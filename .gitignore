@@ -1,2 +1,7 @@
 public
 .hugo_build.lock
+
+# IDE Artifacts
+.idea/*
+.DS_Store
+
