@@ -10,7 +10,7 @@ Our project began in earnest in 20XX. Since then we've been working on multiple 
 
 #### Call Catalogue
 
-We can say whatever we want here. Give credit to John Ford & other contributors. 
+We can introduce the catalogue project here. Give credit to John Ford & other contributors. 
 Then probably [link](/catalogue) to its location. 
 
 ---
