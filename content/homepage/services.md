@@ -35,4 +35,4 @@ We have more models! We bring together environmental data, citizen science obser
 
 In August 2022 we hosted a bioacoustics workshop (hybrid delivery). 
 
-Links to video recordings & slide presentations can be found [here](link-not-ready)
+Links to video recordings & slide presentations can be found [here](SFU-HALLO-Bioacoustics-workshop-2022.html)
