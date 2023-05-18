@@ -12,6 +12,7 @@ We can put info here about the team. List names. Institutional affiliations.
 **Researchers**
 
 Dr. Ruth Joy, *Principal Investigator* 
+
 Faculty, Simon Fraser University
 
 Dr. Steven Bergner
