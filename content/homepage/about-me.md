@@ -7,7 +7,7 @@ header_menu: true
 This would be a good spot for a team photo -- probably from a Zoom call.
 
 We can put info here about the team. List names. Institutional affiliations. 
-<h3>Researchers</h3>
+**Researchers**
 
 Dr. Ruth Joy
 
