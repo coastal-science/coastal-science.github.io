@@ -11,10 +11,9 @@ We can put info here about the team. List names. Institutional affiliations.
 
 **Researchers**
 
-<ul>
-  <li>Dr. Ruth Joy, *Principal Investigator*</li>
-    <ul>
-      <li>Faculty, Simon Fraser University</li>
+Dr. Ruth Joy, *Principal Investigator*
+* School of Environmental Science, Simon Fraser University
+
 
 Dr. Steven Bergner
 
