@@ -12,10 +12,10 @@ We can put info here about the team. List names. Institutional affiliations.
 **Researchers**
 
 Dr. Ruth Joy, *Principal Investigator*
-* School of Environmental Science, Simon Fraser University
+- School of Environmental Science, Simon Fraser University
 
 Dr. Steven Bergner
-* School of Computing Science, Simon Fraser University
+- School of Computing Science, Simon Fraser University
 
 Dr. Mike Dowd
 * Department of Mathematics and Statistics, Dalhousie University
