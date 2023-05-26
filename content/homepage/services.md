@@ -1,17 +1,19 @@
 ---
-title: "What We've Done"
+title: "Our Research Progress"
 weight: 2
 header_menu: true
 ---
 
-Our project began in earnest in 20XX. Since then we've been working on multiple deliverables/projects/products/? that work towards developing a real-time forecasting system for cetaceans in the Salish Sea.
+Our project began in earnest in 20XX. Since then we've been working on several objectives that work towards developing the real-time whale forecasting system in the Salish Sea.
 
 ---
 
 #### Call Catalogue
 
-We can introduce the catalogue project here. Give credit to John Ford & other contributors. 
-Then probably [link](/catalogue) to its location. 
+*We can introduce the catalogue project here. Give credit to John Ford & other contributors. 
+Then probably [link](/catalogue) to its location.* 
+
+We have compiled a catalogue of the 30 unique types of Southern Resident killer whale calls. This allows our team of annotators to manually identify individual call types contained in hydrophone recordings to train the artificial inteligence systems how to detect these calls.
 
 ---
 
