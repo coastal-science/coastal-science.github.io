@@ -4,7 +4,7 @@ weight: 3
 header_menu: true
 ---
 
-This would be a good spot for a team photo -- probably from a Zoom call.
+*This would be a good spot for a team photo -- probably from a Zoom call.*
 
 
 **Researchers**
@@ -33,6 +33,7 @@ Paul Nguyen Hong Duc
 Dr. Dave Campbell
 * School of Mathematics and Statistics, Carleton University
 
+
 **Collaborators**
 
 SMRU Consulting
@@ -50,4 +51,4 @@ Saturna Island Marine Research and Education Society (SIMRES)
 Digital Alliance Canada
 * Jillian Andersen
 
-Logos of collaborators could probably be included here too.
+*Logos of collaborators could probably be included here too.*
