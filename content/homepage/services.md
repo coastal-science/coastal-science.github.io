@@ -4,7 +4,7 @@ weight: 2
 header_menu: true
 ---
 
-Our project began in earnest in 20XX. Since then we've been working on several objectives that work towards developing the real-time whale forecasting system in the Salish Sea.
+HALLO formed and began research efforts in 2019. Since then, we've been working on several objectives that work towards developing the real-time whale forecasting system in the Salish Sea.
 
 ---
 
