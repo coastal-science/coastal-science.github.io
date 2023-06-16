@@ -27,7 +27,7 @@ Check out these open source models on our public [GitHub repository](https://git
 
 #### Forecast Models
 
-We have more models! We bring together environmental data, citizen science observations, and hydrophone data to forecast where a cetacean is going to be. This system allows us to alert ports, ship captains, and ... when a whale might be entering their path so they can take risk-reducing measures.
+Our team is also developing models that will ultimately be able to forecast whale locations based on hydrophone detections, visual observations from citizen science groups, and environmental data. This system will allow us to alert nearby ship captains, shipping ports, and ... when a whale is forecasted to be entering their path and risk-reducing measures can be taken to limit disturbance to the whales.
 
 ![Killer whale by Photographer Name](../images/credit&cropped_rainblow_whale.JPG)
 
