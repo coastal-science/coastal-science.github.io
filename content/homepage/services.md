@@ -19,9 +19,9 @@ We have compiled a catalogue of the 30 unique call types made by Southern Reside
 
 #### Classification Models 
 
-We have models that provide classifications for heard sounds. For example, we have a binary classification model to determine whether a sound was an Killer Whale or not. These models were developed with data from Fisheries and Oceans Canada, JASCO, SMRU, ... . 
+Our team has developed models that identify the source of underwater sounds. For example, we have a binary classification model that classifies sounds into one of two categories - the sound was made by a Killer whale or the sound was not made by a Killer whale. These models were developed with data from Fisheries and Oceans Canada, JASCO, SMRU, ... . 
  
-Check out the open source model's on our public [GitHub repository](https://github.com/coastal-science/HALLO-models). There you can find instructions, scripts and configuration files required to train deep learning models at detecting and classifying vocalisations made by killer whales.
+Check out these open source models on our public [GitHub repository](https://github.com/coastal-science/HALLO-models). There you can find instructions, scripts, and configuration files required to train deep learning models at detecting and classifying vocalisations made by Killer whales.
 
 ---
 
