@@ -13,7 +13,7 @@ HALLO formed and began research efforts in 2019. Since then, we've been working 
 *We can introduce the catalogue project here. Give credit to John Ford & other contributors. 
 Then probably [link](/catalogue) to its location.* 
 
-We have compiled a catalogue of the 30 unique call types made by Southern Resident killer whales. This allows our team of annotators to manually identify individual call types contained in hydrophone recordings. These data are then used to train the artificial inteligence systems to detect these calls. 
+We have compiled a catalogue of the 30 unique call types made by Southern Resident killer whales. This allows our team of annotators to manually identify individual call types contained in hydrophone recordings. These data are then used to train the artificial intelligence systems to detect these calls. 
 
 ---
 
