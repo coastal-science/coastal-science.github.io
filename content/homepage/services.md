@@ -33,8 +33,8 @@ Our team is also developing models that will ultimately be able to forecast whal
 
 ---
 
-#### Bioacoustics Workshop
+#### Outreach & Engagement
 
-In August 2022 we hosted a bioacoustics workshop (hybrid delivery). 
+We hosted a 'Bioacoustics Workshop' in August of 2022 to faciliate engagement both within the HALLO group and the wider community. Topics range from whale sightings and conservation to the application of using deep learning models to identify whale calls.
 
-Links to video recordings & slide presentations can be found [here](SFU-HALLO-Bioacoustics-workshop-2022.html)
+Links to the full list of video recordings & slide presentations can be found [here](SFU-HALLO-Bioacoustics-workshop-2022.html)
