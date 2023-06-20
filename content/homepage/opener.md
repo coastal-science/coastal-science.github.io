@@ -1,5 +1,5 @@
 ---
-title: "About HALLO"
+title: "About Us"
 weight: 1
 ---
 
