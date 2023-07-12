@@ -10,10 +10,15 @@ HALLO formed and began research efforts in 2019. Since then, we've been working 
 
 #### Call Catalogue
 
-*We can introduce the catalogue project here. Give credit to John Ford & other contributors. 
-Then probably [link](/catalogue) to its location.* 
+Visit the [Southern Resident Killer Whale Call Catalogue](/catalogue)!
 
-We have compiled a catalogue of the 30 unique call types made by Southern Resident killer whales. This allows our team of annotators to manually identify individual call types contained in hydrophone recordings. These data are then used to train the artificial intelligence systems to detect these calls. 
+Researchers are currently aiming to “teach” artificial intelligence systems to recognize the sounds of resident killer whales in order to develop a warning system for preventing ships from fatally striking endangered orcas off British Columbia's coast.
+
+Data used to train artificial intelligence systems come from various sources: from hydrophone nodes located near shipping lanes, to the contributions of Citizen Scientists and projects like the Orcasound project.
+
+The [catalogue website](/catalogue) shares a curated collection of orca acoustics and annotations which represent the type of samples used in machine learning datasets. The samples in the catalogue demonstrate the complexity of communication within pods.
+
+These samples have been gathered through decades of research by Dr. John Ford, scientist emeritus, and former head of cetacean research at Fisheries and Oceans Canada's Pacific Biological Station.
 
 ---
 
