@@ -1,5 +1,4 @@
-baseurl = "https://devcows.github.io/hugo-universal-theme/" # Configure URL. if using gh-pages https://github.com/<username>/hugo-universal-theme URL: https://<username>.github.io/hugo-universal-theme/
-title = "Universal"
+title = "HALLO - Humans and Algorithms Listening to Orcas"
 theme = "hugo-universal-theme"
 #themesDir = "../.."
 languageCode = "en-us"
@@ -348,6 +347,12 @@ pluralizelisttitles = false
     weight     = 6
 
 [[menu.main]]
+    identifier = "about"
+    name       = "About"
+    url        = "/about/"
+    weight     = 7
+
+[[menu.main]]
     identifier = "contact"
     name       = "Contact"
     url        = "/contact/"
@@ -365,7 +370,7 @@ pluralizelisttitles = false
 [[menu.topbar]]
     weight = 2
     name = "GitHub"
-    url = "https://github.com/devcows/hugo-universal-theme"
+    url = "https://github.com/coastal-science"
     pre = "<i class='fab fa-2x fa-github'></i>"
 
 [[menu.topbar]]
@@ -383,7 +388,7 @@ pluralizelisttitles = false
 [[menu.topbar]]
     weight = 5
     name = "Email"
-    url = "mailto:hello@universal.com"
+    url = "mailto:no-reply@sfu.ca"
     pre = "<i class='fas fa-2x fa-envelope'></i>"
 
 [params]
@@ -406,7 +411,7 @@ pluralizelisttitles = false
     longitude = "-77.028333"
 
     # Style options: default (light-blue), blue, green, marsala, pink, red, turquoise, violet
-    style = "default"
+    style = "marsala"
 
     # Since this template is static, the contact form uses www.formspree.io as a
     # proxy. The form makes a POST request to their servers to send the actual
@@ -451,18 +456,17 @@ pluralizelisttitles = false
     dropdown_mouse_over = false
 
     disabled_logo = false
-    logo_text = "Universal"
+    logo_text = "HALLO"
 
     logo = "img/logo.png"
     logo_small = "img/logo-small.png"
     contact_url = "/contact"
-    address = """<p class="text-uppercase"><strong>Universal Ltd.</strong>
-        <br>13/25 New Avenue
-        <br>Newtown upon River
-        <br>45Y 73J
-        <br>England
+    address = """<p class="text-uppercase"><strong>HALLO - Humans and Algorithms Listening to Orcas.</strong>
+        <br>8888 University Dr W
+        <br>Burnaby, BC
+        <br>V5A 1S6
         <br>
-        <strong>Great Britain</strong>
+        <strong>Canada</strong>
       </p>
       """
 
@@ -472,9 +476,9 @@ pluralizelisttitles = false
 # Enable or disable top bar with social icons
 [params.topbar]
     enable = true
-    text = """<p class="hidden-sm hidden-xs">Contact us on +420 777 555 333 or hello@universal.com.</p>
+    text = """<p class="hidden-sm hidden-xs">Contact us on <del>+420 777 555 333 or</del> no-reply@sfu.ca.</p>
       <p class="hidden-md hidden-lg"><a href="tel:+420 777 555 333" data-animate-hover="pulse"><i class="fas fa-phone"></i></a>
-      <a href="mailto:hello@universal.com" data-animate-hover="pulse"><i class="fas fa-envelope"></i></a>
+      <a href="mailto:no-reply@sfu.ca" data-animate-hover="pulse"><i class="fas fa-envelope"></i></a>
       </p>
       """
 
