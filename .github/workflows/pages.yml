@@ -28,14 +28,35 @@ defaults:
 jobs:
   # Build job
   build:
-    runs-on: [ self-hosted ]
+    runs-on: [ self-hosted, rcg ]
+    container:
+      image: peaceiris/hugo
+
     env:
-      HUGO_VERSION: 0.102.3
+      HUGO_VERSION: 0.108.0
+    
     steps:
-      - name: Install Hugo CLI
-        run: |
-          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_Linux-64bit.deb \
-          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+# Docker
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: "0.108.0"
+          extended: true
+          
+# Ubuntu
+#       - name: Install Hugo CLI
+#         run: |
+#           wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_Linux-64bit.deb \
+#           && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+
+# RPM
+#       - name: Install Hugo CLI
+#         run: |
+#           sudo dnf install hugo 
+
+      - name: Pre-Build ls
+        run: ls -lah
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -52,6 +73,10 @@ jobs:
           hugo \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
+            
+      - name: Post-Build ls
+        run: ls -lah public/
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
@@ -62,7 +87,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: [ self-hosted ]
+    runs-on: [ self-hosted, rcg ]
     needs: build
     steps:
       - name: Deploy to GitHub Pages
