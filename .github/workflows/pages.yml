@@ -31,7 +31,6 @@ jobs:
     runs-on: [ self-hosted, rcg ]
     container:
       image: peaceiris/hugo
-      options: --user `$(id -u ${USER}):$(id -g ${USER})`
 
     env:
       HUGO_VERSION: 0.108.0
@@ -86,50 +85,54 @@ jobs:
       - name: Post-Build ls
         run: ls -lah public/
         
-#       - name: Deploy 
-#       # uploads via a git commit to github.sfu.ca (which is not possible without credentials on server)
-#         uses: peaceiris/actions-gh-pages@v3
-#         if: github.ref == 'refs/heads/main'
-#         with:
-#           github_token: ${{ secrets.GITHUB_TOKEN }}
-#           publish_dir: ./public
+      - name: Deploy 
+      # uploads via a git commit to github.sfu.ca (which is not possible without credentials on server)
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          personal_token: ${{ secrets.PERSONAL_TOKEN }}
+          publish_dir: ./public # default: public
+          publish_branch: gh-pages # default: gh-pages
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: ${{ github.event.head_commit.message }}
 
-      - name: 'Tar files'
-        run: tar -cvf github-pages.tar ./public         
+#       - name: 'Tar files'
+#         run: tar -cvf github-pages.tar ./public         
         
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: github-pages
-          path: github-pages.tar
-          if-no-files-found: error
-          
-#       - name: Upload Pages artifact
-#         uses: actions/upload-pages-artifact@v1
+#       - name: Upload artifact
+#         uses: actions/upload-artifact@v3
 #         with:
-#           path: ${{ github.workspace }}/public
+#           name: github-pages
+#           path: github-pages.tar
+#           if-no-files-found: error
           
-  # Deployment job
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: [ self-hosted, rcg ]
-    needs: build
-    steps:
-      - uses: actions/download-artifact@master
-        with:
-          name: github-pages
-          path: .
-      - uses: actions/configure-pages@v1
-      - name: 'UnTar files'
-        run: |
-          unzip github-pages.zip
-          tar -xvf --overwrite github-pages.tar -C ./public 
+# #       - name: Upload Pages artifact
+# #         uses: actions/upload-pages-artifact@v1
+# #         with:
+# #           path: ${{ github.workspace }}/public
+          
+#   # Deployment job
+#   deploy:
+#     environment:
+#       name: github-pages
+#       url: ${{ steps.deployment.outputs.page_url }}
+#     runs-on: [ self-hosted, rcg ]
+#     needs: build
+#     steps:
+#       - uses: actions/download-artifact@master
+#         with:
+#           name: github-pages
+#           path: .
+#       - uses: actions/configure-pages@v1
+#       - name: 'UnTar files'
+#         run: |
+#           unzip github-pages.zip
+#           tar -xvf --overwrite github-pages.tar -C ./public 
         
-      - uses: actions/upload-pages-artifact@v1
-        with:
-          path: ./public
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
+#       - uses: actions/upload-pages-artifact@v1
+#         with:
+#           path: ./public
+#       - name: Deploy to GitHub Pages
+#         id: deployment
+#         uses: actions/deploy-pages@v1
