@@ -31,6 +31,7 @@ jobs:
     runs-on: [ self-hosted, rcg ]
     container:
       image: peaceiris/hugo
+      options: --user `$(id -u ${USER}):$(id -g ${USER})`
 
     env:
       HUGO_VERSION: 0.108.0
@@ -92,12 +93,22 @@ jobs:
 #         with:
 #           github_token: ${{ secrets.GITHUB_TOKEN }}
 #           publish_dir: ./public
-          
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: ./public
 
+      - name: 'Tar files'
+        run: tar -cvf github-pages.tar ./public         
+        
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: github-pages
+          path: github-pages.tar
+          if-no-files-found: error
+          
+#       - name: Upload Pages artifact
+#         uses: actions/upload-pages-artifact@v1
+#         with:
+#           path: ${{ github.workspace }}/public
+          
   # Deployment job
   deploy:
     environment:
@@ -106,6 +117,19 @@ jobs:
     runs-on: [ self-hosted, rcg ]
     needs: build
     steps:
+      - uses: actions/download-artifact@master
+        with:
+          name: github-pages
+          path: .
+      - uses: actions/configure-pages@v1
+      - name: 'UnTar files'
+        run: |
+          unzip github-pages.zip
+          tar -xvf --overwrite github-pages.tar -C ./public 
+        
+      - uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./public
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
