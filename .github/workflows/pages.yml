@@ -36,7 +36,7 @@ jobs:
       HUGO_VERSION: 0.108.0
     
     steps:
-# Docker
+# GH Actions
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
@@ -60,10 +60,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          submodules: recursive
+          submodules: true  # Fetch Hugo themes (true OR recursive) # failing on ubuntu container
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+          
+#       - name: Checkout submodules
+#         run: |
+#           git submodule update --init --recursive --depth 1 
+          
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v2
+        
       - name: Build with Hugo
         env:
           # For maximum backward compatibility with Hugo modules
@@ -71,12 +78,21 @@ jobs:
           HUGO_ENV: production
         run: |
           hugo \
+            --gc \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
             
       - name: Post-Build ls
         run: ls -lah public/
         
+#       - name: Deploy 
+#       # uploads via a git commit to github.sfu.ca (which is not possible without credentials on server)
+#         uses: peaceiris/actions-gh-pages@v3
+#         if: github.ref == 'refs/heads/main'
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           publish_dir: ./public
+          
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
