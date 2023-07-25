@@ -493,9 +493,9 @@ pluralizelisttitles = false
 
 [params.carouselCustomers]
     items = 6
-    auto_play = false
-    slide_speed = 2000
-    pagination_speed = 1000
+    auto_play = true
+    slide_speed = 500
+    pagination_speed = 500
 
 [params.carouselTestimonials]
     items = 4
@@ -540,7 +540,7 @@ pluralizelisttitles = false
     # All clients are defined in their own files. You can find example items
     # at 'exampleSite/data/clients'.
     # For more information take a look at the README.
-    title = "Our Clients"
+    title = "Our Partners"
     subtitle = ""
 
 [params.recent_posts]
