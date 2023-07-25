@@ -450,8 +450,8 @@ pluralizelisttitles = false
     enableRecaptchaInContactForm = false
     googleRecaptchaKey = "site_key_for_google_recaptcha"
 
-    about_us = "<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>"
-    copyright = "Copyright (c) 2022 - 2023, HALLO; all rights reserved."
+    about_us = "<p>HALLO formed and began research efforts in 2019. Since then, we've been working on several objectives that work towards developing the real-time whale forecasting system in the Salish Sea.</p>"
+    copyright = "Copyright (c) 2019 - 2023, HALLO; all rights reserved."
 
     # Format dates with Go's time formatting
     date_format = "January 2, 2006"
@@ -545,8 +545,8 @@ pluralizelisttitles = false
 
 [params.recent_posts]
     enable = true
-    title = "From our blog"
-    subtitle = "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo."
+    title = "Our Research Progress"
+    subtitle = "Humans and Algorithms Listening to Orcas explores the concept of training artificial intelligence systems to detect underwater whale vocalizations. The research goal is to develop a whale forecasting system to warn nearby ships of whale presence. This could prevent potentially fatal ship strikes for the endangered Southern Resident killer whales and other whale species that frequent the waters of the Salish Sea in the Pacific Northwest."
     hide_summary = false
 
 [params.footer.recent_posts]
