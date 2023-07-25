@@ -2,4 +2,4 @@ weight: 3
 name: "Forecast Models"
 icon: "fas fa-umbrella"
 url: ""
-description: "Forecast Models"
+description: "Forecast whale locations based on hydrophone detections, visual observations from citizen science groups, and environmental data."
