@@ -1,5 +1,5 @@
 weight: 5
 name: "Classification Models"
-icon: "fas fa-tags"
+icon: "fa fa-tags"
 url: ""
 description: "Models that identify the source of underwater sounds."
