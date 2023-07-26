@@ -79,6 +79,7 @@ jobs:
         run: |
           hugo \
             --gc \
+            --buildDrafts \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
             
