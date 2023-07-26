@@ -1,6 +1,6 @@
 ---
-title: "Features"
-id: features
+title: "Features2"
+id: features2
 date: 2023-07-26T00:20:55-07:00
 draft: true
 ---

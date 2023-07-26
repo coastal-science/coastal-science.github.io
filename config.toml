@@ -69,8 +69,8 @@ pluralizelisttitles = false
 
 [[menu.main]]
     name       = "Features2"
-    identifier = "features"
-    url        = "/features"
+    identifier = "features2"
+    url        = "/features2/"
     weight     = 3
 
 [[menu.main]]
