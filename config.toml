@@ -480,7 +480,7 @@ pluralizelisttitles = false
     search = true
 
 [params.carouselCustomers]
-    items = 6
+    items = 12
     auto_play = true
     slide_speed = 500
     pagination_speed = 500
