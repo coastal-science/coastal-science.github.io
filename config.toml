@@ -506,6 +506,10 @@ pluralizelisttitles = false
     # All features are defined in their own files. You can find example items
     # at 'exampleSite/data/features'.
     # For more information take a look at the README.
+    
+    # Background options: background-white (default), background-gray, background-gray-dark, background-pentagon, background-image-fixed-1, background-image-fixed-2
+    # the options must be prefixed with "bar ", like the example
+    background = "bar background-white"
 
 [params.testimonials]
     enable = true
