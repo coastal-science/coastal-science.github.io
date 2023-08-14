@@ -139,17 +139,17 @@ jobs:
 #         uses: actions/deploy-pages@v1
 
 ## SKIP Until runner is figured out. Perform manually until them.
-#   # Cleanup workspace on the runner
-#   cleanup:
-#     if: ${{ always() }}
-#     needs: 
-#       - build
-#       # - deploy
-#     runs-on: [ self-hosted, rcg ]
-#     steps:
-#       - name: Current workspace
-#         run: du -shc ${GITHUB_WORKSPACE}
-#       # - name: Clean Up Docker Images
-#       #  run: docker rmi -f $(docker images 'registry.rcg.sfu.ca/rcg/website' -a -q)
-#       - name: Clean Up Workspace
-#         run: rm -rf ${GITHUB_WORKSPACE}
+  # Cleanup workspace on the runner
+  cleanup:
+    if: ${{ always() }}
+    needs: 
+      - build
+      # - deploy
+    runs-on: [ self-hosted, rcg ]
+    steps:
+      - name: Current workspace
+        run: du -shc ${GITHUB_WORKSPACE}
+      # - name: Clean Up Docker Images
+      #  run: docker rmi -f $(docker images 'registry.rcg.sfu.ca/rcg/website' -a -q)
+      - name: Clean Up Workspace
+        run: rm -rf ${GITHUB_WORKSPACE}
