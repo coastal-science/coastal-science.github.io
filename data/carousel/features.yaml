@@ -1,5 +1,5 @@
 weight: 2
 title: "Our Research"
-description: "<p> Our goal is the build a whale forecasting model to alert ships of whale presence in order to protect whales from ship collisions and noise disturbance </p>"
+description: "<p> We are building a whale forecasting model to alert ships of whale presence and protect whales from ship collisions and noise disturbance </p>"
 image: "img/LucyShipBreach.PNG"
 href: "faq"
