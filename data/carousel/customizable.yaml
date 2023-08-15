@@ -1,9 +1,5 @@
 weight: 4
-title: "Easy to customize"
-description: >
-  <ul class="list-style-none">
-    <li>7 preprepared colour variations.</li>
-    <li>Easily to change fonts</li>
-  </ul>
+title: "Whale Acoustics"
+description: "<p> Our whale forecast system uses inputs from whale acoustic detections at several underwater hydrophone locations deployed around the Salish Sea </p>"
 image: "img/SMRUWhaleCalls.jpg"
 href: "https://devcows.github.io/hugo-universal-theme/"
