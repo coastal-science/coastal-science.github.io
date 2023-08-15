@@ -1,10 +1,4 @@
 weight: 3
 title: "Whale Sightings"
-description: >
-  <ul class="list-style-none">
-    <li>Clean and elegant design</li>
-    <li>Full width and boxed mode</li>
-    <li>Easily readable Roboto font and awesome icons</li>
-    <li>7 preprepared colour variations</li>
-  </ul>
+description: "<p> Our whale forecast uses inputs from visual whale sighting reports from citizen science groups and organizations from several locations around the Salish Sea </p>"
 image: "img/OliviaWhaleSighting.jpg"
