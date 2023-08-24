@@ -1,12 +1,12 @@
 ---
-title: Sample Blog
+title: MSc Research Award
 date: 2023-07-26T01:53:16-07:00
 tags: 
-  - blog
-  - tutorial
+  - news
+  - research
 categories: 
-  - machine learning
-  - deep learning
+  - supervised learning
+  - unsupervised learning
 
 banner: # if left blank, it is replaced with a placeholder
 # description: "This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content."
@@ -24,6 +24,8 @@ summary:  # If blank, it this is populated from the first 100 characters from th
 
 draft: true
 ---
+Master's student, Janine McNeilly, has recently been awarded the Graduate Research Award at Simon Fraser University. The award recognizes excellence in Environmental Science research. Janine's research focuses on the diet and energetic requirements of the endangered Southern Resident killer whale (SRKW). Her goal is to create a bioenergetics model for the SRKW and input various parameters for Chinook salmon and sablefish to determine if sablefish are a viable prey alternative. She has partnered with DFO to complete the field work component, which involves collecting prey and fecal samples from SRKW to determine the composition of their diet. Congratulations Janine!
+
 
 # Step 1. A section title
 
