@@ -1,6 +1,6 @@
 ---
 title: "The Team"
-id: about
+id: our-team
 weight: 3
 header_menu: true
 ---
