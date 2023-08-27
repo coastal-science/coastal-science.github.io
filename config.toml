@@ -252,6 +252,38 @@ pluralizelisttitles = false
     parent     = "section.marketing"
 
 [[menu.main]]
+    name       = "Research"
+    identifier = "menu.research"
+    url        = "/img/template-homepage.png"
+    weight     = 3
+
+[[menu.main]]
+    name       = "Research"
+    identifier = "section.research"
+    url        = ""
+    weight     = 1
+    parent     = "menu.research"
+    post       = 1
+
+[[menu.main]]
+    name       = "Whale Forecast System"
+    url        = ""
+    weight     = 1
+    parent     = "section.research"
+
+[[menu.main]]
+    name       = "Whale Sightings"
+    url        = ""
+    weight     = 1
+    parent     = "section.research"
+
+[[menu.main]]
+    name       = "Whale Acoustics"
+    url        = ""
+    weight     = 1
+    parent     = "section.research"
+
+[[menu.main]]
     name       = "All Pages"
     identifier = "menu.allpages"
     url        = ""
@@ -356,16 +388,44 @@ pluralizelisttitles = false
     weight     = 6
 
 [[menu.main]]
-    identifier = "about"
-    name       = "About"
-    url        = "/about/"
+    name       = "About HALLO"
+    identifier = "menu.about"
+    url        = "/img/template-homepage.png"
     weight     = 7
 
 [[menu.main]]
+    name       = "About"
+    identifier = "section.about"
+    url        = ""
+    weight     = 2
+    parent     = "menu.about"
+    post       = 2
+
+[[menu.main]]
+    name       = "About Us"
+    url        = ""
+    weight     = 1
+    parent     = "section.about"
+
+[[menu.main]]
+    name       = "Our Team"
+    url        = "/our-team/"
+    weight     = 2
+    parent     = "section.about"
+
+# [[menu.main]]
+#     identifier = "our-team"
+#     name       = "Our Team"
+#     url        = "/out-team/"
+#     weight     = 7
+
+[[menu.main]]
     identifier = "contact"
-    name       = "Contact"
+    name       = "Contact Us"
     url        = "/contact/"
-    weight     = 7
+    # weight     = 7
+    parent     = "section.about"
+
 
 
 # Top bar social links menu
