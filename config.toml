@@ -70,34 +70,34 @@ pluralizelisttitles = false
 [[menu.main]]
     name       = "Research"
     identifier = "menu.research"
-    url        = "/img/template-homepage.png"
+    # url        = "/img/template-homepage.png"
     weight     = 3
 
 [[menu.main]]
     name       = "Research"
-    identifier = "section.research"
+    identifier = "menu.research"
     url        = ""
     weight     = 1
     parent     = "menu.research"
-    post       = 1
+    # post       = 1
 
 [[menu.main]]
     name       = "Whale Forecast System"
     url        = ""
     weight     = 1
-    parent     = "section.research"
+    parent     = "menu.research"
 
 [[menu.main]]
     name       = "Whale Sightings"
     url        = ""
     weight     = 1
-    parent     = "section.research"
+    parent     = "menu.research"
 
 [[menu.main]]
     name       = "Whale Acoustics"
     url        = ""
     weight     = 1
-    parent     = "section.research"
+    parent     = "menu.research"
 
 [[menu.main]]
     name       = "Blog"
@@ -114,7 +114,7 @@ pluralizelisttitles = false
 [[menu.main]]
     name       = "About HALLO"
     identifier = "menu.about"
-    url        = "/img/template-homepage.png"
+    # url        = "/img/template-homepage.png"
     weight     = 7
 
 [[menu.main]]
@@ -129,13 +129,13 @@ pluralizelisttitles = false
     name       = "About Us"
     url        = ""
     weight     = 1
-    parent     = "section.about"
+    parent     = "menu.about"
 
 [[menu.main]]
     name       = "Our Team"
     url        = "/our-team/"
     weight     = 2
-    parent     = "section.about"
+    parent     = "menu.about"
 
 # [[menu.main]]
 #     identifier = "our-team"
