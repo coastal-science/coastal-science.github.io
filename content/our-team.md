@@ -6,9 +6,9 @@ header_menu: true
 ---
 
 HALLO formed and began research efforts in 2019. Since then, we've been working on several objectives that work towards developing the real-time whale forecasting system in the Salish Sea.
-
+{{< figure src="/coastal-science.github.io/img/HALLOMeetingScreenshot_2023.06.30.png" >}}
 *This would be a good spot for a team photo -- probably from a Zoom call.*
-
+{{< figure src="https://media.istockphoto.com/id/960999328/vector/congratulations-card-with-light-rays.jpg?s=1024x1024&w=is&k=20&c=YJi2Ajk6QKNH7opy74UgpF7Rvh7OaDOYcwq88ZF-erU=" title="Congrats" >}}
 
 **Researchers**
 
