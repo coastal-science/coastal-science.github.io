@@ -148,7 +148,7 @@ pluralizelisttitles = false
     name       = "Contact Us"
     url        = "/contact/"
     # weight     = 7
-    parent     = "section.about"
+    parent     = "menu.about"
 
 
 
