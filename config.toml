@@ -202,8 +202,7 @@ pluralizelisttitles = false
     # - you're done. Happy mailing!
     #
     # Enable the contact form by entering your Formspree.io endpoint url
-    email = "no-reply@sfu.ca"
-    formspree_action = "https://formspree.io/sample/of/endpoint"
+    formspree_action = "https://formsubmit.co/no-reply@sfu.ca" #"https://formspree.io/sample/of/endpoint"
     contact_form_ajax = false
 
     # Formspree form supports Google reCAPTCHA Key (type v2).
@@ -220,7 +219,7 @@ pluralizelisttitles = false
     #   5. change `enableRecaptchaInContactForm` is to true
     #   6. enter site key into `googleRecaptchaKey` to enable a recaptcha widget in your page.
     #
-    enableRecaptchaInContactForm = true
+    enableRecaptchaInContactForm = false
     googleRecaptchaKey = "site_key_for_google_recaptcha"
 
     about_us = "<p>HALLO formed and began research efforts in 2019. Since then, we've been working on several objectives that work towards developing the real-time whale forecasting system in the Salish Sea.</p>"
@@ -252,8 +251,7 @@ pluralizelisttitles = false
 # Enable or disable top bar with social icons
 [params.topbar]
     enable = true
-    text = """<p class="hidden-sm hidden-xs">Contact us on <del>+420 777 555 333 or</del> no-reply@sfu.ca.</p>
-      <p class="hidden-md hidden-lg"><a href="tel:+420 777 555 333" data-animate-hover="pulse"><i class="fas fa-phone"></i></a>
+    text = """<p class="hidden-sm hidden-xs">Contact us at no-reply@sfu.ca.</p>
       <a href="mailto:no-reply@sfu.ca" data-animate-hover="pulse"><i class="fas fa-envelope"></i></a>
       </p>
       """
