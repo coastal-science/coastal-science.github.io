@@ -30,11 +30,6 @@ Dr. Oliver Kirsebom
 Dr. Scott Viers
 * OrcaSound Collective, Beam Reach Marine Science and Sustainability School
 
-Paul Nguyen Hong Duc
-* School of Mathematics and Statistics, Carleton University
-
-Dr. Dave Campbell
-* School of Mathematics and Statistics, Carleton University
 
 
 **Collaborators**
@@ -53,5 +48,15 @@ Saturna Island Marine Research and Education Society (SIMRES)
 
 Digital Alliance Canada
 * Jillian Anderson
+
+
+
+**Previous Researchers**
+
+Paul Nguyen Hong Duc
+* School of Mathematics and Statistics, Carleton University
+
+Dr. Dave Campbell
+* School of Mathematics and Statistics, Carleton University
 
 *Logos of collaborators could probably be included here too.*
