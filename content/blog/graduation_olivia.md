@@ -10,6 +10,7 @@ categories:
   - unsupervised learning
 
 banner: https://www.sfu.ca/~rjoy/images/OliviaMu.png
+banner_align: wrap-left # options: 'wrap-left', 'wrap-right' or remove for none
 # description: "This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content."
 authors: 
   - Ruth Joy
