@@ -112,37 +112,32 @@ pluralizelisttitles = false
     # url        = "/img/template-homepage.png"
     weight     = 7
 
-[[menu.main]]
-    name       = "About"
-    identifier = "section.about"
-    url        = ""
-    weight     = 2
-    parent     = "menu.about"
-    post       = 2
+# [[menu.main]]
+#     name       = "About"
+#     identifier = "section.about"
+#     url        = ""
+#     weight     = 2
+#     parent     = "menu.about"
+#     post       = 2
 
 [[menu.main]]
     name       = "About Us"
-    url        = ""
+    url        = "/about-us"
+    identifier = "about-us"
     weight     = 1
     parent     = "menu.about"
 
 [[menu.main]]
     name       = "Our Team"
-    url        = "/our-team/"
+    url        = "/our-team"
     weight     = 2
     parent     = "menu.about"
-
-# [[menu.main]]
-#     identifier = "our-team"
-#     name       = "Our Team"
-#     url        = "/out-team/"
-#     weight     = 7
 
 [[menu.main]]
     identifier = "contact"
     name       = "Contact Us"
-    url        = "/contact/"
-    # weight     = 7
+    url        = "/contact"
+    # weight     = 3
     parent     = "menu.about"
 
 
