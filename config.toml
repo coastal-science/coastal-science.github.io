@@ -105,11 +105,6 @@ pluralizelisttitles = false
     url        = "/blog/"
     weight     = 5
 
-[[menu.main]]
-    name       = "FAQ"
-    identifier = "menu.faq"
-    url        = "/faq/"
-    weight     = 6
 
 [[menu.main]]
     name       = "About HALLO"
