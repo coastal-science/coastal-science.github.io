@@ -27,3 +27,13 @@ https://stackoverflow.com/a/39164739
 .customers .owl-item > div {
   text-align: center;
 }
+
+.wrap-right {
+    float: right; 
+    margin: 5px;
+}
+
+.wrap-left {
+  float: left; 
+  margin: 5px;
+}
