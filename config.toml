@@ -62,9 +62,9 @@ pluralizelisttitles = false
     parent     = "menu.home"
 
 [[menu.main]]
-    name       = "Services"
-    identifier = "services"
-    url        = "/features2/"
+    name       = "Applications"
+    identifier = "applications"
+    url        = "/applications/"
     weight     = 3
 
 [[menu.main]]
