@@ -41,7 +41,7 @@ https://stackoverflow.com/a/39164739
   margin: 5px;
 }
 
-figure img {
+img {
   height: 100%;
   width: 100%;
   object-fit: contain;
