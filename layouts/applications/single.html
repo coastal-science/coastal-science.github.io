@@ -31,7 +31,9 @@
                             <img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}">
                           {{ end }}
                         {{ end }} -->
+                        <a href="{{ if .Params.thumbnailurl }} {{ .Params.thumbnailurl }} {{ else }} {{ .RelPermalink }} {{ end }}">
                         <img src="{{ .Params.thumbnail | relURL }}" class="img-responsive" alt="">
+                        </a>
                       {{ else }}
                       {{ with .Resources.GetMatch "img/placeholder.png" }}
                           {{ with .Resize (printf "%dx%d webp" .Width .Height) }}
