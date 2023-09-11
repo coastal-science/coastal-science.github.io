@@ -7,7 +7,7 @@ draft: true
 
 # Bioacoustics Workshop Schedule
 
-[Old version fo schedule](/SFU-HALLO-Bioacoustics-workshop-2022.html)
+[Old version of schedule](/SFU-HALLO-Bioacoustics-workshop-2022.html)
 
 |   |   |
 |---|---|
