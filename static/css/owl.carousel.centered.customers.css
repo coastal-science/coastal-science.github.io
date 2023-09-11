@@ -16,7 +16,9 @@ https://stackoverflow.com/a/39164739
 }
 .customers .owl-item > div {
   text-align: center;
-} .owl-wrapper {
+} 
+
+/* .owl-wrapper {
   display: table !important;
 }
 .customers .owl-item {
@@ -27,6 +29,7 @@ https://stackoverflow.com/a/39164739
 .customers .owl-item > div {
   text-align: center;
 }
+*/
 
 .wrap-right {
     float: right; 
@@ -36,4 +39,10 @@ https://stackoverflow.com/a/39164739
 .wrap-left {
   float: left; 
   margin: 5px;
+}
+
+figure img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
 }
