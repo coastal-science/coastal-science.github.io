@@ -9,12 +9,12 @@ HALLO formed and began research efforts in 2019. Since then, we've been working 
 
 {{< figure src="/img/HALLOMeetingScreenshot_2023.06.30.png" caption="Team photo -- June 2023" alt="Team photo -- June 2023" >}}
 
-**Researchers**
+### Researchers
 
-Dr. Ruth Joy, *Principal Investigator*
+[Dr. Ruth Joy](https://www.sfu.ca/~rjoy), *Principal Investigator*
 * School of Environmental Science, Simon Fraser University
 
-Dr. Steven Bergner
+[Dr. Steven Bergner](https://www.sfu.ca/computing/people/faculty/stevenbergner.html)
 * School of Computing Science, Simon Fraser University
 
 Dr. Mike Dowd
@@ -30,8 +30,7 @@ Dr. Scott Viers
 * OrcaSound Collective, Beam Reach Marine Science and Sustainability School
 
 
-
-**Collaborators**
+### Collaborators
 
 SMRU Consulting
 * Jason Wood
@@ -45,17 +44,15 @@ Ocean Network Canada
 Saturna Island Marine Research and Education Society (SIMRES)
 * Dr. Martin Wale
 
-Digital Alliance Canada
+Digital Research Alliance of Canada
 * Jillian Anderson
 
 
 
-**Previous Researchers**
+### Previous Researchers
 
 Paul Nguyen Hong Duc
 * School of Mathematics and Statistics, Carleton University
 
 Dr. Dave Campbell
 * School of Mathematics and Statistics, Carleton University
-
-*Logos of collaborators could probably be included here too.*
