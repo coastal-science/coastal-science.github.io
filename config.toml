@@ -84,19 +84,19 @@ pluralizelisttitles = false
 
 [[menu.main]]
     name       = "Whale Forecast System"
-    url        = ""
+    url        = "/research/whale-forecast-system"
     weight     = 1
     parent     = "menu.research"
 
 [[menu.main]]
     name       = "Whale Sightings"
-    url        = ""
+    url        = "/research/whale-sightings"
     weight     = 1
     parent     = "menu.research"
 
 [[menu.main]]
     name       = "Whale Acoustics"
-    url        = ""
+    url        = "/research/whale-acoustics"
     weight     = 1
     parent     = "menu.research"
 
