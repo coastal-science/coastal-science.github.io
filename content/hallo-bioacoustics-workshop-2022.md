@@ -27,7 +27,7 @@ draft: true
 {{< youtube 5s-qSV8-raY >}}
 {{< /wrapclass >}}
 ### Southern Gulf Island Whale Sighting Network | Session 2
-#### _Lucy Quayle/ Susie Washington-Smyth_
+#### _Lucy Quayle, Susie Washington-Smyth_
 {{< end_entry >}}
 
 ----
@@ -178,7 +178,7 @@ draft: true
 {{< youtube RERsnzFyd1g >}}
 {{< /wrapclass>}}
 ### Streaming Data in the Wild | Session 15
-#### _Andrei Vassilenko/Jillian Anderson_
+#### _Andrei Vassilenko, Jillian Anderson_
 {{< end_entry >}}
 
 ----
