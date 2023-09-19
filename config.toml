@@ -101,6 +101,12 @@ pluralizelisttitles = false
     parent     = "menu.research"
 
 [[menu.main]]
+    name       = "Publications"
+    url        = "/research/publications"
+    weight     = 99
+    parent     = "menu.research"
+
+[[menu.main]]
     name       = "Blog"
     identifier = "menu.blog"
     url        = "/blog/"
