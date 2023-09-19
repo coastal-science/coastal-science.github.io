@@ -38,7 +38,7 @@ SMRU Consulting
 JASCO Applied Sciences
 * Jennifer Wladichuk, April Houweling, David Hannay
 
-Ocean Network Canada
+Ocean Networks Canada
 * Jasper Kanes
 
 Saturna Island Marine Research and Education Society (SIMRES)
