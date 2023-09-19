@@ -17,6 +17,9 @@ draft: true
 #### _Ruth Joy_
 
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 
@@ -26,6 +29,9 @@ draft: true
 ### Southern Gulf Island Whale Sighting Network | Session 2
 #### _Lucy Quayle/ Susie Washington-Smyth_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 
@@ -36,6 +42,9 @@ draft: true
 #### _Monika Wieland_
 
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 
@@ -45,6 +54,9 @@ draft: true
 ### Overview Elements of Acoustic Whale Detection | Session 4
 #### _Mike Dowd_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 
@@ -54,6 +66,9 @@ draft: true
 ### The Good, the Bad and the Ugly of Hydrophone Data | Session 5
 #### _Harald Yurk_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 {{< wrapclass class="col-md-4">}}
@@ -62,6 +77,9 @@ draft: true
 ### Evaluation of the Coastal Acoustic Buoy for Offshore Wind | Session 6
 #### _Kaitlin Palmer_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 {{< wrapclass class="col-md-4">}}
@@ -70,6 +88,9 @@ draft: true
 ### Boundary Pass Underwater Listening Station | Session 7
 #### _Melanie Austin_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 
@@ -79,6 +100,9 @@ draft: true
 ### Music Information Retrieval Random Forest (MIRRF) Classifier for PAMGuard | Session 8
 #### _Taylor Leblond_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 
@@ -88,6 +112,9 @@ draft: true
 ### Deep Learning and Marine Bioacoustics | Session 9
 #### _Oliver Kirsebom_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 
@@ -97,6 +124,9 @@ draft: true
 ### Open-source Detector: Current State and Future Efforts | Session 10
 #### _Fabio Frazao_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 {{< wrapclass class="col-md-4">}}
@@ -105,6 +135,9 @@ draft: true
 ### Characterizing Southern Resident Killer Whale (SRKW) Calls Using a Particle Filter for Frequency Ridge Extraction | Session 11
 #### _Paul Nguyen Hong Duc_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 {{< wrapclass class="col-md-4">}}
@@ -113,6 +146,9 @@ draft: true
 ### Adventures with Autoencoders | Session 12
 #### _Val Viers_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 {{< wrapclass class="col-md-4">}}
@@ -122,6 +158,9 @@ draft: true
 ### Orca Call Analysis for Source Separation | Session 13
 #### _Ambra Jin_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 {{< wrapclass class="col-md-4">}}
@@ -130,6 +169,9 @@ draft: true
 ### Integrating Acoustic and Visual Observations for Cetacean Conservation | Session 14
 #### _Virgil Zetterlind_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 {{< wrapclass class="col-md-4">}}
@@ -138,6 +180,9 @@ draft: true
 ### Streaming Data in the Wild | Session 15
 #### _Andrei Vassilenko/Jillian Anderson_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 {{< wrapclass class="col-md-4">}}
@@ -146,6 +191,9 @@ draft: true
 ### Catalyzing Conservation of Southern Resident Killer Whale | Session 16
 #### _Scott Viers_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 {{< wrapclass class="col-md-4">}}
@@ -154,6 +202,9 @@ draft: true
 ### Streamlining the OrcaAL (Orca Active Learning Tool) | Session 17
 #### _Benjamin Chew_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 {{< wrapclass class="col-md-4">}}
@@ -162,6 +213,9 @@ draft: true
 ### Non-song Humpback Vocalizations from Inland Waters of Washington | Session 18
 #### _Emily Vierling_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 {{< wrapclass class="col-md-4">}}
@@ -170,6 +224,9 @@ draft: true
 ### Stream External Hydrophones to Orcasound Websites | Session 19
 #### _Karan Mishra_
 {{< end_entry >}}
+
+----
+
 {{< start_entry class="row">}}
 
 
