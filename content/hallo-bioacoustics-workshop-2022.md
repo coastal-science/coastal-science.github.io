@@ -9,83 +9,168 @@ draft: true
 
 [Old version of schedule](/SFU-HALLO-Bioacoustics-workshop-2022.html)
 
-|   |   |
-|---|---|
-| **Workshop session** | **Early morning, August 31, 2022** |
-| Presenter | Ruth Joy |
-| Overview of the Forecast Framework and Challenges | {{< youtube 3fao7Gtlckw >}} |
-| | |
-| **Workshop session** | **Early morning, August 31, 2022** |
-| Presenter | Lucy Quayle/ Susie Washington-Smyth |
-| Southern Gulf Island Whale Sighting Network | {{< youtube 5s-qSV8-raY >}} |
-| | |
-| **Workshop session** | **Early morning, August 31, 2022** |
-| Presenter | Monika Wieland |
-| Tracking Orcas in Washington\'s Inland Waters | {{< youtube BFn2HibmELc >}} |
-| | |
-| **Workshop session** | **Early morning, August 31, 2022** |
-| Presenter | Mike Dowd |
-| Overview Elements of Acoustic Whale Detection | {{< youtube 8siJ-kEmwtY >}} |
-| | |
-| **Workshop session** | **Late morning Aug 31** |
-| Presenter | Harald Yurk |
-| The Good, the Bad and the Ugly of Hydrophone Data | {{< youtube sk74dD7Dfyc >}} |
-| | |
-| **Workshop session** | **Late morning Aug 31** |
-| Presenter | Kaitlin Palmer |
-| Evaluation of the Coastal Acoustic Buoy for Offshore Wind | {{< youtube 37tLBSHxzWk >}} |
-| | |
-| **Workshop session** | **Late morning Aug 31** |
-| Presenter | Melanie Austin |
-| Boundary Pass Underwater Listening Station | {{< youtube R-OI8oltGKo >}} |
-| | |
-| **Workshop session** | **Late morning Aug 31** |
-| Presenter | Taylor Leblond |
-| Music Information Retrieval Random Forest (MIRRF) Classifier for PAMGuard | {{< youtube _rNcYphOKyc >}} |
-| | |
-| **Workshop session** | **Late morning Aug 31** |
-| Presenter | Oliver Kirsebom |
-| Deep Learning and Marine Bioacoustics | {{< youtube ZJz3MdNiUMY >}} |
-| | |
-| **Workshop session** | **Early afternoon Aug 31** |
-| Presenter | Fabio Frazao |
-| Open-source Detector: Current State and Future Efforts | {{< youtube YHixr-N_VQY >}} |
-| | |
-| **Workshop session** | **Early afternoon Aug 31** |
-| Presenter | Paul Nguyen Hong Duc |
-| Characterizing Southern Resident Killer Whale (SRKW) Calls Using a Particle Filter for Frequency Ridge Extraction | {{< youtube jOS-R4DHiHU >}} |
-| | |
-| **Workshop session** | **Early afternoon Aug 31** |
-| Presenter | Val Viers |
-| Adventures with Autoencoders | {{< youtube MLuDuFjUAxE >}} |
-| | |
-| **Workshop session** | **Early afternoon Aug 31** |
-| Presenter | Ambra Jin |
-| Orca Call Analysis for Source Separation | {{< youtube 5r5bq3Qs34c >}} |
-| | |
-| **Workshop session** | **Late afternoon Aug 31** |
-| Presenter | Virgil Zetterlind |
-| Integrating Acoustic and Visual Observations for Cetacean Conservation | {{< youtube d15uOYCt9F4 >}} |
-| | |
-| **Workshop session** | **Late afternoon Aug 31** |
-| Presenter | Andrei Vassilenko/Jillian Anderson |
-| Streaming Data in the Wild | {{< youtube RERsnzFyd1g >}} |
-| | |
-| **Workshop session** | **Late afternoon Aug 31** |
-| Presenter | Scott Viers |
-| Catalyzing Conservation of Southern Resident Killer Whale | {{< youtube kD7ozqCww-Q >}} |
-| | |
-| **Workshop session** | **Late afternoon Aug 31** |
-| Presenter | Benjamin Chew |
-| Streamlining the OrcaAL (Orca Active Learning Tool) | {{< youtube my2RqPoRC6M >}} |
-| | |
-| ****Workshop session**** | **Early morning September 1** |
-| Presenter | Emily Vierling |
-| Non-song Humpback Vocalizations from Inland Waters of Washington | {{< youtube 2qnRTnMCLRw >}} |
-| | |
-| ****Workshop session**** | **Early morning September 1** |
-| Presenter | Karan Mishra |
-| Stream External Hydrophones to Orcasound Websites | {{< youtube mlxg8G5SoIM >}} |
-| | |
+{{< start_entry class="row">}}
+{{< wrapclass class="col-md-4">}}
+{{< youtube 3fao7Gtlckw >}}
+{{< /wrapclass >}}
+### Overview of the Forecast Framework and Challenges | Session 1
+#### _Ruth Joy_
+
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube 5s-qSV8-raY >}}
+{{< /wrapclass >}}
+### Southern Gulf Island Whale Sighting Network | Session 2
+#### _Lucy Quayle/ Susie Washington-Smyth_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube BFn2HibmELc >}}
+{{< /wrapclass >}}
+### Tracking Orcas in Washington\'s Inland Waters | Session 3
+#### _Monika Wieland_
+
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube 8siJ-kEmwtY >}}
+{{< /wrapclass >}}
+### Overview Elements of Acoustic Whale Detection | Session 4
+#### _Mike Dowd_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube sk74dD7Dfyc >}}
+{{< /wrapclass >}}
+### The Good, the Bad and the Ugly of Hydrophone Data | Session 5
+#### _Harald Yurk_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube 37tLBSHxzWk >}}
+{{< /wrapclass >}}
+### Evaluation of the Coastal Acoustic Buoy for Offshore Wind | Session 6
+#### _Kaitlin Palmer_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube R-OI8oltGKo >}}
+{{< /wrapclass>}}
+### Boundary Pass Underwater Listening Station | Session 7
+#### _Melanie Austin_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube _rNcYphOKyc >}}
+{{< /wrapclass >}}
+### Music Information Retrieval Random Forest (MIRRF) Classifier for PAMGuard | Session 8
+#### _Taylor Leblond_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube ZJz3MdNiUMY >}}
+{{< /wrapclass>}}
+### Deep Learning and Marine Bioacoustics | Session 9
+#### _Oliver Kirsebom_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube YHixr-N_VQY >}}
+{{< /wrapclass>}}
+### Open-source Detector: Current State and Future Efforts | Session 10
+#### _Fabio Frazao_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube jOS-R4DHiHU >}}
+{{< /wrapclass>}}
+### Characterizing Southern Resident Killer Whale (SRKW) Calls Using a Particle Filter for Frequency Ridge Extraction | Session 11
+#### _Paul Nguyen Hong Duc_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube MLuDuFjUAxE >}}
+{{< /wrapclass>}}
+### Adventures with Autoencoders | Session 12
+#### _Val Viers_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube 5r5bq3Qs34c >}}
+{{< /wrapclass>}}
+
+### Orca Call Analysis for Source Separation | Session 13
+#### _Ambra Jin_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube d15uOYCt9F4 >}}
+{{< /wrapclass>}}
+### Integrating Acoustic and Visual Observations for Cetacean Conservation | Session 14
+#### _Virgil Zetterlind_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube RERsnzFyd1g >}}
+{{< /wrapclass>}}
+### Streaming Data in the Wild | Session 15
+#### _Andrei Vassilenko/Jillian Anderson_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube kD7ozqCww-Q >}}
+{{< /wrapclass>}}
+### Catalyzing Conservation of Southern Resident Killer Whale | Session 16
+#### _Scott Viers_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube my2RqPoRC6M >}}
+{{< /wrapclass>}}
+### Streamlining the OrcaAL (Orca Active Learning Tool) | Session 17
+#### _Benjamin Chew_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube 2qnRTnMCLRw >}}
+{{< /wrapclass>}}
+### Non-song Humpback Vocalizations from Inland Waters of Washington | Session 18
+#### _Emily Vierling_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
+{{< wrapclass class="col-md-4">}}
+{{< youtube mlxg8G5SoIM >}}
+{{< /wrapclass>}}
+### Stream External Hydrophones to Orcasound Websites | Session 19
+#### _Karan Mishra_
+{{< end_entry >}}
+{{< start_entry class="row">}}
+
 
 <!-- {{< workshop class="test" >}} -->
