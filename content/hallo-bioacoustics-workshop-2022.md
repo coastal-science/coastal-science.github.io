@@ -227,7 +227,5 @@ draft: true
 
 ----
 
-{{< start_entry class="row">}}
-
 
 <!-- {{< workshop class="test" >}} -->
