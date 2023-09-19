@@ -4,7 +4,7 @@ date: 2023-07-31T12:00:00-07:00
 draft: true
 weight: 3
 # icon: "fa fa-headphones"
-thumbnail: https://upload.wikimedia.org/wikipedia/commons/c/c5/Spectrogram-19thC.png #https://orca.research.sfu.ca/catalogue/home-media/S01-J,L-1.jpg
+thumbnail: https://placehold.co/600x400/png #https://orca.research.sfu.ca/catalogue/home-media/S01-J,L-1.jpg
 # thumbnail: images/S01-J,L-1.jpg
 # description: "Dr. John Ford's Southern Resident Killer Whale Call Catalogue"
 ---

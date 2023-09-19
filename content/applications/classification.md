@@ -4,7 +4,7 @@ date: 2023-07-31T12:33:46-07:00
 draft: true
 weight: 5
 # icon: "fa fa-check"
-thumbnail: https://upload.wikimedia.org/wikipedia/commons/c/c5/Spectrogram-19thC.png 
+thumbnail: https://placehold.co/600x400/png
 # thumbnail: images/Scatter-Plot-of-Multi-Class-Classification-Dataset.webp
 # thumbnailurl: ""
 # description: "Models that identify the source of underwater sounds."
