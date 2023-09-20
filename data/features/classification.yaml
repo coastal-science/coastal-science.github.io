@@ -1,5 +1,5 @@
 weight: 5
 name: "Classification Models"
 icon: "fa fa-check"
-url: "research/classification-models/"
+url: "applications/classification/"
 description: "Models that identify the source of underwater sounds."
