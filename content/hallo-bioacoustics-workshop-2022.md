@@ -98,7 +98,7 @@ draft: true
 {{< youtube _rNcYphOKyc >}}
 {{< /wrapclass >}}
 ### Music Information Retrieval Random Forest (MIRRF) Classifier for PAMGuard | Session 8
-#### _Taylor Leblond_
+#### _Holly Leblond_
 {{< end_entry >}}
 
 ----
