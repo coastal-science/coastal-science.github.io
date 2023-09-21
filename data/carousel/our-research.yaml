@@ -1,4 +1,5 @@
 weight: 2
 title: "Our Research"
 description: "<p> We are building a whale forecasting model to protect whales from ship collisions and noise disturbance in the Salish Sea </p>"
+photocredits: "Write credits in markdown here" # or leave blank
 image: "img/LucyShipBreach.PNG"
