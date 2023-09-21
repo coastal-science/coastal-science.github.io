@@ -32,7 +32,11 @@
                           {{ end }}
                         {{ end }} -->
                         <a href="{{ if .Params.thumbnailurl }} {{ .Params.thumbnailurl }} {{ else }} {{ .RelPermalink }} {{ end }}">
-                        <img src="{{ .Params.thumbnail | relURL }}" class="img-responsive" alt="">
+                        <figure>
+                          <img src="{{ .Params.thumbnail | relURL }}" class="img-responsive">
+                          {{ if .Params.photocredits }} <figcaption>Photo Credits: {{ .Params.photocredits | markdownify }}</figcaption> {{ end }}
+                        </figure>
+
                         </a>
                       {{ else }}
                       {{ with .Resources.GetMatch "img/placeholder.png" }}

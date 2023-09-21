@@ -6,6 +6,7 @@ weight: 5
 # icon: "fa fa-check"
 thumbnail: https://placehold.co/600x400/png
 # thumbnail: images/Scatter-Plot-of-Multi-Class-Classification-Dataset.webp
+photocredits: "Write Credits here" # or leave blank
 # thumbnailurl: ""
 # description: "Models that identify the source of underwater sounds."
 ---

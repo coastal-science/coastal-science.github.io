@@ -6,6 +6,7 @@ weight: 3
 # icon: "fa fa-headphones"
 thumbnail: https://placehold.co/600x400/png #https://orca.research.sfu.ca/catalogue/home-media/S01-J,L-1.jpg
 # thumbnail: images/S01-J,L-1.jpg
+photocredits: "Write Credits here" # or leave blank
 # description: "Dr. John Ford's Southern Resident Killer Whale Call Catalogue"
 ---
 

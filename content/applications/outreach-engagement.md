@@ -6,6 +6,7 @@ weight: 7
 # icon: "fa fa-headphones"
 thumbnail: https://placehold.co/600x400/png
 # thumbnail: images/S01-J,L-1.jpg
+photocredits: "Write Credits here" # or leave blank
 ---
 
 ## 
