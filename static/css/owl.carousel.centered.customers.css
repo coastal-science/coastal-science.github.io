@@ -46,3 +46,23 @@ img {
   width: 100%;
   object-fit: contain;
 }
+
+.row.display-flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+}
+.row.display-flex > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}
+
+.partner-logo {
+  margin-top: 10px; 
+  margin-bottom: 10px;
+  /* border: 1px solid rgba(86,61,124,.2); */
+}
+
+#bioacoustics-workshop-schedule{
