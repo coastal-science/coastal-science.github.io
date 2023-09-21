@@ -34,7 +34,7 @@
                         <a href="{{ if .Params.thumbnailurl }} {{ .Params.thumbnailurl }} {{ else }} {{ .RelPermalink }} {{ end }}">
                         <figure>
                           <img src="{{ .Params.thumbnail | relURL }}" class="img-responsive">
-                          {{ if .Params.photocredits }} <figcaption>Photo Credits: {{ .Params.photocredits | markdownify }}</figcaption> {{ end }}
+                          {{ with .Params.photocredits }} <figcaption>Photo Credits: {{ . | markdownify }}</figcaption> {{ end }}
                         </figure>
 
                         </a>
