@@ -138,7 +138,7 @@ pluralizelisttitles = false
     author = "SFU"
     defaultKeywords = ["devcows", "hugo", "go"]
     mainSections = ["blog"]
-    defaultDescription = "Site template made by Devcows using Hugo"
+    defaultDescription = "Humans and Algorithms Listening to Orcas and other whales is a DFO funded intiative to develop a real-time forecasting system for whales in the Salish Sea"
 
     # Social media
     facebook_site = "" # the Facebook handle of your site ('https://www.facebook.com/HANDLE')
