@@ -10,19 +10,18 @@
                 data-slide-speed="{{ default 2000 .Site.Params.CarouselHomepage.slide_speed }}"
                 data-pagination-speed="{{ default 1000 .Site.Params.CarouselHomepage.pagination_speed }}">
                 {{ range sort .Site.Data.carousel "weight" }}
-                <div class="item">
+                <div class="item card bg-dark text-white">
+                    <!-- <div class="card bg-dark text-white"> -->
                     {{ if .href }}
                     <a href="{{ .href }}" target="_blank" title="{{ .title | safeHTML }}">
                     {{ end }}
-                        <div class="row img-responsive"><!-- style="background-image: url('{{ .image }}'); background-repeat: no-repeat; "> -->
-                            <div class="col-sm-5 right">
-                                <h1>{{ .title | safeHTML }}</h1>
-                                {{ .description | safeHTML }}
-                            </div>
-                            <div class="col-sm-7">
-                                <img class="img-responsive" src="{{ .image }}" alt="">
-                            </div>
+                        <img class="card-img img-responsive" src="{{ .image }}" alt="Card image">
+                        <div class="card-img-overlay "> <!-- col-sm-5 right-->
+                          <h1 class="card-title">{{ .title | safeHTML }}</h1>
+                          <!-- <p class="card-text"></p>                           -->
+                          {{ .description | safeHTML }}
                         </div>
+                      <!-- </div> -->
                     {{ if .href }}
                     </a>
                     {{ end }}
