@@ -1,5 +1,6 @@
 weight: 5
 name: "Classification Models"
 icon: "fa fa-check"
+thumbnail: https://placehold.co/80x80/png
 url: "applications/classification/"
 description: "Models that identify the source of underwater sounds."
