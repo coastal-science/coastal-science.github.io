@@ -1,5 +1,6 @@
 weight: 4
 name: "Featured"
 icon: "fa fa-star-half-o"
+thumbnail: https://placehold.co/80x80/png
 url: "418.html"
 description: "Featured"
