@@ -1,5 +1,6 @@
 weight: 6
 name: "Publications"
 icon: "fa fa-book"
+thumbnail: https://placehold.co/80x80/png
 url: "research/publications/"
 description: "Publications"
