@@ -9,294 +9,294 @@ draft: true
 
 [Old version of schedule](/SFU-HALLO-Bioacoustics-workshop-2022.html)
 
-{{< start_entry class="row" >}} <!-- create a row -->
+{{< create class="row" >}} <!-- create a row -->
 
-{{< start_entry class="col-md-4" >}} <!-- column 1 -->
+{{< create class="col-md-4" >}} <!-- column 1 -->
 {{< youtube 3fao7Gtlckw >}} <!-- Add a youtube link with their id -->
-{{< /start_entry >}} <!-- end column 1 -->
+{{< /create >}} <!-- end column 1 -->
 
-{{% start_entry %}} <!-- column 2: note the % symbol for rendering markdown -->
+{{% create %}} <!-- column 2: note the % symbol for rendering markdown -->
 ### Overview of the Forecast Framework and Challenges | Session 1
 #### _Ruth Joy_
-{{% /start_entry %}} <!-- end column 2 -->
+{{% /create %}} <!-- end column 2 -->
 
-{{< /start_entry >}} <!-- end row -->
+{{< /create >}} <!-- end row -->
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube 5s-qSV8-raY >}}
-{{< /start_entry >}}
+{{< /create >}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Southern Gulf Island Whale Sighting Network | Session 2
 #### _Lucy Quayle, Susie Washington-Smyth_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube BFn2HibmELc >}}
-{{< /start_entry >}}
+{{< /create >}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Tracking Orcas in Washington\'s Inland Waters | Session 3
 #### _Monika Wieland_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube 8siJ-kEmwtY >}}
-{{< /start_entry >}}
+{{< /create >}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Overview Elements of Acoustic Whale Detection | Session 4
 #### _Mike Dowd_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube sk74dD7Dfyc >}}
-{{< /start_entry >}}
+{{< /create >}}
 
-{{% start_entry %}}
+{{% create %}}
 ### The Good, the Bad and the Ugly of Hydrophone Data | Session 5
 #### _Harald Yurk_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube 37tLBSHxzWk >}}
-{{< /start_entry >}}
+{{< /create >}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Evaluation of the Coastal Acoustic Buoy for Offshore Wind | Session 6
 #### _Kaitlin Palmer_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube R-OI8oltGKo >}}
-{{< /start_entry>}}
+{{< /create>}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Boundary Pass Underwater Listening Station | Session 7
 #### _Melanie Austin_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube _rNcYphOKyc >}}
-{{< /start_entry >}}
+{{< /create >}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Music Information Retrieval Random Forest (MIRRF) Classifier for PAMGuard | Session 8
 #### _Holly Leblond_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube ZJz3MdNiUMY >}}
-{{< /start_entry>}}
+{{< /create>}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Deep Learning and Marine Bioacoustics | Session 9
 #### _Oliver Kirsebom_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube YHixr-N_VQY >}}
-{{< /start_entry>}}
+{{< /create>}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Open-source Detector: Current State and Future Efforts | Session 10
 #### _Fabio Frazao_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube jOS-R4DHiHU >}}
-{{< /start_entry>}}
+{{< /create>}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Characterizing Southern Resident Killer Whale (SRKW) Calls Using a Particle Filter for Frequency Ridge Extraction | Session 11
 #### _Paul Nguyen Hong Duc_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube MLuDuFjUAxE >}}
-{{< /start_entry>}}
+{{< /create>}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Adventures with Autoencoders | Session 12
 #### _Val Viers_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube 5r5bq3Qs34c >}}
-{{< /start_entry>}}
+{{< /create>}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Orca Call Analysis for Source Separation | Session 13
 #### _Ambra Jin_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube d15uOYCt9F4 >}}
-{{< /start_entry>}}
+{{< /create>}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Integrating Acoustic and Visual Observations for Cetacean Conservation | Session 14
 #### _Virgil Zetterlind_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube RERsnzFyd1g >}}
-{{< /start_entry>}}
+{{< /create>}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Streaming Data in the Wild | Session 15
 #### _Andrei Vassilenko, Jillian Anderson_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube kD7ozqCww-Q >}}
-{{< /start_entry>}}
+{{< /create>}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Catalyzing Conservation of Southern Resident Killer Whale | Session 16
 #### _Scott Viers_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube my2RqPoRC6M >}}
-{{< /start_entry>}}
+{{< /create>}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Streamlining the OrcaAL (Orca Active Learning Tool) | Session 17
 #### _Benjamin Chew_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube 2qnRTnMCLRw >}}
-{{< /start_entry>}}
+{{< /create>}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Non-song Humpback Vocalizations from Inland Waters of Washington | Session 18
 #### _Emily Vierling_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
-{{< start_entry class="row" >}}
+{{< create class="row" >}}
 
-{{< start_entry class="col-md-4" >}}
+{{< create class="col-md-4" >}}
 {{< youtube mlxg8G5SoIM >}}
-{{< /start_entry>}}
+{{< /create>}}
 
-{{% start_entry %}}
+{{% create %}}
 ### Stream External Hydrophones to Orcasound Websites | Session 19
 #### _Karan Mishra_
-{{% /start_entry %}}
+{{% /create %}}
 
-{{< /start_entry >}}
+{{< /create >}}
 
 ----
 
