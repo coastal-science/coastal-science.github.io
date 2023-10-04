@@ -31,6 +31,9 @@ https://stackoverflow.com/a/39164739
 }
 */
 
+/****
+Text wrapping
+****/
 .wrap-right {
     float: right; 
     margin: 5px;
@@ -68,7 +71,9 @@ img {
 #bioacoustics-workshop-schedule{
 }
 
-/* Carousel text overlay over image */
+/****
+Carousel text overlay over image 
+****/
 /* Container holding the image and the text */
 .container {
   position: relative;
