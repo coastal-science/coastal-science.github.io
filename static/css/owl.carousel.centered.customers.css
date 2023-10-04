@@ -116,3 +116,33 @@ Carousel text overlay over image
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.application-summary {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  .application-image {
+    max-height: 400px;
+    overflow: hidden;
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  .application-content {
+    flex: 1;
+    padding: 20px;
+    /* border-bottom: 2px solid $primary; */
+    .application-title {
+    }
+    p {
+    }
+  }
+}
+
+.application-image {
+  img {
+    width: 100%;
+    height: auto;
+  }
+}

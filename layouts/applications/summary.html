@@ -1,11 +1,11 @@
-<div class="work work-summary">
+<div class="application application-summary">
   {{ if .Params.thumbnail }}
-  <div class="work-image">
+  <div class="application-image">
     <a href="{{ if .Params.thumbnailurl }} {{ .Params.thumbnailurl }} {{ else }} {{ .Permalink }} {{ end }}"><img src="{{ .Params.thumbnail | relURL }}"/></a>
   </div>
   {{ end }}
-  <div class="work-content">
-    <h2 class="work-title">
+  <div class="application-content">
+    <h2 class="application-title">
       <a href="{{ .Permalink }}">{{ .Title }}</a>
     </h2>
     {{ .Content | truncate 120 "..." | plainify }}
