@@ -31,7 +31,7 @@
                             <img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}">
                           {{ end }}
                         {{ end }} -->
-                        <a href="{{ if .Params.thumbnailurl }} {{ .Params.thumbnailurl }} {{ else }} {{ .RelPermalink }} {{ end }}">
+                        <a href="{{ if .Params.thumbnailurl }} {{ .Params.thumbnailurl }} {{ else }} {{ .RelPermalink }} {{ end }}" style="color: inherit; text-decoration: inherit; cursor: inherit;">
                         <figure>
                           <img src="{{ .Params.thumbnail | relURL }}" class="img-responsive">
                           {{ with .Params.photocredits }} <figcaption>Photo Credits: {{ . | markdownify }}</figcaption> {{ end }}
