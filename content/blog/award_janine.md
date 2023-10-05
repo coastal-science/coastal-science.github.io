@@ -4,9 +4,12 @@ date: 2023-07-26T01:53:16-07:00
 tags: 
   - news
   - research
+  - graduate student
+  - award
 categories: 
-  - supervised learning
-  - unsupervised learning
+  - whale biology
+  - bioenergetics
+  - Southern Resident killer whale
 
 banner: "img/IMG_0108.JPG"
 # description: "This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content."
