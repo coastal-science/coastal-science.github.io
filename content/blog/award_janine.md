@@ -14,7 +14,7 @@ categories:
 banner: "img/IMG_0108.JPG"
 # description: "This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content."
 authors: 
-  - Ruth Joy
+  - Olivia Murphy
 
 facebook_author: CoastalScience
 facebook_site: 
