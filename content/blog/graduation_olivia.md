@@ -6,8 +6,9 @@ tags:
   - research
   - alumni
 categories: 
-  - supervised learning
-  - unsupervised learning
+  - Southern Resident killer whale
+  - whale acoustics
+  - vessel noise impact
 
 banner: https://www.sfu.ca/~rjoy/images/OliviaMu.png
 banner_align: wrap-left # options: 'wrap-left', 'wrap-right' or remove for none
