@@ -219,7 +219,7 @@ pluralizelisttitles = false
 [params.topbar]
     enable = true
     text = """<p class="hidden-sm hidden-xs">Contact us at no-reply@sfu.ca.</p>
-      <a href="mailto:no-reply@sfu.ca" data-animate-hover="pulse"><i class="fas fa-envelope"></i></a>
+      <a href="mailto:no-reply@sfu.ca" data-animate-hover="pulse" aria-label="Email"><i class="fas fa-envelope"></i></a>
       </p>
       """
 
