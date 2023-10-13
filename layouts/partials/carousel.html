@@ -13,11 +13,11 @@
                 <div class="item card bg-dark text-white">
                     <!-- <div class="card bg-dark text-white"> -->
                     {{ if .href }}
-                    <a href="{{ .href }}" target="_blank" title="{{ .title | safeHTML }}">
+                    <a href="{{ .href }}" target="_blank" title="{{ .Title | safeHTML }}" alt="Read more about {{ .Title | safeHTML }}">
                     {{ end }}
                         <!-- <img class="card-img img-responsive" src="{{ .image }}" alt="Card image"> -->
                         <figure>
-                            <img class="card-img img-responsive" src="{{ .image }}" alt="carousel {{ .title | safeHTML }}">
+                            <img class="card-img img-responsive" src="{{ .image }}" alt="carousel {{ .Title | safeHTML }}">
                             {{ with .photocredits }} <figcaption style="color:white; text-align: center;">Photo Credits: {{ . | markdownify }}</figcaption> {{ end }}
                             <div class="card-img-overlay col-sm-5 right top-left">
                                 <h1 class="card-title">{{ .title | safeHTML }}</h1>

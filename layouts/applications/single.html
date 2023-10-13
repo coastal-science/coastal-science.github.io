@@ -31,9 +31,10 @@
                             <img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}">
                           {{ end }}
                         {{ end }} -->
-                        <a href="{{ if .Params.thumbnailurl }} {{ .Params.thumbnailurl }} {{ else }} {{ .RelPermalink }} {{ end }}" style="color: inherit; text-decoration: inherit; cursor: inherit;">
+                        <a href="{{ if .Params.thumbnailurl }} {{ .Params.thumbnailurl }} {{ else }} {{ .RelPermalink }} {{ end }}" style="color: inherit; text-decoration: inherit; cursor: inherit;"
+                        aria-label="Read more about {{ .Title | safeHTML }}">
                         <figure>
-                          <img src="{{ .Params.thumbnail | relURL }}" class="img-responsive">
+                          <img src="{{ .Params.thumbnail | relURL }}" class="img-responsive" alt="{{ .Title | safeHTML }}">
                           {{ with .Params.photocredits }} <figcaption>Photo Credits: {{ . | markdownify }}</figcaption> {{ end }}
                         </figure>
 
@@ -41,7 +42,7 @@
                       {{ else }}
                       {{ with .Resources.GetMatch "img/placeholder.png" }}
                           {{ with .Resize (printf "%dx%d webp" .Width .Height) }}
-                          <img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}">
+                          <img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="{{ .Title | safeHTML }}">
                           {{ end }}
                         {{ end }}
                       {{ end }}
