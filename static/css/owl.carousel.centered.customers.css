@@ -84,7 +84,7 @@ Carousel text overlay over image
 /* Bottom left text */
 .bottom-left {
   position: absolute;
-  bottom: 8px;
+  bottom: 18px;
   left: 16px;
 }
 
@@ -105,7 +105,7 @@ Carousel text overlay over image
 /* Bottom right text */
 .bottom-right {
   position: absolute;
-  bottom: 8px;
+  bottom: 18px;
   right: 16px;
 }
 

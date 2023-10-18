@@ -19,7 +19,9 @@
                         <figure>
                             <img class="card-img img-responsive" src="{{ .image }}" alt="carousel {{ .Title | safeHTML }}">
                             {{ with .photocredits }} <figcaption style="color:white; text-align: center;">Photo Credits: {{ . | markdownify }}</figcaption> {{ end }}
-                            <div class="card-img-overlay col-sm-5 right top-left">
+                            <div class="card-img-overlay col-sm-5 
+                            {{ with .textalign }}{{ . }}{{ end }} 
+                            {{ with .position }}{{ . }}{{ end }}">
                                 <h1 class="card-title">{{ .title | safeHTML }}</h1>
                                 <!-- <p class="card-text"></p>                           -->
                                 {{ .description | safeHTML }}
