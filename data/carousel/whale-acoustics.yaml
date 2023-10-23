@@ -1,7 +1,7 @@
 weight: 4
 title: "Whale Acoustics"
 description: "<p> Our whale forecast system uses inputs from whale acoustic detections at several underwater hydrophone locations deployed around the Salish Sea </p>"
-position: top-left # empty (text does not overlap with image), centered, four combinations of {top | bottom}-{left | right}
+position: top-right
 textalign:  # left (default), right
 image: "img/SMRUWhaleCalls.jpg"
 photocredits: "Data from SMRU Consulting" # or leave blank
