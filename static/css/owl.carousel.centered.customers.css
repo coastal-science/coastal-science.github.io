@@ -50,6 +50,16 @@ img {
   object-fit: contain;
 }
 
+.fig-caption {
+  font-size: 14px;
+  margin-bottom: 1em; /* Adds space below the figcaption */
+}
+
+.fig-caption .photo-credit {
+  text-align: right;
+  margin-bottom: 0.5em; /* Adds space between the credit and the description */
+}
+
 .row.display-flex {
   display: -webkit-box;
   display: -webkit-flex;
@@ -68,8 +78,7 @@ img {
   /* border: 1px solid rgba(86,61,124,.2); */
 }
 
-#bioacoustics-workshop-schedule{
-}
+
 
 /****
 Carousel text overlay over image 
@@ -80,6 +89,25 @@ Carousel text overlay over image
   /* text-align: center;
   color: white; */
 }
+
+.post-content{
+  padding-bottom: 50px;
+  padding-top: 10px;
+  font-size: 16px;
+}
+
+.post-content p {
+  margin-bottom: 20px;
+}
+
+.justified-text {
+  text-align: justify;
+}
+
+/* p {
+  margin-bottom: 20px;
+} */
+
 
 /* Bottom left text */
 .bottom-left {
@@ -118,31 +146,45 @@ Carousel text overlay over image
 }
 
 .application-summary {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  .application-image {
-    max-height: 400px;
-    overflow: hidden;
-    img {
-      max-width: 100%;
-      height: auto;
-    }
-  }
-  .application-content {
-    flex: 1;
-    padding: 20px;
-    /* border-bottom: 2px solid $primary; */
-    .application-title {
-    }
-    p {
-    }
-  }
+  margin-bottom: 20px; /* Space between items */
+  text-align: center; /* Center-aligns the content */
 }
 
-.application-image {
-  img {
-    width: 100%;
-    height: auto;
-  }
+.application-image img {
+  max-width: 100%; /* Ensures the image is responsive */
+  height: auto;
+}
+
+.application-content {
+  text-align: left;
+  /* Additional styling for content if needed */
+}
+
+.application-title {
+  font-weight: bold;
+  margin-bottom: 10px; /* Space below the title */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  /* Need to check for different screen types and adjust as necessary */
+}
+
+.publication-title {
+  font-weight: bold;
+  color: black;
+  margin-bottom: 20px;
+}
+
+.authors, .journal-venue, .doi {
+  color: #333; /* Dark gray */
+  margin-bottom: 15px;
+}
+
+.publication-image {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.publication-item {
+  margin-bottom: 40px;
 }

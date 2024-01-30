@@ -14,14 +14,14 @@ HALLO formed and began research efforts in 2019. Since then, we've been working 
 [Dr. Ruth Joy](https://www.sfu.ca/~rjoy), *Principal Investigator*
 * School of Environmental Science, Simon Fraser University
 
-[Dr. Steven Bergner](https://www.sfu.ca/computing/people/faculty/stevenbergner.html)
-* School of Computing Science, Simon Fraser University
-
 Dr. Mike Dowd
 * Department of Mathematics and Statistics, Dalhousie University
 
 Fabio Frazao
 * Department of Computer Science, Dalhousie University
+
+Dr. Bruno Padovese
+* School of Environmental Science, Simon Fraser University
 
 Dr. Oliver Kirsebom
 * Open Ocean Robotics
@@ -29,6 +29,8 @@ Dr. Oliver Kirsebom
 Dr. Scott Viers
 * OrcaSound Collective, Beam Reach Marine Science and Sustainability School
 
+Dr. Dave Campbell
+* School of Mathematics and Statistics, Carleton University
 
 ### Collaborators
 
@@ -54,5 +56,7 @@ Digital Research Alliance of Canada
 Paul Nguyen Hong Duc
 * School of Mathematics and Statistics, Carleton University
 
-Dr. Dave Campbell
-* School of Mathematics and Statistics, Carleton University
+
+
+[Dr. Steven Bergner](https://www.sfu.ca/computing/people/faculty/stevenbergner.html)
+* School of Computing Science, Simon Fraser University

@@ -10,6 +10,7 @@ photocredits: "Write Credits here" # or leave blank
 thumbnailurl: "https://orca.research.sfu.ca/catalogue"
 # description: "Dr. John Ford's Southern Resident Killer Whale Call Catalogue"
 ---
+{{< figure url="/images/S01-J,L-1.jpg" credit="Write Credits here" >}}
 
 ## Dr. John Ford\'s Southern Resident Killer Whale Call Catalogue
 

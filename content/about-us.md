@@ -5,19 +5,17 @@ date: 2023-09-05T13:00:40-07:00
 draft: true
 ---
 
-Humans and Algorithms Listening to Orcas explores the concept of training artificial intelligence systems to detect underwater whale vocalizations. The research goal is to develop a whale forecasting system to warn nearby ships of whale presence. This could prevent potentially fatal ship strikes for the endangered Southern Resident killer whales and other whale species that frequent the waters of the Salish Sea in the Pacific Northwest. 
+HALLO (Humans and Algorithms Listening to Orcas) is a multidisciplinary collective comprising bioacousticians, ocean researchers, citizen scientists, and computer scientists, with a shared mission of developing advanced artificial intelligence systems aimed at supporting the environmental conservation of endangered marine mammals. Our first goal is the development of a whale forecasting system, primarily focused on aiding the preservation of the endangered Southern Resident Killer Whale (SRKW) population. This system is designed to alert nearby ships of whale presence in the vicinity, with the aim of preventing potentially fatal ship strikes. While our immediate focus is on the SRKWs, this system is also beneficial for other whale species that inhabit the Salish Sea in the Pacific Northwest. Beyond its immediate protective function, this system will also contribute valuable data to inform and enhance conservation measures. 
 
-To train the artificial intelligence systems, we use recordings of verified whale vocalizations from several hydrophones located around the Salish Sea. These hydrophones are operated by various partners including citizen scientists and projects like the [Orcasound project](https://www.orcasound.net/).
+To develop this forecasting system, we utilize a diverse range of marine data, including:
 
+* Automated acoustic detections from hydrophone deployments
+* Marine environmental data
+* Visual sightings reported by citizen science groups
+* Statistical modeling to project the future locations of the whales
 
-#### Grammarly contributed to this text by responding to these AI prompts: Prompts I wrote 
-- "Write content for about page" 
-- "Write content for the about page of an organization"
+To support this forecast system, our team is developping artificial intelligence models automatically detect and classifying whale vocalizations from large quantities of acoustic data.  To train these AI systems, we use recordings of verified whale vocalizations captured by several hydrophones strategically placed around the Salish Sea. These hydrophones are operated by various partners including citizen scientists and projects like the [Orcasound project](https://www.orcasound.net/).
 
-Welcome to our organization! We are a group of individuals who share a common goal of [insert mission/goal]. Our journey began when [insert personal story/background], and since then, we have been working tirelessly to achieve our mission.
+We collaborate and rely extensively with the ocean research community, encompassing government institutions, citizen science groups, First Nations, and other key stakeholders committed to marine conservation and research. Our partnerships are instrumental in not only providing the necessary data to develop these state-of-the-art systems but also ensuring that we meet the needs of the community.
 
-At our core, we believe that [insert belief]. By coming together and working towards a common goal, we can make a real difference in the world. We created this organization to [insert purpose of organization], and we hope to inspire others to join us in our mission.
-
-Our team is made up of passionate [insert profession/hobby/interest] enthusiasts who are dedicated to making a positive impact. We believe that by sharing our experiences, thoughts, and ideas, we can learn from each other and grow together.
-
-Thank you for taking the time to learn more about our organization. If you share our vision and would like to get involved, please don't hesitate to reach out to us. We look forward to hearing from you!
+Sharing of knowledge is at the core of our project. We are committed to open-source principles, ensuring that all of our projects are accessible and transparent. We strongly encourage collaboration and welcome involvement from those who share our vision of advancing marine conservation through technology and research. If you are interested in contributing or collaborating with us, or simply want to know more, please do not hesitate to [reach out](mailto:no-reply@sfu.ca). We are always eager to connect with like-minded individuals and organizations. For a closer look at our projects, [see our GitHub repo](https://github.com/coastal-science). We look forward to hearing from you!

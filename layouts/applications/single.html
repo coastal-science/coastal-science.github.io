@@ -25,12 +25,8 @@
 
                     <div class="col-12 col-md-8" id="applications-post">
                       
-                      {{ if .Params.thumbnail }}
-                      <!-- {{ with .Resources.Get .Params.thumbnail }}
-                          {{ with .Resize (printf "%dx%d webp" .Width .Height) }}
-                            <img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}">
-                          {{ end }}
-                        {{ end }} -->
+                      <!-- {{ if .Params.thumbnail }}
+
                         <a href="{{ if .Params.thumbnailurl }} {{ .Params.thumbnailurl }} {{ else }} {{ .RelPermalink }} {{ end }}" style="color: inherit; text-decoration: inherit; cursor: inherit;"
                         aria-label="Read more about {{ .Title | safeHTML }}">
                         <figure>
@@ -39,13 +35,13 @@
                         </figure>
 
                         </a>
-                      {{ else }}
+                      {{ else }} -->
                       {{ with .Resources.GetMatch "img/placeholder.png" }}
                           {{ with .Resize (printf "%dx%d webp" .Width .Height) }}
                           <img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="{{ .Title | safeHTML }}">
                           {{ end }}
                         {{ end }}
-                      {{ end }}
+                      <!-- {{ end }} -->
                       
                         {{ if or .Params.author .Params.date }}
                           <p class="text-muted text-uppercase mb-small text-right">
@@ -63,7 +59,7 @@
                           </p>
                         {{ end }}
 
-                        <div id="post-content">
+                        <div id="post-content" class="post-content justified-text">
                           {{ .Content }}
                         </div>
                         <!-- /#post-content -->
