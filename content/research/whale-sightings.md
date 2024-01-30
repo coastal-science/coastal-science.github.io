@@ -5,7 +5,7 @@ date: 2023-09-11T18:04:04-07:00
 draft: true
 ---
 
-{{< figure src="/img/LucyWhaleSighting.jpg" caption="2020 MSc student Lucy Quayle. Photo taken from Saturna Island by Derek Peterson" alt="credit: Derek Peterson" >}}
+{{< figure url="/img/LucyWhaleSighting.jpg" description="2020 MSc student Lucy Quayle. Photo taken from Saturna Island by Derek Peterson" credit="Derek Peterson" >}}
 
 Whale sightings are one of the ways in which we insight into where the whales are located in real time. On the Canadian side of the border, Master's students from Simon Fraser University have been conducting research on whales in the Southern Gulf Islands and are able to provide whale sightings throughout field seasons over the past several years. These researchers have worked alongside the citizen science group, the Southern Gulf Islands Whale Sightings Network (SGIWSN), made up of over 60 whale sighters located throughout the Southern Gulf Islands. 
 
