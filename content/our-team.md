@@ -7,7 +7,9 @@ header_menu: true
 
 HALLO formed and began research efforts in 2019. Since then, we've been working on several objectives that work towards developing the real-time whale forecasting system in the Salish Sea.
 
-{{< figure src="/img/HALLOMeetingScreenshot_2023.06.30.png" caption="Team photo -- June 2023" alt="Team photo -- June 2023" >}}
+{{< figure url="/img/HALLOMeetingScreenshot_2023.06.30.png" description="Team photo -- June 2023" alt="Team photo -- June 2023" >}}
+
+
 
 ### Researchers
 
