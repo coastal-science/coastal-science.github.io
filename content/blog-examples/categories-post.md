@@ -12,7 +12,6 @@ tags:
     - research
 categories: 
     - programming
-    - lorem
     - pseudo
 authors: 
     - John Doe

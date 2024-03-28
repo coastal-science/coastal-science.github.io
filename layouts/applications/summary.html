@@ -8,6 +8,10 @@
     <h2 class="application-title">
       <a href="{{ .Permalink }}" aria-label="Read more about {{ .Title | safeHTML }}">{{ .Title }}</a>
     </h2>
-    {{ .Content | plainify | markdownify | truncate 120 "..." }}
+    {{ with .Params.description }}
+      <p>{{ . }}</p>
+    {{ else }}
+      <p>{{ .Content | plainify | markdownify | truncate 120 "..." }}</p>
+    {{ end }}
   </div>
 </div>

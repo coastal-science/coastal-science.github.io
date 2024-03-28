@@ -8,10 +8,10 @@ thumbnail: /img/short_detector_animation.gif
 # thumbnail: images/Scatter-Plot-of-Multi-Class-Classification-Dataset.webp
 # photocredits: "test" # or leave blank
 thumbnailurl: "https://github.com/coastal-science/HALLO-models"
-description: "Models that identify the source of underwater sounds."
+description: "Models that identify the source of underwater sounds. Explore our diverse models designed to discern underwater sounds from marine mammals."
 ---
 
-## CLassifying Whale Sounds With Deep Learning
+## Classifying Whale Sounds With Deep Learning
 
 Our team has developed sophisticated artificial inteligence models capable of identifying the sources of underwater sounds. As of now, our primary offering is a binary classifier designed specifically for detecting killer whales. This model operates by categorizing acoustic events into one of two groups: sounds produced by killer whales and sounds not produced by killer whales.
 

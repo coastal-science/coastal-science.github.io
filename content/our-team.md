@@ -25,10 +25,19 @@ Fabio Frazao
 Dr. Bruno Padovese
 * School of Environmental Science, Simon Fraser University
 
+Teng-Wei Lim
+* School of Environmental Science, Simon Fraser University
+
+Dr. Peter Thompson
+* School of Environmental Science, Simon Fraser University
+
 Dr. Oliver Kirsebom
 * Open Ocean Robotics
 
 Dr. Scott Viers
+* OrcaSound Collective, Beam Reach Marine Science and Sustainability School
+
+Dr. Val Viers
 * OrcaSound Collective, Beam Reach Marine Science and Sustainability School
 
 Dr. Dave Campbell
@@ -49,16 +58,14 @@ Saturna Island Marine Research and Education Society (SIMRES)
 * Dr. Martin Wale
 
 Digital Research Alliance of Canada
-* Jillian Anderson
+* Jillian Anderson, Dr. Andrei Vassilenko, Ishan Sahay, Alireza Ensan
 
 
 
 ### Previous Researchers
 
-Paul Nguyen Hong Duc
+Dr. Paul Nguyen Hong Duc
 * School of Mathematics and Statistics, Carleton University
-
-
 
 [Dr. Steven Bergner](https://www.sfu.ca/computing/people/faculty/stevenbergner.html)
 * School of Computing Science, Simon Fraser University
