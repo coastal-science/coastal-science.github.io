@@ -14,7 +14,7 @@ To develop this forecasting system, we utilize a diverse range of marine data, i
 * Visual sightings reported by citizen science groups
 * Statistical modeling to project the future locations of the whales
 
-To support this forecast system, our team is developping artificial intelligence models automatically detect and classifying whale vocalizations from large quantities of acoustic data.  To train these AI systems, we use recordings of verified whale vocalizations captured by several hydrophones strategically placed around the Salish Sea. These hydrophones are operated by various partners including citizen scientists and projects like the [Orcasound project](https://www.orcasound.net/).
+To support this forecast system, our team is developing artificial intelligence models automatically detect and classifying whale vocalizations from large quantities of acoustic data.  To train these AI systems, we use recordings of verified whale vocalizations captured by several hydrophones strategically placed around the Salish Sea. These hydrophones are operated by various partners including citizen scientists and projects like the [Orcasound project](https://www.orcasound.net/).
 
 We collaborate and rely extensively with the ocean research community, encompassing government institutions, citizen science groups, First Nations, and other key stakeholders committed to marine conservation and research. Our partnerships are instrumental in not only providing the necessary data to develop these state-of-the-art systems but also ensuring that we meet the needs of the community.
 
