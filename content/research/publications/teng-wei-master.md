@@ -6,7 +6,7 @@ authors:
 image: "/img/tengwei_master_first_page.png"
 journal: "Department of Statistics and Actuarial Science"
 doi: ""
-publicationurl: "https://theses.lib.sfu.ca/7791/show"
+publicationurl: "https://theses.lib.sfu.ca/file/thesis/7791"
 draft: true
 ---
 
