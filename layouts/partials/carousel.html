@@ -23,8 +23,7 @@
                             {{ with .textalign }}{{ . }}{{ end }} 
                             {{ with .position }}{{ . }}{{ end }}">
                                 <h1 class="card-title">{{ .title | safeHTML }}</h1>
-                                <!-- <p class="card-text"></p>                           -->
-                                {{ .description | safeHTML }}
+                                <div class="card-text">{{ .description | safeHTML }}</div>
                             </div>
                         </figure>
                       <!-- </div> -->

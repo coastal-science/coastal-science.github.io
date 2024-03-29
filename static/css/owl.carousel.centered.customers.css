@@ -168,6 +168,10 @@ Carousel text overlay over image
 /* Responsive adjustments */
 @media (max-width: 768px) {
   /* Need to check for different screen types and adjust as necessary */
+  .card-text { 
+    /* Carousel text */
+    display: none; 
+  } 
 }
 
 .publication-title {
