@@ -130,7 +130,7 @@ pluralizelisttitles = false
 [[menu.topbar]]
     weight = 5
     name = "Email"
-    url = "mailto:no-reply@sfu.ca"
+    url = "/contact"
     pre = "<i class='fas fa-2x fa-envelope'></i>"
 
 [params]
@@ -218,8 +218,8 @@ pluralizelisttitles = false
 # Enable or disable top bar with social icons
 [params.topbar]
     enable = true
-    text = """<p class="hidden-sm hidden-xs">Contact us at no-reply@sfu.ca.</p>
-      <a href="mailto:no-reply@sfu.ca" data-animate-hover="pulse" aria-label="Email"><i class="fas fa-envelope"></i></a>
+    text = """<p class="hidden-sm hidden-xs">Contact us at ____@sfu.ca.</p>
+      <a href="/contact" data-animate-hover="pulse" aria-label="Email"><i class="fas fa-envelope"></i></a>
       </p>
       """
 
