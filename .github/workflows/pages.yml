@@ -21,6 +21,17 @@ defaults:
     shell: bash
 
 jobs:
+  generate-timestamp:
+    runs-on: [ self-hosted, rcg ]
+    steps:
+      - name: Set TIMESTAMP
+        id: date
+        run: |
+             export DATE=$(date +'%Y%m%d-%H%M%S')
+             echo "TIMESTAMP=$DATE" >> $GITHUB_ENV
+    outputs:
+      TIMESTAMP: ${{ env.TIMESTAMP }}
+
   # Build job
   build:
     runs-on: [ self-hosted, rcg ]
