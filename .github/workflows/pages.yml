@@ -126,7 +126,7 @@ jobs:
 # #           path: ${{ github.workspace }}/public
 
 #   # Create and publish a docker image          
-  build-and-push-image:
+  build_and_push_image:
     needs:
       - generate-timestamp
       - build-website
@@ -143,6 +143,9 @@ jobs:
       contents: read
       packages: write
       # 
+    outputs:
+      tags: ${{ steps.meta.outputs.tags }}
+
     steps:
       # - name: Checkout repository
       #   uses: actions/checkout@v4
@@ -202,14 +205,13 @@ jobs:
     needs: 
       - build-website
       # - deploy
-      - build-and-push-image
+      - build_and_push_image
     runs-on: [ self-hosted, rcg ]
     steps:
       - name: Current workspace
         run: du -shc ${GITHUB_WORKSPACE}
-      # - name: Clean Up Docker Images
-      #  run: docker rmi -f $(docker images 'registry.rcg.sfu.ca/rcg/website' -a -q)
       - name: Clean Up Docker Images
-        run: docker rmi -f $(docker images '${{ steps.meta.outputs.tags }}' -a -q)
+        # run: docker rmi -f $(docker images '${{ jobs.build_and_push_image.steps.meta.outputs.tags }}' -a -q)
+        run: docker rmi -f $(docker images '${{ needs.build_and_push_image.outputs.tags }}' -a -q)
       - name: Clean Up Workspace
         run: rm -rf ${GITHUB_WORKSPACE}
