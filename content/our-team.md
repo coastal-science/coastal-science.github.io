@@ -58,7 +58,7 @@ Saturna Island Marine Research and Education Society (SIMRES)
 * Dr. Martin Wale
 
 Digital Research Alliance of Canada
-* Jillian Anderson, Dr. Andrei Vassilenko, Ishan Sahay, Alireza Ensan
+* Jillian Anderson, Andrei Vassilenko, Ishan Sahay, Dr. Alireza Ensan
 
 
 
