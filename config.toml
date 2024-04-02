@@ -271,7 +271,7 @@ pluralizelisttitles = false
     enable = true
     icon = "far fa-photo"
     # title = "Do you want to see more?"
-    subtitle = "Photo Credits: Placeholder"
+    subtitle = "Photo Credits: Lauren Laturnus"
     # link_url = "#featured"
     # link_text = "Check other featured content"
 
