@@ -33,7 +33,7 @@ jobs:
       TIMESTAMP: ${{ env.TIMESTAMP }}
 
   # Build job
-  build:
+  build-website:
     runs-on: [ self-hosted, rcg ]
     container:
       image: peaceiris/hugo
@@ -127,6 +127,9 @@ jobs:
 
 #   # Create and publish a docker image          
   build-and-push-image:
+      needs:
+      - generate-timestamp
+      - build-website
     # runs-on: ubuntu-latest
     runs-on: [ self-hosted, rcg ]
 
