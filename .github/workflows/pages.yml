@@ -127,7 +127,7 @@ jobs:
 
 #   # Create and publish a docker image          
   build-and-push-image:
-      needs:
+    needs:
       - generate-timestamp
       - build-website
     # runs-on: ubuntu-latest
@@ -135,8 +135,8 @@ jobs:
 
     # Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.
     env:
-        REGISTRY: docker.github.sfu.ca #ghcr.io
-        IMAGE_NAME: ${{ github.repository }}
+      REGISTRY: docker.github.sfu.ca #ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
 
     # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
     permissions:
@@ -200,8 +200,9 @@ jobs:
   cleanup:
     if: ${{ always() }}
     needs: 
-      - build
+      - build-website
       # - deploy
+      - build-and-push-image
     runs-on: [ self-hosted, rcg ]
     steps:
       - name: Current workspace
