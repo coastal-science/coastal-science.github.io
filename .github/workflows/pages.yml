@@ -1,5 +1,5 @@
 # Sample workflow for building and deploying a Hugo site to GitHub Pages
-name: Deploy Hugo site to Pages
+name: Deploy Hugo site to Pages and build docker image
 
 on:
   # Runs on pushes targeting the default branch
@@ -77,10 +77,6 @@ jobs:
           submodules: true  # Fetch Hugo themes (true OR recursive) # failing on ubuntu container
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
           
-#       - name: Checkout submodules
-#         run: |
-#           git submodule update --init --recursive --depth 1 
-          
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v2
@@ -127,12 +123,12 @@ jobs:
 # #         with:
 # #           path: ${{ github.workspace }}/public
 
-#   # Create and publish a docker image          
+  # Create and publish a docker image          
   build_and_push_image:
     needs:
       - generate-timestamp
       - build-website
-    # runs-on: ubuntu-latest
+
     runs-on: [ self-hosted, rcg ]
 
     # Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.
@@ -142,9 +138,8 @@ jobs:
 
     # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
     permissions:
-      contents: read
       packages: write
-      # 
+      
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
 
@@ -213,7 +208,6 @@ jobs:
       - name: Current workspace
         run: du -shc ${GITHUB_WORKSPACE}
       - name: Clean Up Docker Images
-        # run: docker rmi -f $(docker images '${{ jobs.build_and_push_image.steps.meta.outputs.tags }}' -a -q)
         run: docker rmi -f $(docker images '${{ needs.build_and_push_image.outputs.tags }}' -a -q)
       - name: Clean Up Workspace
         run: rm -rf ${GITHUB_WORKSPACE}
