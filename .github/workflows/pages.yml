@@ -34,8 +34,20 @@ jobs:
     outputs:
       TIMESTAMP: ${{ env.TIMESTAMP }}
 
+  configure-pages:
+    runs-on: [ self-hosted, rcg ]
+    steps:
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v2
+    outputs:
+      base_url: ${{ env.base_url }}
+      
   # Build job
   build-website:
+    needs:
+      - configure-pages
+    
     runs-on: [ self-hosted, rcg ]
     container:
       image: peaceiris/hugo
@@ -50,11 +62,11 @@ jobs:
       id-token: write
     
     steps:
-# GH Actions
+    # GH Actions
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: "latest"
+          hugo-version: ${{ env.HUGO_VERSION }}
           extended: true
 
       - name: Pre-Build ls
@@ -65,10 +77,6 @@ jobs:
         with:
           submodules: true  # Fetch Hugo themes (true OR recursive) # failing on ubuntu container
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
-          
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v2
         
       - name: Build with Hugo
         env:
@@ -80,7 +88,7 @@ jobs:
             --gc \
             --buildDrafts \
             --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/"
+            --baseURL "${{ needs.configure-pages.outputs.base_url }}/"
             
       - name: Post-Build ls
         run: ls -lah public/
