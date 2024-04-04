@@ -157,31 +157,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-#   # Deployment job
-#   deploy:
-#     environment:
-#       name: github-pages
-#       url: ${{ steps.deployment.outputs.page_url }}
-#     runs-on: [ self-hosted, rcg ]
-#     needs: build
-#     steps:
-#       - uses: actions/download-artifact@master
-#         with:
-#           name: github-pages
-#           path: .
-#       - uses: actions/configure-pages@v1
-#       - name: 'UnTar files'
-#         run: |
-#           unzip github-pages.zip
-#           tar -xvf --overwrite github-pages.tar -C ./public 
-        
-#       - uses: actions/upload-pages-artifact@v1
-#         with:
-#           path: ./public
-#       - name: Deploy to GitHub Pages
-#         id: deployment
-#         uses: actions/deploy-pages@v1
-
 ## SKIP Until runner is figured out. Perform manually until them.
   # Cleanup workspace on the runner
   cleanup:
