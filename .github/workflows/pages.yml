@@ -108,21 +108,6 @@ jobs:
           user_email: 'github-actions[bot]@users.noreply.github.com'
           commit_message: ${{ github.event.head_commit.message }}
 
-#       - name: 'Tar files'
-#         run: tar -cvf github-pages.tar ./public         
-        
-#       - name: Upload artifact
-#         uses: actions/upload-artifact@v3
-#         with:
-#           name: github-pages
-#           path: github-pages.tar
-#           if-no-files-found: error
-          
-# #       - name: Upload Pages artifact
-# #         uses: actions/upload-pages-artifact@v1
-# #         with:
-# #           path: ${{ github.workspace }}/public
-
   # Create and publish a docker image          
   build_and_push_image:
     needs:
