@@ -57,9 +57,7 @@ jobs:
     
     # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
     permissions:
-      contents: write
-      pages: write
-      id-token: write
+      contents: read
     
     steps:
     # GH Actions
@@ -92,7 +90,26 @@ jobs:
             
       - name: Post-Build ls
         run: ls -lah public/
-        
+      
+  # Deployment
+  deploy-gh-pages:
+    needs:
+      - build-website
+    
+    runs-on: [ self-hosted, rcg ]
+    container:
+      image: peaceiris/hugo
+
+    env:
+      HUGO_VERSION: latest
+    
+    # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    
+    steps:
       - name: Deploy 
       # uploads via a git commit to github.sfu.ca
         uses: peaceiris/actions-gh-pages@v3
