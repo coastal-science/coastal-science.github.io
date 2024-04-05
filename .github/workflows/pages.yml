@@ -171,13 +171,12 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-## SKIP Until runner is figured out. Perform manually until them.
   # Cleanup workspace on the runner
   cleanup:
     if: ${{ always() }}
     needs: 
       - build-website
-      # - deploy
+      - deploy-gh-pages
       - build_and_push_image
     runs-on: [ self-hosted, rcg ]
     steps:
