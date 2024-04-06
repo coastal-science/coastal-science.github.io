@@ -218,7 +218,7 @@ pluralizelisttitles = false
 # Enable or disable top bar with social icons
 [params.topbar]
     enable = true
-    text = """<a href="/contact" data-animate-hover="pulse" aria-label="Email"><p class="hidden-sm hidden-xs">Contact us at ____@sfu.ca.</p></a>
+    text = """<a href="/contact" data-animate-hover="pulse" aria-label="Email"><p class="hidden-sm hidden-xs">Contact us</p></a>
       """
 
 # Enable and disable widgets for the right sidebar
