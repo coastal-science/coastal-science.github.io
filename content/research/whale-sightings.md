@@ -2,7 +2,6 @@
 title: "Whale Sightings"
 id: "whale-sightings"
 date: 2023-09-11T18:04:04-07:00
-draft: true
 ---
 
 {{< figure url="/img/LucyWhaleSighting.jpg" description="2020 MSc student Lucy Quayle. Photo taken from Saturna Island by Derek Peterson" credit="Derek Peterson" >}}

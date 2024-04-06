@@ -26,7 +26,6 @@ twitter_site:
 
 summary:  # If blank, it this is populated from the first 100 characters from the post 
 
-draft: true
 ---
 
 Congrats to one of our team members, Olivia Murphy, for recently finishing her Master's degree at Simon Fraser University! In partnership with the Saturna Island Marine Research and Education Society, for the last two years, Olivia has been researching vessel related noise impacts on the endangered Southern Resident killer whales (SRKW) during their transits of Boundary Pass over the summer of 2022. Olivia found that SRKW are increasing the peak frequency, frequency range, and duration of calls when there is more underwater background noise from vessels in the area. See her full thesis here: [https://www.sfu.ca/~rjoy/OMurphy_ARP.pdf](https://www.sfu.ca/~rjoy/OMurphy_ARP.pdf "Analysing marine vessel noise impacts on endangered Southern Resident killer whale acoustic behaviour during transits of Boundary Pass in the Salish Sea by Olivia Beth Murphy")

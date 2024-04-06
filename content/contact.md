@@ -3,6 +3,7 @@ title: "Contact"
 id: contact
 weight: 4
 header_menu: true
+draft: true
 ---
 
 # We are here to help you

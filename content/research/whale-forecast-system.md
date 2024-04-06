@@ -2,7 +2,6 @@
 title: "Whale Forecast System"
 id: "whale-forecast-system"
 date: 2023-09-11T18:03:55-07:00
-draft: true
 ---
 
 The study of whale forecast systems has garnered significant interest in recent years, particularly in the realm of marine conservation and management. These highly social marine mammals, often moving in close-knit groups or pods, face significant challenges due to noise and physical disturbances caused by dense shipping traffic in their natural habitats. Therefore, it is of considerable interest to be able to accurately predict their movement. Our project main goal is to ultimately be able to forecast whale locations and alert vessel captains and ports when a whale is forecasted to be entering their path. In this way, risk-reducing measures such as adjusting vessel paths or reducing their speeds can be undertaken, minimizing acoustic disturbances and the risk of vessel collisions.  

@@ -2,7 +2,6 @@
 title: "Whale Acoustics"
 id: "whale-acoustics"
 date: 2023-09-11T18:03:41-07:00
-draft: true
 ---
 
 Whale acoustics is a fascinating subject that explores the vocalizations and communication methods of these creatures. Whales predominantly use sound to communicate, navigate, and interact with their environment. This acoustical signaling plays a crucial role in their survival, from locating prey to maintaining social connections within pods. Through the study of whale acoustics, we are able to gain a deeper understanding of their behavior, social structures, and even migration patterns. This field of research relies on a growing number of underwater listening devices ranging from stationary hydrophone deployments to autonomous gliders that covers vast areas to capture the sounds produced by whales. 

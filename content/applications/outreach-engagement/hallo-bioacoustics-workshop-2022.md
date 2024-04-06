@@ -2,7 +2,6 @@
 title: "2022 Workshop"
 id: "2022-workshop"
 date: 2023-09-10T00:16:56-07:00
-draft: true
 ---
 
 # Bioacoustics Workshop Schedule
