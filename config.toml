@@ -136,13 +136,13 @@ pluralizelisttitles = false
 [params]
     viewMorePostLink = "/blog/"
     author = "SFU"
-    defaultKeywords = ["devcows", "hugo", "go"]
+    defaultKeywords = ["hydrophone", "HALLO", "Simon Fraser University", "Humans and Algorithms Listening and Learning Orcas", "Salish Sea", "orca whales", "forecast models"]
     mainSections = ["blog"]
     defaultDescription = "Humans and Algorithms Listening to Orcas and other whales is a DFO funded intiative to develop a real-time forecasting system for whales in the Salish Sea"
 
     # Social media
     facebook_site = "" # the Facebook handle of your site ('https://www.facebook.com/HANDLE')
-    twitter_site = "GoHugoIO" # the Twitter handle of your site (without the '@')
+    twitter_site = "" # the Twitter handle of your site (without the '@')
     default_sharing_image = "img/sharing-default.png"
 
     # Google Maps widget: If `googleMapsApiKey` is not set, no key will be passed to Google (which likely results in a broken map widget).
