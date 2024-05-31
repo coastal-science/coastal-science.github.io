@@ -125,19 +125,19 @@ pluralizelisttitles = false
     weight = 2
     name = "GitHub"
     url = "https://github.com/coastal-science"
-    pre = "<i class='fab fa-2x fa-github'></i>"
+    pre = "<i class='fa fa-2x fa-github' aria-hidden='true'></i>"
 
 [[menu.topbar]]
     weight = 5
     name = "Email"
     url = "/contact"
-    pre = "<i class='fas fa-2x fa-envelope'></i>"
+    pre = "<i class='fa fa-2x fa-envelope' aria-hidden='true'></i>"
 
 [[menu.topbar]]
     weight = 5
     name = "YouTube"
     url = "https://www.youtube.com/@coastal-science/featured"
-    pre = "<i class='fa fa-2x fa-youtube'></i>"
+    pre = "<i class='fa fa-2x fa-youtube' aria-hidden='true'></i>"
     
 [params]
     viewMorePostLink = "/blog/"
