@@ -133,6 +133,12 @@ pluralizelisttitles = false
     url = "/contact"
     pre = "<i class='fas fa-2x fa-envelope'></i>"
 
+[[menu.topbar]]
+    weight = 5
+    name = "YouTube"
+    url = "https://www.youtube.com/@coastal-science/featured"
+    pre = "<i class='fa fa-2x fa-youtube'></i>"
+    
 [params]
     viewMorePostLink = "/blog/"
     author = "SFU"
