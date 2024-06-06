@@ -53,7 +53,7 @@ jobs:
       image: peaceiris/hugo
 
     env:
-      HUGO_VERSION: latest
+      HUGO_VERSION: 126.1 # latest
     
     # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
     permissions:
