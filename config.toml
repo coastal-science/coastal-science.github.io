@@ -1,5 +1,5 @@
 #baseurl = "https://isahay.github.io" # "https://devcows.github.io/hugo-universal-theme/" # Configure URL. if using gh-pages https://github.com/<username>/hugo-universal-theme URL: https://<username>.github.io/hugo-universal-theme/
-baseurl = "https://isahay.github.io/coastal-science.github.io" # "https://devcows.github.io/hugo-universal-theme/" # Configure URL. if using gh-pages https://github.com/<username>/hugo-universal-theme URL: https://<username>.github.io/hugo-universal-theme/
+baseURL = "https://isahay.github.io/coastal-science.github.io" # "https://devcows.github.io/hugo-universal-theme/" # Configure URL. if using gh-pages https://github.com/<username>/hugo-universal-theme URL: https://<username>.github.io/hugo-universal-theme/
 #baseurl = "https://orca.research.sfu.ca"
 canonifyURLs = true
 title = "HALLO - Humans and Algorithms Listening to Orcas"
