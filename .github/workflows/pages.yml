@@ -41,7 +41,7 @@ jobs:
         id: pages
         uses: actions/configure-pages@v2
     outputs:
-      base_url: ${{ env.base_url }}
+      base_url: ${{ steps.pages.outputs.base_url }}
       
   # Build job
   build-website:
@@ -68,7 +68,10 @@ jobs:
           extended: true
 
       - name: Pre-Build ls
-        run: ls -lah
+        run: |
+          ls -lah
+          echo "${{ needs.generate-timestamp.outputs.TIMESTAMP }}" from env
+          echo "${{ needs.configure-pages.outputs.base_url }}/" from env
 
       - name: Checkout
         uses: actions/checkout@v3
