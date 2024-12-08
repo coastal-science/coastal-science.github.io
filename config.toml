@@ -174,8 +174,12 @@ pluralizelisttitles = false
     # - test a dummy email yourself
     # - you're done. Happy mailing!
     #
+    
     # Enable the contact form by entering your Formspree.io endpoint url
-    formspree_action = "https://formsubmit.co/no-reply@sfu.ca" #"https://formspree.io/sample/of/endpoint"
+    # "https://formspree.io/sample/of/endpoint"
+    # If the environment variable `HUGO_FORMS` is set, it will supersede the variable below
+    formspree_action = "https://formsubmit.co/no-reply@sfu.ca"
+    # formspree_action = "https://formsubmit.co/no-reply@sfu.ca"
     contact_form_ajax = false
 
     # Formspree form supports Google reCAPTCHA Key (type v2).
