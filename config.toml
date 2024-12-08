@@ -196,7 +196,9 @@ pluralizelisttitles = false
     googleRecaptchaKey = "site_key_for_google_recaptcha"
 
     about_us = "<p>HALLO formed and began research efforts in 2019. Since then, we've been working on several objectives that work towards developing the real-time whale forecasting system in the Salish Sea.</p>"
-    copyright = "Copyright (c) 2019 - 2024, HALLO; all rights reserved."
+    
+    # if the string '${time.Now.Year}' is part of the copyright message, then it will be replaced with the current year.
+    copyright = "Copyright (c) 2019 - ${time.Now.Year}, HALLO; all rights reserved."
 
     # Format dates with Go's time formatting
     date_format = "January 2, 2006"
