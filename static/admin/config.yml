@@ -12,7 +12,7 @@ collections:
     label: "Main page and About"
     folder: "content"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
     fields:
@@ -29,9 +29,10 @@ collections:
     label: "Applications"
     folder: "content/applications"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
+    summary: "{{title | upper}} - {{thumbnailurl}} – {{description | truncate(20, '***')}}"
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
@@ -50,7 +51,7 @@ collections:
     label: "Research"
     folder: "content/research"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
     fields:
@@ -67,7 +68,7 @@ collections:
     label: "Research Publications"
     folder: "content/research/publications"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
     fields:
