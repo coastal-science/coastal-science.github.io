@@ -23,6 +23,8 @@ paginate = 10
 # not pluralize title pages by default
 pluralizelisttitles = false
 
+enableGitInfo = true
+
 [menu]
 
 
