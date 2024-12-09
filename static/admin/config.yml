@@ -54,6 +54,7 @@ collections:
     # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
+    summary: "{{title | upper}} [{{id}}] - {{date | date('YYYY-MM-DD')}} – {{body | truncate(20, '***')}}"
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
@@ -71,6 +72,7 @@ collections:
     # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
+    summary: "{{title | upper}} {{ authors }}, {{journal}} - {{body | truncate(20, '***')}}"
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
@@ -93,6 +95,7 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
+    summary: "{{title | upper}} - {{ authors }} {{date | date('YYYY-MM-DD')}} - {{body | truncate(20, '***')}}"
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
@@ -107,5 +110,4 @@ collections:
       - { label: 'Summary', name: 'summary', widget: 'text', required: False, hint: 'Used for the a page listing multiple posts. If blank, this is populated from the first 100 characters from the post.' }
 
       - { label: 'Body', name: 'body', widget: 'markdown' }
-
 
