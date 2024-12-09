@@ -4,7 +4,7 @@ date: 2023-07-31T12:33:46-07:00
 weight: 5
 # icon: "fa fa-check"
 thumbnail: /img/short_detector_animation.gif
-# thumbnail: images/Scatter-Plot-of-Multi-Class-Classification-Dataset.webp
+# thumbnail: img/Scatter-Plot-of-Multi-Class-Classification-Dataset.webp
 # photocredits: "test" # or leave blank
 thumbnailurl: "https://github.com/coastal-science/HALLO-models"
 description: "Models that identify the source of underwater sounds. Explore our diverse models designed to discern underwater sounds from marine mammals."
