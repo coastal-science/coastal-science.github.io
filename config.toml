@@ -10,8 +10,9 @@ languageCode = "en-us"
 defaultContentLanguage = "en"
 # Enable comments by entering your Disqus shortname
 # disqusShortname = "devcows"
-# Enable Google Analytics by entering your tracking code
-googleAnalytics = "G-4ZT5PMCN8Z"
+# Enable Google Analytics by entering your tracking code 
+# or using the environment variable `HUGO_GOOGLEANALYTICS`
+# googleAnalytics = "G-4ZT5PMCN8Z"
 
 # number of words of summarized post content (default 70)
 summaryLength = 70
