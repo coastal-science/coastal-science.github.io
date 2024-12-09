@@ -111,3 +111,57 @@ collections:
 
       - { label: 'Body', name: 'body', widget: 'markdown' }
 
+
+  - name: "Carousel"
+    label: "Carousel Images"
+    folder: "data/carousel"
+    extension: "yaml"
+    create: true
+    # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    editor:
+      preview: true
+    fields:
+      - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, description: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
+      - { label: 'Title', name: 'title', widget: 'string', description: 'Title' }
+      - { label: 'Description', name: 'description', widget: 'string', required: False, description: 'subtitle', hint: 'Raw html is accepted: `<p> Our whale forecast system uses ...</p>`' }
+
+      - { label: 'Text position', name: 'position', widget: 'select', default: 'top-left', options:  ['', 'centered', 'top-left', 'top-right', 'bottom-left', 'bottom-right'], hint: 'Select the relative position of the text description overlapping the the image. The empty entry means that text does not overlap with image and is placed underneath.' }
+      - { label: 'Text justification', name: 'textalign', widget: 'select', default: 'left', options:  ['left', 'right'], hint: 'Select the justification of the text.' }
+
+      - { label: 'Image', name: 'thumbnail', widget: 'image', description: '`Image` supersedes the `icon` field.', hint: 'image (img/LucyShipBreach.PNG)' }
+      - { label: 'Photo Credits', name: 'photocredits', widget: 'string', required: False, description: '', hint: 'Provide image credits here or leave blank'}
+      - { label: 'URL', name: 'href', widget: 'string', required: False, description: 'Page or URL that redirects to more information about the featured item', hint: "e.g. applications/call-catalogue/ or research/publications/" }      
+
+
+  - name: "features"
+    label: "Featured items"
+    folder: "data/features"
+    extension: "yaml"
+    create: true
+    # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    editor:
+      preview: true
+    fields:
+      # - { label: 'Title', name: 'name', widget: 'string' }
+      - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, description: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
+      - { label: 'Name', name: 'name', widget: 'string', description: 'Name of the featured item' }
+
+      - { label: 'Icon', name: 'icon', widget: 'string', required: False, description: 'Fork Awesome icon', hint: 'e.g. `fa fa-users` https://forkaweso.me/Fork-Awesome/icons/'}
+      - { label: 'Thumbnail image', name: 'thumbnail', widget: 'image', required: False, description: '`Thumbnail` supersedes the `icon` field.', hint: 'image (img/LucyShipBreach.PNG)' }
+      - { label: 'URL', name: 'url', widget: 'string', required: False, description: 'Page or URL that redirects to more information about the featured item', hint: "e.g. applications/call-catalogue/ or research/publications/" }
+      
+      - { label: 'Description', name: 'description', widget: 'text', required: False, description: 'Description under the featured item icon.' }
+
+
+  - name: "partners"
+    label: "Partners"
+    folder: "data/clients"
+    extension: "yaml"
+    create: true
+    # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    editor:
+      preview: true
+    fields:
+      - { label: 'Name', name: 'name', widget: 'string', description: 'Name of the Partner' }
+      - { label: 'Logo', name: 'image', widget: 'image', description: 'logo', hint: 'Thumbnail image for publication entry.'}
+      - { label: 'URL', name: 'url', widget: 'string', hint: 'URL that redirects to the partner site', pattern: ['^https?:\/\/\w+(\.\w+)+.*$', "Must be an http url"] }
