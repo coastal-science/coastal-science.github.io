@@ -35,13 +35,13 @@ collections:
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
-      - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
+      - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
       
-      - { label: 'Thumbnail', name: 'thumbnail', widget: 'image' }
-      - { label: 'Photo Credits', name: 'photocredits', widget: 'string', hint: 'Provide image credits here or leave blank'}
-      - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', hint: '`Thumbnail URL` supersedes the `Thumbnail` image', pattern: ['^https?:\/\/\w+(\.\w+)+.*$', "Must be an http url"] }
+      - { label: 'Thumbnail', name: 'thumbnail', widget: 'image', required: False}
+      - { label: 'Photo Credits', name: 'photocredits', widget: 'string', required: False, hint: 'Provide image credits here or leave blank'}
+      - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', required: False, hint: '`Thumbnail URL` supersedes the `Thumbnail` image', pattern: ['^https?:\/\/\w+(\.\w+)+.*$', "Must be an http url"] }
 
-      - { label: 'Description', name: 'description', widget: 'string', hint: 'Used for the a page listing multiple pages. If blank, this is populated from the first 100 characters from the page entry.' }
+      - { label: 'Description', name: 'description', widget: 'string', required: False, hint: 'Used for the page listing multiple pages. If blank, this is populated from the first 100 characters from the page entry.' }
       
       - { label: 'Body', name: 'body', widget: 'markdown' }
 
@@ -56,7 +56,7 @@ collections:
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
-      - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
+      - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
       
       - { label: 'ID', name: 'id', widget: 'string', hint: 'Add a unique id so that it is available in the dropdown menu.' }
 
@@ -79,7 +79,7 @@ collections:
       - { label: 'Publication', name: 'journal', widget: 'string', hint: 'Journal Name, etc' }
       
       - { label: 'Thumbnail image', name: 'image', widget: 'image', hint: 'Thumbnail image for publication entry.'}
-      - { label: 'DOI', name: 'doi', widget: 'string', hint: 'Document Object Identifier.' }
+      - { label: 'DOI', name: 'doi', required: False, widget: 'string', hint: 'Document Object Identifier.' }
       - { label: 'Publication URL', name: 'publicationurl', widget: 'string', hint: 'URL that redirects to the publication', pattern: ['^https?:\/\/\w+(\.\w+)+.*$', "Must be an http url"] }
 
       - { label: 'Body', name: 'body', widget: 'markdown' }
@@ -100,10 +100,10 @@ collections:
       - { label: 'Categories', name: 'categories', widget: 'list', hint: 'Separate multiple entries with a comma (,)' }
       
       - { label: 'Banner', name: 'banner', widget: 'image' }
-      - { label: 'Banner Alignment', name: 'banner_align', widget: 'select', default: '', options:  ['', 'wrap-left', 'wrap-right'], hint: 'Select the position around the thumbnail images that the text should wrap around. The empty entry means that there is no wrapping.' }
+      - { label: 'Banner Alignment', name: 'banner_align', widget: 'select', required: False, default: '', options:  ['', 'wrap-left', 'wrap-right'], hint: 'Select the position around the thumbnail images that the text should wrap around. The empty entry means that there is no wrapping.' }
 
       - { label: 'Authors', name: 'authors', widget: 'list', hint: 'Separate multiple entries with a comma (,)' }
-      - { label: 'Summary', name: 'summary', widget: 'text', hint: 'Used for the a page listing multiple posts. If blank, this is populated from the first 100 characters from the post.' }
+      - { label: 'Summary', name: 'summary', widget: 'text', required: False, hint: 'Used for the a page listing multiple posts. If blank, this is populated from the first 100 characters from the post.' }
 
       - { label: 'Body', name: 'body', widget: 'markdown' }
 
