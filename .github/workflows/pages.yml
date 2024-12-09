@@ -55,6 +55,8 @@ jobs:
     env:
       HUGO_VERSION: 0.126.1 # latest
       HUGO_FORMS: ${{ vars.HUGO_FORMS }}
+      HUGO_GOOGLEANALYTICS: ${{ vars.HUGO_GOOGLEANALYTICS }}
+
     # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
     permissions:
       contents: read
