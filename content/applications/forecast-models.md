@@ -5,7 +5,7 @@ weight: 3
 # icon: "fa fa-headphones"
 thumbnail: /img/movement_model_2.png #https://orca.research.sfu.ca/call-library/home-media/S01-J,L-1.jpg
 # thumbnail: img/S01-J,L-1.jpg
-photocredits: Teng-Wei Lim" # or leave blank
+photocredits: Teng-Wei Lim # or leave blank
 # description: "Dr. John Ford's Southern Resident Killer Whale Call Catalogue"
 ---
 
