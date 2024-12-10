@@ -11,7 +11,7 @@ categories:
   - whale movement
   - whale behaviour
 
-banner: "img/Headshot_Thompson.JPG"
+banner: "img/Headshot_Thompson.jpg"
 # description: "This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content."
 authors: 
   - Olivia Murphy
