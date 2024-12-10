@@ -3,7 +3,7 @@
 	url = https://github.com/janraasch/hugo-scroll.git
 [submodule "themes/hugo-universal-theme"]
 	path = themes/hugo-universal-theme
-	url = https://github.com/devcows/hugo-universal-theme
+	url = https://github.com/VWJF/hugo-universal-theme.git
 [submodule "themes/hugo-hero-theme"]
 	path = themes/hugo-hero-theme
 	url = https://github.com/zerostaticthemes/hugo-hero-theme.git
