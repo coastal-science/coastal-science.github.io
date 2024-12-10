@@ -40,7 +40,7 @@ collections:
       
       - { label: 'Thumbnail', name: 'thumbnail', widget: 'image', required: False}
       - { label: 'Photo Credits', name: 'photocredits', widget: 'string', required: False, hint: 'Provide image credits here or leave blank'}
-      - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', required: False, hint: '`Thumbnail URL` supersedes the `Thumbnail` image', pattern: ['^https?:\/\/\w+(\.\w+)+.*$', "Must be an http url"] }
+      - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', required: False, hint: '`Thumbnail URL` supersedes the `Thumbnail` image', pattern: ['^https?:\/\/\w+(\.\w+)+.*$', "Must be an http(s) url."] }
 
       - { label: 'Description', name: 'description', widget: 'string', required: False, hint: 'Used for the page listing multiple pages. If blank, this is populated from the first 100 characters from the page entry.' }
       
@@ -83,13 +83,13 @@ collections:
       
       - { label: 'Thumbnail image', name: 'image', widget: 'image', hint: 'Thumbnail image for publication entry.'}
       - { label: 'DOI', name: 'doi', required: False, widget: 'string', hint: 'Document Object Identifier.' }
-      - { label: 'Publication URL', name: 'publicationurl', widget: 'string', hint: 'URL that redirects to the publication', pattern: ['^https?:\/\/\w+(\.\w+)+.*$', "Must be an http url"] }
+      - { label: 'Publication URL', name: 'publicationurl', widget: 'string', hint: 'URL that redirects to the publication', pattern: ['^https?:\/\/\w+(\.\w+)+.*$', "Must be an http(s) url."] }
 
       - { label: 'Body', name: 'body', widget: 'markdown' }
 
 
   - name: "blog"
-    label: "Blog"
+    label: "Latest News/Blog/Post"
     folder: "content/blog"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
@@ -103,7 +103,7 @@ collections:
       - { label: 'Tags', name: 'tags', widget: 'list', hint: 'Separate multiple entries with a comma (,)' }
       - { label: 'Categories', name: 'categories', widget: 'list', hint: 'Separate multiple entries with a comma (,)' }
       
-      - { label: 'Banner', name: 'banner', widget: 'image' }
+      - { label: 'Banner image', name: 'banner', widget: 'image', required: False, description: '', hint: ''}
       - { label: 'Banner Alignment', name: 'banner_align', widget: 'select', required: False, default: '', options:  ['', 'wrap-left', 'wrap-right'], hint: 'Select the position around the thumbnail images that the text should wrap around. The empty entry means that there is no wrapping.' }
 
       - { label: 'Authors', name: 'authors', widget: 'list', hint: 'Separate multiple entries with a comma (,)' }
@@ -112,7 +112,7 @@ collections:
       - { label: 'Body', name: 'body', widget: 'markdown' }
 
 
-  - name: "Carousel"
+  - name: "carousel"
     label: "Carousel Images"
     folder: "data/carousel"
     extension: "yaml"
@@ -164,4 +164,4 @@ collections:
     fields:
       - { label: 'Name', name: 'name', widget: 'string', description: 'Name of the Partner' }
       - { label: 'Logo', name: 'image', widget: 'image', description: 'logo', hint: 'Thumbnail image for publication entry.'}
-      - { label: 'URL', name: 'url', widget: 'string', hint: 'URL that redirects to the partner site', pattern: ['^https?:\/\/\w+(\.\w+)+.*$', "Must be an http url"] }
+      - { label: 'URL', name: 'url', widget: 'string', hint: 'URL that redirects to the partner site', pattern: ['^https?:\/\/\w+(\.\w+)+.*$', "Must be an http(s) url."] }
