@@ -76,7 +76,7 @@ jobs:
           echo "${{ needs.configure-pages.outputs.base_url }}/" from env
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true  # Fetch Hugo themes (true OR recursive) # failing on ubuntu container
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
