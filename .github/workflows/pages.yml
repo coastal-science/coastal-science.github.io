@@ -53,7 +53,7 @@ jobs:
       image: peaceiris/hugo
 
     env:
-      HUGO_VERSION: 0.126.1 # latest
+      HUGO_VERSION: latest  #  0.126.1 
       HUGO_FORMS: ${{ vars.HUGO_FORMS }}
       HUGO_GOOGLEANALYTICS: ${{ vars.HUGO_GOOGLEANALYTICS }}
 
