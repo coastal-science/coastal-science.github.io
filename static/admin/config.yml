@@ -163,8 +163,8 @@ collections:
     folder: "data/clients"
     extension: "yaml"
     create: true
-    media_folder: "/static/img/clients/HALLO\ partner\ logos"
-    public_folder: "/img/clients/HALLO\ partner\ logos"
+    media_folder: "/static/img/clients/HALLO partner logos"
+    public_folder: "/img/clients/HALLO partner logos"
     editor:
       preview: true
     fields:
