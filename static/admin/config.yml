@@ -128,7 +128,7 @@ collections:
       - { label: 'Text position', name: 'position', widget: 'select', default: 'top-left', options:  ['', 'centered', 'top-left', 'top-right', 'bottom-left', 'bottom-right'], hint: 'Select the relative position of the text description overlapping the the image. The empty entry means that text does not overlap with image and is placed underneath.' }
       - { label: 'Text justification', name: 'textalign', widget: 'select', default: 'left', options:  ['left', 'right'], hint: 'Select the justification of the text.' }
 
-      - { label: 'Image', name: 'thumbnail', widget: 'image', description: '`Image` supersedes the `icon` field.', hint: 'image (img/LucyShipBreach.PNG)' }
+      - { label: 'Image', name: 'image', widget: 'image', required: False, description: '', hint: 'image (img/LucyShipBreach.PNG)' }
       - { label: 'Photo Credits', name: 'photocredits', widget: 'string', required: False, description: '', hint: 'Provide image credits here or leave blank'}
       - { label: 'URL', name: 'href', widget: 'string', required: False, description: 'Page or URL that redirects to more information about the featured item', hint: "e.g. applications/call-catalogue/ or research/publications/" }      
 
