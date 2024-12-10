@@ -24,7 +24,7 @@ defaults:
 
 jobs:
   generate-timestamp:
-    runs-on: [ self-hosted, rcg, ubuntu-latest ]
+    runs-on: ubuntu-latest
     steps:
       - name: Set TIMESTAMP
         id: date
@@ -35,7 +35,7 @@ jobs:
       TIMESTAMP: ${{ env.TIMESTAMP }}
 
   configure-pages:
-    runs-on: [ self-hosted, rcg, ubuntu-latest ]
+    runs-on: ubuntu-latest
     steps:
       - name: Setup Pages
         id: pages
@@ -48,7 +48,7 @@ jobs:
     needs:
       - configure-pages
     
-    runs-on: [ self-hosted, rcg, ubuntu-latest ]
+    runs-on: ubuntu-latest
     container:
       image: peaceiris/hugo
 
@@ -101,7 +101,7 @@ jobs:
     needs:
       - build-website
     
-    runs-on: [ self-hosted, rcg, ubuntu-latest ]
+    runs-on: ubuntu-latest
     container:
       image: peaceiris/hugo
 
@@ -132,7 +132,7 @@ jobs:
       - generate-timestamp
       - build-website
 
-    runs-on: [ self-hosted, rcg, ubuntu-latest ]
+    runs-on: ubuntu-latest
 
     # Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.
     env:
@@ -182,7 +182,7 @@ jobs:
       - build-website
       - deploy-gh-pages
       - build_and_push_image
-    runs-on: [ self-hosted, rcg, ubuntu-latest ]
+    runs-on: ubuntu-latest
     steps:
       - name: Current workspace
         run: du -shc ${GITHUB_WORKSPACE}
