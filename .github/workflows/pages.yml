@@ -80,8 +80,12 @@ jobs:
         with:
           submodules: true  # Fetch Hugo themes (true OR recursive) # failing on ubuntu container
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
-          set-safe-directory: '/__w/coastal-science.github.io/coastal-science.github.io'
-        
+          # set-safe-directory: '/__w/coastal-science.github.io/coastal-science.github.io'
+          
+      - name: Set safe directory workaround
+        run: |
+          git config --global --add safe.directory /__w/coastal-science.github.io/coastal-science.github.io
+          
       - name: Build with Hugo
         env:
           # For maximum backward compatibility with Hugo modules
