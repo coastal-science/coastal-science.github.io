@@ -20,7 +20,7 @@ collections:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Description', name: 'description', widget: 'string', required: False, hint: 'Used for the page listing multiple pages. If blank, this is populated from the first 100 characters from the page entry.' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
-      # - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
+      # - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the top of the collection.' }
       
       - { label: 'ID', name: 'id', widget: 'string', hint: 'Add a unique id so that it is available in the dropdown menu.' }
 
@@ -79,7 +79,7 @@ collections:
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
-      # - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
+      # - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the top of the collection.' }
       - { label: 'Authors', name: 'authors', widget: 'list', hint: 'Separate multiple entries with a comma (,)' }
       
       - { label: 'Publication', name: 'journal', widget: 'string', hint: 'Journal Name, etc' }
