@@ -38,7 +38,7 @@ collections:
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
-      - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
+      - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the top of the collection.' }
       
       - { label: 'Thumbnail', name: 'thumbnail', widget: 'image', required: False}
       - { label: 'Photo Credits', name: 'photocredits', widget: 'string', required: False, hint: 'Provide image credits here or leave blank'}
@@ -60,7 +60,7 @@ collections:
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
-      - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
+      - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the top of the collection.' }
       
       - { label: 'ID', name: 'id', widget: 'string', hint: 'Add a unique id so that it is available in the dropdown menu.' }
       - { label: 'Description', name: 'description', widget: 'string', required: False, hint: 'Used for the page listing multiple pages. If blank, this is populated from the first 100 characters from the page entry.' }
@@ -125,8 +125,8 @@ collections:
       preview: true
     summary: "{{title}} - {{description | truncate(20, '...')}}"
     fields:
-      - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, description: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
-      - { label: 'Title', name: 'title', widget: 'string', description: 'Title' }
+      - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, description: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the top of the collection.' }
+      - { label: 'Title', name: 'title', widget: 'string', description: 'Title', pattern: ['^[a-zA-Z0-9-]+$', 'Only letters, numbers and hyphen (-) are allowed.'] }
       - { label: 'Description', name: 'description', widget: 'text', required: False, description: 'subtitle', hint: 'Raw html is accepted: `<p> Our whale forecast system uses ...</p>`' }
 
       - { label: 'Text position', name: 'position', widget: 'select', default: 'top-left', options:  ['', 'centered', 'top-left', 'top-right', 'bottom-left', 'bottom-right'], hint: 'Select the relative position of the text description overlapping the the image. The empty entry means that text does not overlap with image and is placed underneath.' }
@@ -148,8 +148,8 @@ collections:
     summary: "{{name}} - {{description | truncate(20, '...')}}"
     fields:
       # - { label: 'Title', name: 'name', widget: 'string' }
-      - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, description: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
-      - { label: 'Name', name: 'name', widget: 'string', description: 'Name of the featured item' }
+      - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, description: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the top of the collection.' }
+      - { label: 'Name', name: 'name', widget: 'string', description: 'Name of the featured item', pattern: ['^[a-zA-Z0-9-]+$', 'Only letters, numbers and hyphen (-) are allowed.'] }
 
       - { label: 'Icon', name: 'icon', widget: 'string', required: False, description: 'Fork Awesome icon', hint: 'e.g. `fa fa-users` https://forkaweso.me/Fork-Awesome/icons/'}
       - { label: 'Thumbnail image', name: 'thumbnail', widget: 'image', required: False, description: '`Thumbnail` supersedes the `icon` field.', hint: 'image (img/LucyShipBreach.PNG)' }
