@@ -159,7 +159,8 @@ collections:
     folder: "data/clients"
     extension: "yaml"
     create: true
-    # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    media_folder: "/static/img/clients/HALLO\ partner\ logos"
+    public_folder: "/img/clients/HALLO\ partner\ logos"
     editor:
       preview: true
     fields:
