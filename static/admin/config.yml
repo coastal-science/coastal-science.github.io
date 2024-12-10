@@ -15,8 +15,10 @@ collections:
     # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
+    summary: "{{title}} {{description | truncate(40, '...')}} {{body | truncate(150, '...')}}"
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
+      - { label: 'Description', name: 'description', widget: 'string', required: False, hint: 'Used for the page listing multiple pages. If blank, this is populated from the first 100 characters from the page entry.' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
       # - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
       
@@ -32,7 +34,7 @@ collections:
     # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
-    summary: "{{title | upper}} - {{thumbnailurl}} – {{description | truncate(20, '***')}}"
+    summary: "{{title | upper}} - {{thumbnailurl}} - {{description | truncate(20, '...')}}"
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
@@ -54,13 +56,14 @@ collections:
     # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
-    summary: "{{title | upper}} [{{id}}] - {{date | date('YYYY-MM-DD')}} – {{body | truncate(20, '***')}}"
+    summary: "{{title | upper}} [{{id}}] – {{description | truncate(40,'...')}} {{body | truncate(150, '...')}}"
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
       - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
       
       - { label: 'ID', name: 'id', widget: 'string', hint: 'Add a unique id so that it is available in the dropdown menu.' }
+      - { label: 'Description', name: 'description', widget: 'string', required: False, hint: 'Used for the page listing multiple pages. If blank, this is populated from the first 100 characters from the page entry.' }
 
       - { label: 'Body', name: 'body', widget: 'markdown' }
 
@@ -72,7 +75,7 @@ collections:
     # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
-    summary: "{{title | upper}} {{ authors }}, {{journal}} - {{body | truncate(20, '***')}}"
+    summary: "{{title | upper}} {{ authors }} - {{journal}} - {{body | truncate(20, '...')}}"
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
@@ -95,7 +98,7 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
-    summary: "{{title | upper}} - {{ authors }} {{date | date('YYYY-MM-DD')}} - {{body | truncate(20, '***')}}"
+    summary: "{{title | upper}} - {{ authors }} {{date | date('YYYY-MM-DD')}} - {{body | truncate(20, '...')}}"
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
@@ -120,11 +123,11 @@ collections:
     # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
-    summary: "{{title}} - {{description | truncate(20, '***')}}"
+    summary: "{{title}} - {{description | truncate(20, '...')}}"
     fields:
       - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, description: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
       - { label: 'Title', name: 'title', widget: 'string', description: 'Title' }
-      - { label: 'Description', name: 'description', widget: 'string', required: False, description: 'subtitle', hint: 'Raw html is accepted: `<p> Our whale forecast system uses ...</p>`' }
+      - { label: 'Description', name: 'description', widget: 'text', required: False, description: 'subtitle', hint: 'Raw html is accepted: `<p> Our whale forecast system uses ...</p>`' }
 
       - { label: 'Text position', name: 'position', widget: 'select', default: 'top-left', options:  ['', 'centered', 'top-left', 'top-right', 'bottom-left', 'bottom-right'], hint: 'Select the relative position of the text description overlapping the the image. The empty entry means that text does not overlap with image and is placed underneath.' }
       - { label: 'Text justification', name: 'textalign', widget: 'select', default: 'left', options:  ['left', 'right'], hint: 'Select the justification of the text.' }
@@ -142,6 +145,7 @@ collections:
     # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
+    summary: "{{name}} - {{description | truncate(20, '...')}}"
     fields:
       # - { label: 'Title', name: 'name', widget: 'string' }
       - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, description: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
@@ -151,7 +155,7 @@ collections:
       - { label: 'Thumbnail image', name: 'thumbnail', widget: 'image', required: False, description: '`Thumbnail` supersedes the `icon` field.', hint: 'image (img/LucyShipBreach.PNG)' }
       - { label: 'URL', name: 'url', widget: 'string', required: False, description: 'Page or URL that redirects to more information about the featured item', hint: "e.g. applications/call-catalogue/ or research/publications/" }
       
-      - { label: 'Description', name: 'description', widget: 'text', required: False, description: 'Description under the featured item icon.' }
+      - { label: 'Description', name: 'description', widget: 'markdown', required: False, description: 'Description under the featured item icon.' }
 
 
   - name: "partners"
