@@ -120,6 +120,7 @@ collections:
     # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     editor:
       preview: true
+    summary: "{{title}} - {{description | truncate(20, '***')}}"
     fields:
       - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, description: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items float to the top, while heavier items sink to the bottom. Unweighted or zero-weighted elements are placed at the end of the collection.' }
       - { label: 'Title', name: 'title', widget: 'string', description: 'Title' }
