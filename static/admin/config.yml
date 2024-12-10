@@ -121,6 +121,7 @@ collections:
     extension: "yaml"
     create: true
     # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: "{{title}}"
     editor:
       preview: true
     summary: "{{title}} - {{description | truncate(20, '...')}}"
@@ -143,6 +144,7 @@ collections:
     extension: "yaml"
     create: true
     # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: "{{name}}"
     editor:
       preview: true
     summary: "{{name}} - {{description | truncate(20, '...')}}"
@@ -163,6 +165,7 @@ collections:
     folder: "data/clients"
     extension: "yaml"
     create: true
+    slug: "{{name}}"
     media_folder: "/static/img/clients/HALLO partner logos"
     public_folder: "/img/clients/HALLO partner logos"
     editor:
