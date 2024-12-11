@@ -12,11 +12,12 @@ categories:
 
 banner: https://www.sfu.ca/~rjoy/images/OliviaMu.png
 banner_align: wrap-left # options: 'wrap-left', 'wrap-right' or remove for none
-# description: "This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content."
 authors: 
   - Ruth Joy
   - Olivia Murphy
 
+# Social media settings are for meta tags, https://metatags.io/
+# these are good to have for accessability, sharing sites, etc, but no required
 ffacebook_author: CoastalScience
 facebook_site: 
 banner_alt: 
@@ -24,8 +25,7 @@ banner_alt:
 twitter_author: CoastalScience
 twitter_site:
 
-summary:  # If blank, it this is populated from the first 100 characters from the post 
-
+summary:  # If blank, it is populated with the first 100 characters from the post 
 ---
 
 Congrats to one of our team members, Olivia Murphy, for recently finishing her Master's degree at Simon Fraser University! In partnership with the Saturna Island Marine Research and Education Society, for the last two years, Olivia has been researching vessel related noise impacts on the endangered Southern Resident killer whales (SRKW) during their transits of Boundary Pass over the summer of 2022. Olivia found that SRKW are increasing the peak frequency, frequency range, and duration of calls when there is more underwater background noise from vessels in the area. See her full thesis here: [https://www.sfu.ca/~rjoy/OMurphy_ARP.pdf](https://www.sfu.ca/~rjoy/OMurphy_ARP.pdf "Analysing marine vessel noise impacts on endangered Southern Resident killer whale acoustic behaviour during transits of Boundary Pass in the Salish Sea by Olivia Beth Murphy")

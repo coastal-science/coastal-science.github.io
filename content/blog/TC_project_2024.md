@@ -15,21 +15,11 @@ categories:
 
 banner: "img/TC_post/thumbnail_IMG_8583.png"
 banner_align: wrap-left # options: 'wrap-left', 'wrap-right' or remove for none
-banner_style: 
-# description: "This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content."
 authors: 
   - Ruth Joy
   - Olivia Murphy
 
-ffacebook_author: CoastalScience
-facebook_site: 
-banner_alt: 
-
-twitter_author: CoastalScience
-twitter_site:
-
-summary:  # If blank, it this is populated from the first 100 characters from the post 
-
+summary:  # If blank, it is populated with the first 100 characters from the post 
 ---
 
 There will be a new area added to the management measures put in place to help recover the endangered Southern Resident killer whales (SRKW) for the 2024 season. You can find a detailed overview of these measures [here](https://www.pac.dfo-mpo.gc.ca/fm-gp/mammals-mammiferes/whales-baleines/srkw-measures-mesures-ers-eng.html)

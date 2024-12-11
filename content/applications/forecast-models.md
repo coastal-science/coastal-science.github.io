@@ -3,10 +3,8 @@ title: "Forecast Models"
 date: 2023-07-31T12:00:00-07:00
 weight: 3
 # icon: "fa fa-headphones"
-thumbnail: /img/movement_model_2.png #https://orca.research.sfu.ca/call-library/home-media/S01-J,L-1.jpg
-# thumbnail: img/S01-J,L-1.jpg
+thumbnail: /img/movement_model_2.png
 photocredits: Teng-Wei Lim # or leave blank
-# description: "Dr. John Ford's Southern Resident Killer Whale Call Catalogue"
 ---
 
 ## Forecast Models
