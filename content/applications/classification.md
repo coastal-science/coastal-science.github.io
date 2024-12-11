@@ -20,4 +20,3 @@ In the GIF below, you can see a model developed by one of our PhD students, Fabi
 All our current and future models are open-source and accessible via our public [GitHub repository](https://github.com/coastal-science/HALLO-models). There you can find instructions, scripts, and configuration files required to train deep learning models at detecting and classifying vocalizations made by Killer whales. Each model comes with a detailed description, including the data used for training.
 
 We are continuously working on developing more advanced models. These forthcoming models aim to classify whale vocalizations with a higher degree of specificity, such as distinguishing between different ecotypes or even identifying individual pods. Stay tuned for these exciting developments.
-

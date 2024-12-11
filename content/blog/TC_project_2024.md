@@ -28,7 +28,6 @@ In the later months of 2023, a team of researchers in Dr. Ruth Joy’s laborator
 
 {{< figure url="/img/TC_post/thumbnail_IMG_8584.png" class="custom-image" description="Team members at East Point." >}}
 
-
 The team analysed how both SRKW and marine vessels use the area of interest off of Saturna Island as well as a spatial analysis of vessel noise in the area and received noise levels to SRKW using a movement model. The team also contributed their own spatial data of vessels in the area of interest, which was collected by lab members over the previous years while stationed at East Point, overlooking the Saturna ISZ.
 
 The results of this project found that keeping the current extent of the Saturna ISZ as a total vessel exclusion zone was most effective. Additionally, a vessel speed restriction zone in the nearby adjacent area of Tumbo Channel could potentially reduce the received underwater noise levels to SRKW. Find the full report [here](https://www.sfu.ca/~rjoy/SaturnaAnalysisOfMeasures_SFU.pdf).
@@ -40,5 +39,3 @@ These regulations are in effect from June 1 – November 30, 2024 and are renewe
 Our hope is that these measures and others help in the recovery of the iconic and treasured SRKW.
 
 {{< figure url="/img/TC_post/thumbnail_19-46-14.jpg" class="custom-image" description="Team members Olivia, Lauren, Rachel and Mikayla at East Point." >}}
-
-

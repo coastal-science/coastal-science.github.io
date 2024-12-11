@@ -21,5 +21,3 @@ Data used to train artificial intelligence systems come from various sources: fr
 This [catalogue website](https://orca.research.sfu.ca/call-library) shares a curated collection of orca acoustics and annotations which represent the type of samples used in machine learning datasets. The samples here demonstrate the complexity of communication within and between pods.
 
 These samples have been gathered through decades of research by Dr. John Ford, scientist emeritus, and former head of cetacean research at Fisheries and Oceans Canada's Pacific Biological Station in collaboration with Dr. Volker Deecke, professor at the University of Cumbria, UK and James Pilkington from the Department of Ocean and Fisheries (DFO), Canada.
-
-
