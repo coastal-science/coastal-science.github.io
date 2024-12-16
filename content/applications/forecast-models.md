@@ -1,7 +1,7 @@
 ---
 title: "Forecast Models"
 date: 2023-07-31T12:00:00-07:00
-weight: 3
+weight: 4
 # icon: "fa fa-headphones"
 thumbnail: /img/movement_model_2.png
 photocredits: Teng-Wei Lim # or leave blank

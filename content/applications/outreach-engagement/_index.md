@@ -1,7 +1,7 @@
 ---
 title: "Outreach & Engagement"
 date: 2023-07-31T12:00:00-07:00
-weight: 7
+weight: 2
 # icon: "fa fa-headphones"
 thumbnail: /img/LucyShipBreach.png
 # thumbnail: img/S01-J,L-1.jpg

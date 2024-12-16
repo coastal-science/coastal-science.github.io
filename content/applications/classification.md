@@ -1,7 +1,7 @@
 ---
 title: 'Classification Models'
 date: 2023-07-31T12:33:46-07:00
-weight: 5
+weight: 3
 # icon: "fa fa-check"
 thumbnail: /img/short_detector_animation.gif
 # photocredits: "" # or leave blank
