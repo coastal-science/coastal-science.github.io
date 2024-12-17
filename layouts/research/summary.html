@@ -13,13 +13,13 @@
         <a href="{{ .Params.publicationurl }}">{{ .Title }}</a>
       </h3>
       <p class="authors">
-        {{ range $index, $author := .Params.authors }}
-          {{ if $index }}, {{ end }}{{ $author }}
-        {{ end }}
+      {{ if .Params.authors }}
+        {{ delimit .Params.authors ", " " and " | plainify | markdownify}}
+      {{ end }}
       </p>
-      <p class="journal-venue">{{ .Params.journal }}</p>
+      <p class="journal-venue">{{ .Params.journal | plainify | markdownify }}</p>
       {{ if .Params.doi }}
-        <p class="doi">{{ .Params.doi }}</p>
+        <p class="doi">{{ .Params.doi | plainify | markdownify }}</p>
       {{ end }}
       <p class="abstract">{{ .Content }}</p>
     </div>
