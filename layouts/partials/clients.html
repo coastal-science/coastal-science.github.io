@@ -20,10 +20,10 @@
                     <div class="col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-xxl-1 align-middle partner-logo" title="{{ .name }}" data-slide-index="{{ $.Scratch.Get "index" }}">
                         {{ if .url }}
                           <a href="{{ .url | relURL }}" target="_blank">
-                            <img src="{{ .image }}" alt="{{ .name }}" class="img-responsive" />
+                            <img src="{{ .image }}" alt="{{ .name }}" class="img-responsive" style="border-radius: 0px;"/>
                           </a>
                         {{ else }}
-                          <img src="{{ .image }}" alt="{{ .name }}" class="img-responsive" />
+                          <img src="{{ .image }}" alt="{{ .name }}" class="img-responsive" style="border-radius: 0px;" />
                         {{ end }}
                     </div>
                     {{ $.Scratch.Set "index" (add ($.Scratch.Get "index") 1) }}
