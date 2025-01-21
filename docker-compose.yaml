@@ -1,0 +1,35 @@
+services:
+ 
+  decap-cms:
+    #   platform: "linux/amd64"
+    image: itsmejoeeey/docker-decap-cms-standalone:latest
+    ports:
+      - "9980:80"
+      - "9930:3000"
+    restart: unless-stopped
+    environment:
+      # - ORIGINS=orca.research.sfu.ca,orca-dev.research.sfu.ca
+      - ORIGINS=${ORIGINS}
+      - OAUTH_CLIENT_ID=${OAUTH_GITHUB_CLIENT_ID}
+      - OAUTH_CLIENT_SECRET=${OAUTH_GITHUB_CLIENT_SECRET}
+    volumes:
+      - ./static/admin/config.yml:/app/config.yml:ro
+    depends_on:
+      - website
+
+  website:
+    environment:
+      - HUGO_BASEURL=${HUGO_BASEURL}
+    build:
+      # context: https://github.com/coastal-science/coastal-science.github.io.git
+      context: .
+      additional_contexts:
+        public: ./public
+        nginx: ./nginx
+      dockerfile: Dockerfile
+      # platforms:
+      #   - "linux/amd64"
+
+    # image: ${REGISTRY}/${IMAGE_NAME}:${DATE}_${TYPE_OF_BUILD-development}
+    ports:
+      - 8800:80
