@@ -3,8 +3,7 @@ title: 'Applications'
 subtitle: 'Our portfolio and previous projects'
 date: 2023-07-31T00:00:00-07:00
 # ^^YOU CAN MODIFY THE ITEMS ABOVE^^ as long as the warning in the editing.md#config.toml is respected.
-# This is a special page used to define the website title, subtitle and the background image, which are later used
-# by `hugo` internals.
+# This is a special page used to define the website title, subtitle and the background image, which are later used by `hugo` internals.
 
 # > [!WARNING]  
 # > Changes in this file include hugo configuration, structural to the top bar, menus, dropdowns and navigation. Limit changes to those minimally necessary and to those about which you are absolutely certain. Changes to this configuration could break the website.
