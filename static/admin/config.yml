@@ -8,7 +8,7 @@ backend:
   name: github
   branch: main
   repo: coastal-science/coastal-science.github.io
-  base_url: https://orca.research.sfu.ca
+  base_url: https://orca-dev.research.sfu.ca
   commit_messages:
     create: "Create {{collection}} “{{slug}}”"
     update: "Update {{collection}} “{{slug}}”"
