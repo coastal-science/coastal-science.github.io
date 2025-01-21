@@ -5,7 +5,7 @@ FROM alpine:latest AS build
 # ARG HUGO_BASEURL="http://localhost"
 ENV HUGO_BASEURL=${HUGO_BASEURL}
 
-# Install the Hugo go app.
+# Install the Hugo go app and git.
 RUN apk add --update hugo git
 
 WORKDIR /opt/HugoApp
@@ -18,7 +18,8 @@ RUN hugo \
       --gc \
       --buildDrafts \
       --minify \
-      --baseURL "${HUGO_BASEURL}/"
+      --baseURL "${HUGO_BASEURL}/" \
+      --logLevel info
 
 # Remove git artifacts
 RUN rm -rf .git
