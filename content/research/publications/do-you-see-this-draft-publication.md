@@ -6,3 +6,5 @@ image: /img/logo-small.png
 publicationurl: https://www.sfu.ca
 ---
 Just a test
+
+Returned and edited
