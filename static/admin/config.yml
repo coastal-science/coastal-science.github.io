@@ -145,7 +145,7 @@ collections:
   # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   editor:
     preview: true
-  summary: "{{title | title}} ({{date | date('YYYY')}}) {{journal}} - {{ authors }}}}"
+  summary: "{{title | title}} ({{date | date('YYYY')}}) {{journal}} - {{ authors }}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
   - { label: 'Publish Date', name: 'date', widget: 'datetime' }
