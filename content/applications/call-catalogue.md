@@ -1,16 +1,15 @@
 ---
-title: "Call Catalogue"
+title: Call Catalogue
 date: 2023-07-31T12:00:00-07:00
 weight: 1
-# icon: "fa fa-headphones"
 thumbnail: img/S01-J,L-1.jpg
-photocredits: "Write Credits here" # or leave blank
-thumbnailurl: "https://orca.research.sfu.ca/call-library"
-description: "Dr. John Ford's Southern Resident Killer Whale Call Catalogue"
+photocredits: Write Credits here
+thumbnailurl: https://orca.research.sfu.ca/call-library
+description: Dr. John Ford's Southern Resident Killer Whale Call Catalogue
 ---
 {{< figure url="/img/S01-J,L-1.jpg" credit="_Ford, et. al. 2023_" >}}
 
-## Dr. John Ford\'s Southern Resident Killer Whale Call Catalogue
+## Dr. John Ford\'s [Southern Resident Killer Whale Call Catalogue](https://orca.research.sfu.ca/call-library)
 
 Visit the [Southern Resident Killer Whale Call Catalogue](https://orca.research.sfu.ca/call-library)!
 
