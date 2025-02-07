@@ -11,7 +11,7 @@ description: Dr. John Ford's Southern Resident Killer Whale Call Catalogue
 
 ## Dr. John Ford\'s [Southern Resident Killer Whale Call Catalogue](https://orca.research.sfu.ca/call-library)
 
-Visit the [Southern Resident Killer Whale Call Catalogue](https://orca.research.sfu.ca/call-library)!
+<!--- Visit the [Southern Resident Killer Whale Call Catalogue](https://orca.research.sfu.ca/call-library)! -->
 
 Researchers are currently aiming to “teach” artificial intelligence systems to recognize the sounds of resident killer whales in order to develop a warning system for preventing ships from fatally striking endangered orcas off British Columbia's coast.
 
