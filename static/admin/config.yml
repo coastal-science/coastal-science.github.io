@@ -26,7 +26,7 @@ media_folder: "static/img"
 public_folder: "/img"
 
 collections:
-- name: "Main page"
+- name: "main_page"
   label: "Main page and About"
   folder: "content"
   create: true
