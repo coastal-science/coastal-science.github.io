@@ -24,6 +24,7 @@ defaults:
 
 jobs:
   generate-timestamp:
+    permissions: {}
     runs-on: ubuntu-latest
     steps:
       - name: Set TIMESTAMP
@@ -176,6 +177,7 @@ jobs:
   # Cleanup workspace on the runner
   cleanup:
     # if: ${{ always() }}
+    permissions: {}
     needs: 
       - build-website
       - deploy-gh-pages
