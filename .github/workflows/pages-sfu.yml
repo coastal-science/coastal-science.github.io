@@ -37,6 +37,7 @@ jobs:
 
   configure-pages:
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - name: Setup Pages
         id: pages
