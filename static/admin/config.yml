@@ -30,7 +30,6 @@ collections:
   label: "Main page and About"
   folder: "content"
   create: true
-  # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   editor:
     preview: false
   preview_path: "{{slug}}"
@@ -50,8 +49,6 @@ collections:
   folder: "data/carousel"
   extension: "yaml"
   create: true
-  # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-  slug: "{{title}}"
   editor:
     preview: false
   summary: "{{title}} - {{description | truncate(20, '...')}}"
@@ -72,7 +69,6 @@ collections:
   folder: "data/features"
   extension: "yaml"
   create: true
-  # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   slug: "{{name}}"
   editor:
     preview: false
@@ -107,7 +103,6 @@ collections:
   label: "Applications"
   folder: "content/applications"
   create: true
-  # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   editor:
     preview: false
   preview_path: "applications/{{slug}}"
@@ -129,7 +124,6 @@ collections:
   label: "Research"
   folder: "content/research"
   create: true
-  # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   editor:
     preview: false
   preview_path: "research/{{slug}}"
@@ -148,7 +142,6 @@ collections:
   label: "Research Publications"
   folder: "content/research/publications"
   create: true
-  # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   editor:
     preview: false
   preview_path: "research/publications/{{slug}}"
