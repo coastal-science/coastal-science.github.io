@@ -4,7 +4,7 @@ name: Deploy Hugo site to Pages and build docker image [GitHub.com]
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches: ["main", "gha-docker-prod"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -128,7 +128,7 @@ jobs:
   build_and_push_prod_image:
     environment: docker-image
 
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/gha-docker-prod'
     needs:
       - generate-timestamp
       - build-website
