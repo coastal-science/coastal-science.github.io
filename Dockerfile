@@ -10,13 +10,12 @@ RUN apk add --update hugo git
 
 WORKDIR /opt/HugoApp
 
-# Copy Hugo config into the container Workdir.
+# Copy Hugo config into the container's Workdir.
 COPY . .
 
 # Run Hugo in the Workdir to generate HTML in /public.
 RUN hugo \
       --gc \
-      --buildDrafts \
       --minify \
       --baseURL "${HUGO_BASEURL}/" \
       --logLevel info
