@@ -1,5 +1,6 @@
 # Sample workflow for building and deploying a Hugo site to GitHub Pages
 name: Deploy Hugo site to Pages and build docker image [GitHub.com]
+run-name: Build/deploy Pages/Production
 
 on:
   # Runs on pushes targeting the default branch
