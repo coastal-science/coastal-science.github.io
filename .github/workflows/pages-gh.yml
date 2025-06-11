@@ -48,6 +48,7 @@ jobs:
   # Build job
   build-website:
     needs:
+      - generate-timestamp
       - configure-pages
     
     runs-on: ubuntu-latest
