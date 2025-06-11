@@ -332,7 +332,7 @@ jobs:
     needs: 
       - build-website
       - deploy-gh-pages
-      - build_and_push_image
+      - build_and_push_prod_image
     runs-on: ubuntu-latest
     steps:
       - name: Current workspace
