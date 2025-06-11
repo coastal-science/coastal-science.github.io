@@ -32,7 +32,7 @@ collections:
   create: true
   # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   editor:
-    preview: true
+    preview: false
   summary: "{{title}}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
@@ -52,7 +52,7 @@ collections:
   # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   slug: "{{title}}"
   editor:
-    preview: true
+    preview: false
   summary: "{{title}} - {{description | truncate(20, '...')}}"
   fields:
   - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, hint: 'Controls the position of a page within a collection that is sorted by weight. Assign weights using non-zero integers. Lighter items are ranked higher, while heavier items are ranked lower. Unweighted or zero-weighted elements are placed ahead of other items.' }
@@ -74,7 +74,7 @@ collections:
   # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   slug: "{{name}}"
   editor:
-    preview: true
+    preview: false
   summary: "{{name}} - {{description | truncate(20, '...')}}"
   fields:
   # - { label: 'Title', name: 'name', widget: 'string' }
@@ -96,7 +96,7 @@ collections:
   media_folder: "/static/img/clients/HALLO partner logos"
   public_folder: "/img/clients/HALLO partner logos"
   editor:
-    preview: true
+    preview: false
   fields:
   - { label: 'Name', name: 'name', widget: 'string', hint: 'Name of the Partner' }
   - { label: 'Logo', name: 'image', widget: 'image', hint: 'Thumbnail image for publication entry.' }
@@ -108,7 +108,7 @@ collections:
   create: true
   # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   editor:
-    preview: true
+    preview: false
   summary: "{{title | strings.Title}}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
@@ -129,7 +129,7 @@ collections:
   create: true
   # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   editor:
-    preview: true
+    preview: false
   summary: "{{title | title}} [{{id}}] – {{description | truncate(40,'...')}} {{body | truncate(150, '...')}}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
@@ -147,7 +147,7 @@ collections:
   create: true
   # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   editor:
-    preview: true
+    preview: false
   summary: "{{title | title}} ({{date | date('YYYY')}}) {{journal}} - {{ authors }}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
@@ -169,7 +169,7 @@ collections:
   create: true
   slug: "{{slug}}-{{year}}-{{month}}-{{day}}"
   editor:
-    preview: true
+    preview: false
   summary: "{{title | title}} - {{ authors }} {{date | date('YYYY-MM-DD')}} - {{body | truncate(20, '...')}}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
