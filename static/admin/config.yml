@@ -33,6 +33,7 @@ collections:
   # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   editor:
     preview: false
+  preview_path: "{{slug}}"
   summary: "{{title}}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
@@ -109,6 +110,7 @@ collections:
   # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   editor:
     preview: false
+  preview_path: "applications/{{slug}}"
   summary: "{{title | strings.Title}}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
@@ -130,6 +132,7 @@ collections:
   # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   editor:
     preview: false
+  preview_path: "research/{{slug}}"
   summary: "{{title | title}} [{{id}}] – {{description | truncate(40,'...')}} {{body | truncate(150, '...')}}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
@@ -148,6 +151,7 @@ collections:
   # slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
   editor:
     preview: false
+  preview_path: "research/publications/{{slug}}"
   summary: "{{title | title}} ({{date | date('YYYY')}}) {{journal}} - {{ authors }}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
@@ -170,6 +174,7 @@ collections:
   slug: "{{slug}}-{{year}}-{{month}}-{{day}}"
   editor:
     preview: false
+  preview_path: "blog/{{slug}}"
   summary: "{{title | title}} - {{ authors }} {{date | date('YYYY-MM-DD')}} - {{body | truncate(20, '...')}}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
