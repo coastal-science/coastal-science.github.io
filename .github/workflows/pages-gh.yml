@@ -190,8 +190,8 @@ jobs:
             # Replace spaces, colons, and dashes with underscores
             formatted_result=$(echo "$formatted_result" | sed 's/[ :\-]/_/g')
             
-            branch_name=$(echo $branch_name | xargs)
-            branch_name=$(echo "$branch_name" | sed 's/[ :\-]/_/g')
+            #branch_name=$(echo $branch_name | xargs)
+            #branch_name=$(echo "$branch_name" | sed 's/[ :\-]/_/g')
             
             commit_hash=$(echo $commit_hash | xargs)
             commit_hash=$(echo "$commit_hash" | sed 's/[ :\-]/_/g')
@@ -204,7 +204,7 @@ jobs:
             
             echo "TAG=${TAG-random}" >> "$GITHUB_OUTPUT"
             echo "EXTRA_TAG=${EXTRA_TAG}" >> "$GITHUB_OUTPUT"
-            echo "branch_name=${branch_name}" >> "$GITHUB_OUTPUT"
+            #echo "branch_name=${branch_name}" >> "$GITHUB_OUTPUT"
             echo "commit_hash=${commit_hash}" >> "$GITHUB_OUTPUT"
             echo "commit_date=${commit_date}" >> "$GITHUB_OUTPUT"
 
@@ -265,7 +265,7 @@ jobs:
         run: |
           docker compose -f docker-compose.yaml -f docker-compose.override.yaml build website
           docker tag website ${{ steps.meta.outputs.tags }}
-          #docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.branch_name }}
+          docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.branch_name }}
           docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.commit_hash }}
           docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.commit_date }}
           
