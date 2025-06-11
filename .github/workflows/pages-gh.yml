@@ -264,7 +264,7 @@ jobs:
           
         run: |
           docker compose -f docker-compose.yaml -f docker-compose.override.yaml build website
-          docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
+          docker tag website ${{ steps.meta.outputs.tags }}
           #docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.branch_name }}
           #docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.commit_hash }}
           #docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.commit_date }}
