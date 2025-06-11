@@ -207,6 +207,13 @@ jobs:
             echo "commit_hash=${commit_hash}" >> "$GITHUB_OUTPUT"
             echo "commit_date=${commit_date}" >> "$GITHUB_OUTPUT"
 
+      - name: List repos in workspace
+        run: |
+          ls -lah
+          du -sh *
+          echo The current workspace repo is..
+          pwd
+
       # GH Actions
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
