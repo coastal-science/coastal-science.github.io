@@ -1,0 +1,4 @@
+services:
+  website:
+    build:
+      dockerfile: Dockerfile.prod
