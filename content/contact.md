@@ -1,11 +1,10 @@
 ---
-title: "Contact"
+title: Contact
 id: contact
 weight: 4
 header_menu: true
+date: 2025-06-10T22:25:00.000Z
 ---
-
-# We are here to help you
 
 Are you curious about something?  If you have any questions, comments, or feedback, please don't hesitate to reach out to us. 
 
