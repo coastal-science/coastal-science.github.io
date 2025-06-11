@@ -11,7 +11,7 @@ on:
 
 env:
   SERVICE: "${{ vars.SERVICE }}"
-  CONTAINER_PROJECT: "rcg-containers"
+  CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name
   WEB_URL: "${{ secrets.DOMAIN_NAME }}"
 
 
