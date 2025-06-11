@@ -255,7 +255,7 @@ jobs:
 
       - name: Build website with Dockerfile.prod
         run: |
-          docker compose -f docker-compose.yml -f docker-compose.override.yml build website
+          docker compose -f docker-compose.yaml -f docker-compose.override.yaml build website
           docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
           docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.branch_name }}
           docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.commit_hash }}
