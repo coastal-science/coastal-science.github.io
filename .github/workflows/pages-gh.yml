@@ -150,6 +150,10 @@ jobs:
       # This is used to complete the identity challenge
       # with sigstore/fulcio when running outside of PRs.
       id-token: write
+
+    outputs: 
+      tags: ${{ steps.meta.outputs.tags }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -338,6 +342,6 @@ jobs:
       - name: Current workspace
         run: du -shc ${GITHUB_WORKSPACE}
       - name: Clean Up Docker Images
-        run: docker rmi -f $(docker images '${{ needs.build_and_push_image.outputs.tags }}' -a -q)
+        run: docker rmi -f $(docker images '${{ needs.build_and_push_prod_image.outputs.tags }}' -a -q)
       - name: Clean Up Workspace
         run: rm -rf ${GITHUB_WORKSPACE}
