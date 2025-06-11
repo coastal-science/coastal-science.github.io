@@ -255,7 +255,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} # /${{ env.SERVICE }}
+          labels: |
+            org.opencontainers.image.version=${{ needs.generate-timestamp.outputs.TIMESTAMP }}
 
       - name: Build website with Dockerfile.prod
         env:
@@ -298,6 +300,7 @@ jobs:
         run: |
              apk update
              apk add gettext nomad
+
       - name: Test Nomad
         run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad status
 
@@ -318,6 +321,7 @@ jobs:
              # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
              envsubst < nomad/template.hcl > ${{ env.SERVICE }}.hcl
              cat ${{ env.SERVICE }}.hcl
+
       - name: Deploy TIMESTAMPED Website To Nomad
         run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run ${{ env.SERVICE }}.hcl
 
