@@ -10,7 +10,10 @@ on:
   workflow_dispatch:
 
 env:
-  SERVICE: landing
+  SERVICE: "${{ vars.SERVICE }}"
+  CONTAINER_PROJECT: "rcg-containers"
+  WEB_URL: "${{ secrets.DOMAIN_NAME }}"
+
 
 # Allow one concurrent deployment
 concurrency:
@@ -274,40 +277,50 @@ jobs:
   
   # Create and publish a prod docker image          
   deploy_prod_image:
+    if: false
+    #if: github.ref == 'refs/heads/main'
     environment: docker-image
-
-    if: github.ref == 'refs/heads/main'
-    needs:
-      - build_and_push_prod_image
-    env:      
-      REGISTRY: ghcr.io # docker.github.sfu.ca 
-      IMAGE_NAME: ${{ github.repository }}
-
-    runs-on: self-hosted
     permissions:
       contents: read
       packages: read
-      
+    needs:
+      - build_and_push_prod_image
+    runs-on: [ self-hosted, rcg ]
+    env:      
+        REGISTRY: ghcr.io # docker.github.sfu.ca 
+        IMAGE_NAME: ${{ github.repository }}
+        ENVIRONMENT: "production"
+    container:
+      image: alpine:3.18
+ 
     steps:
-      - name: Deploy backend nomad job
+      - name: Prepare Environment
         run: |
-          echo "Attempting backend deployment: population=${{ env.IMAGE_NAME }}"
-          
-          # cd call-library/nomad/
+             apk update
+             apk add gettext nomad
+      - name: Test Nomad
+        run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad status
 
-          # export POPULATION=${{ vars.POPULATION }}; 
-          # export TYPE=${{ steps.type-of-build.outputs.TYPE_OF_BUILD }}; 
-          # envsubst < call-catalogue-single.nomad.template > $POPULATION-call-catalogue-$TYPE.nomad
+      - name: Setup Nomad Job
+        run: |
+             __SERVICE__="${{ env.SERVICE }}" \
+             __JOB_DRIVER__="docker" \
+             __ENVIRONMENT__="${{ env.ENVIRONMENT }}" \
+             __WEB_URL__="${{ env.WEB_URL }}" \
+             __JOB_NAME__="${{ env.SERVICE }}-${{ env.ENVIRONMENT }}" \
+             # __IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}" \
+             __IMAGE_NAME__="${{ env.IMAGE_NAME }}" \
+             __IMAGE_TAG__="${{ needs.generate-timestamp.outputs.TIMESTAMP }}" \
+             __DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}"" \
+             __NAMESPACE__="${{ secrets.NOMAD_SERVER_NAMESPACE }}" \
+             #__USERNAME__="${{ secrets.GITLAB_CONTAINER_USERNAME }}" \
+             #__PASSWORD__="${{ secrets.GITLAB_CONTAINER_TOKEN }}" \
+             # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
+             envsubst < nomad/template.hcl > ${{ env.SERVICE }}.hcl
+             cat ${{ env.SERVICE }}.hcl
+      - name: Deploy TIMESTAMPED Website To Nomad
+        run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run ${{ env.SERVICE }}.hcl
 
-          # nomad job stop -address="http://192.168.245.224:4646" -token=${{ secrets.NOMAD_TOKEN }} \
-          #     $POPULATION-call-catalogue-$TYPE || true
-          # nomad run -verbose -address="http://192.168.245.224:4646" -token=${{ secrets.NOMAD_TOKEN }} \
-          #     -var "type=${{ steps.type-of-build.outputs.TYPE_OF_BUILD }}" \
-          #     -var "population=${{ vars.POPULATION }}" \
-          #     $POPULATION-call-catalogue-$TYPE.nomad
-
-          # echo deployed to https://${{ vars.POPULATION }}-${{ steps.type-of-build.outputs.TYPE_OF_BUILD }}.***.***.ca
-          # cd -
 
   # Create and publish a docker image          
   build_and_push_image:
