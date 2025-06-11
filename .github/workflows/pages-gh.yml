@@ -60,7 +60,7 @@ jobs:
       image: peaceiris/hugo
 
     env:
-      HUGO_VERSION: 0.139.4 # latest  #  0.126.1 
+      HUGO_VERSION: 0.147.8 # latest  #  0.126.1 
       HUGO_FORMS: ${{ vars.HUGO_FORMS }}
       HUGO_GOOGLEANALYTICS: ${{ vars.HUGO_GOOGLEANALYTICS }}
 
@@ -137,7 +137,7 @@ jobs:
     needs:
       - generate-timestamp
     env:
-      HUGO_VERSION: 0.139.4 # latest  #  0.126.1 
+      HUGO_VERSION: 0.147.8 # latest  #  0.126.1 
       HUGO_FORMS: ${{ vars.HUGO_FORMS }}
       HUGO_GOOGLEANALYTICS: ${{ vars.HUGO_GOOGLEANALYTICS }}
       
