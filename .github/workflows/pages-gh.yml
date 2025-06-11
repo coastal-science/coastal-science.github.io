@@ -108,7 +108,7 @@ jobs:
         with:
           path: ./public
 
-   # Deployment job
+  # Deployment job
   deploy-gh-pages:
     environment:
       name: github-pages
