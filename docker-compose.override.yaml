@@ -12,6 +12,6 @@ services:
       # platforms:
       #   - "linux/amd64"
 
-    # image: ${REGISTRY}/${IMAGE_NAME}:${DATE}_${TYPE_OF_BUILD-development}
+    image: website
     ports:
       - 8800:80
