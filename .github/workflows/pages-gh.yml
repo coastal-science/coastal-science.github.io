@@ -268,6 +268,7 @@ jobs:
           # docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.branch_name }}
           docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.commit_hash }}
           docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.commit_date }}
+          docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           
           docker push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
   
