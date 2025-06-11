@@ -334,10 +334,11 @@ jobs:
     # if: ${{ always() }}
     permissions: {}
     needs: 
-      - build-website
-      - deploy-gh-pages
+      # - build-website
+      # - deploy-gh-pages
       - build_and_push_prod_image
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: [ self-hosted, rcg ]
     steps:
       - name: Current workspace
         run: du -shc ${GITHUB_WORKSPACE}
