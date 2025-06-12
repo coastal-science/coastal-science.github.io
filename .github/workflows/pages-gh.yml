@@ -304,7 +304,9 @@ jobs:
   deploy_prod_image:
     if: false
     #if: github.ref == 'refs/heads/main'
-    environment: docker-image
+    environment: 
+      name: docker-image
+      url: ${{ vars.HUGO_BASEURL }}
     permissions:
       contents: read
       packages: read
