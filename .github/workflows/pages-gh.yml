@@ -90,6 +90,7 @@ jobs:
       HUGO_VERSION: "${{ vars.HUGO_VERSION }}" # 0.147.8 # latest  #  0.126.1 
       HUGO_FORMS: ${{ vars.HUGO_FORMS }}
       HUGO_GOOGLEANALYTICS: ${{ vars.HUGO_GOOGLEANALYTICS }}
+      REPO_NAME: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
 
     # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
     permissions:
