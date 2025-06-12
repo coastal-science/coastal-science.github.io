@@ -353,7 +353,7 @@ jobs:
              # __IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}" \
              __IMAGE_NAME__="${{ env.IMAGE_NAME }}" \
              __IMAGE_TAG__="${{ needs.generate-timestamp.outputs.TIMESTAMP }}" \
-             __DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}"" \
+             __DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
              __NAMESPACE__="${{ secrets.NOMAD_SERVER_NAMESPACE }}" \
              # __USERNAME__="${{ secrets.GITLAB_CONTAINER_USERNAME }}" \
              # __PASSWORD__="${{ secrets.GITLAB_CONTAINER_TOKEN }}" \
