@@ -28,7 +28,7 @@ on:
         required: true
         
 env:
-  HUGO_VERSION: 0.147.8
+  HUGO_VERSION: "0.147.8"
   SERVICE: "${{ vars.SERVICE }}"
   CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name
   WEB_URL: "${{ secrets.DOMAIN_NAME }}"
