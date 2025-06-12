@@ -340,7 +340,6 @@ jobs:
         # __PASSWORD__="${{ secrets.GITLAB_CONTAINER_TOKEN }}" \
         # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
 
- 
     steps:
       - name: Prepare Environment
         run: |
@@ -378,8 +377,7 @@ jobs:
              cat ${{ env.SERVICE }}.hcl
 
       - name: Deploy TIMESTAMPED Website To Nomad
-        # run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run ${{ env.SERVICE }}.hcl
-        run: echo NOMAD_TOKEN=xxx NOMAD_ADDR=yyy nomad job run ${{ env.SERVICE }}.hcl
+        run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run ${{ env.SERVICE }}.hcl
 
   # Cleanup workspace on the runner
   cleanup:
