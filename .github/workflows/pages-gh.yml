@@ -333,7 +333,7 @@ jobs:
       - name: Prepare Environment
         run: |
              apk update
-             apk add gettext nomad
+             apk add gettext nomad git
 
       - name: Checkout
         uses: actions/checkout@v4
