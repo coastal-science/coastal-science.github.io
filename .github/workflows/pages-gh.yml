@@ -316,6 +316,7 @@ jobs:
       contents: read
       packages: read
     needs:
+      - generate-timestamp
       - build-website-and-container-build
     runs-on: [ self-hosted, rcg ]
     container:
@@ -330,6 +331,8 @@ jobs:
         CONTAINER_PROJECT: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
         IMAGE_NAME: ${{ vars.__REGISTRY__ }}/${{ github.repository }}
         IMAGE_TAG: latest
+        NOMAD_SERVER_DATACENTERS: "${{ vars.__DATACENTERS__ }}"
+        NOMAD_SERVER_NAMESPACE:  "${{ vars.__NAMESPACE__ }}"
  
     steps:
       - name: Prepare Environment
@@ -363,8 +366,10 @@ jobs:
              #__IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}" \
              __IMAGE_NAME__="${{ env.IMAGE_NAME }}" \
              __IMAGE_TAG__="${{ needs.generate-timestamp.outputs.TIMESTAMP }}" \
-             __DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
-             __NAMESPACE__="${{ secrets.NOMAD_SERVER_NAMESPACE }}" \
+             #__DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
+             __DATACENTERS__="${{ env.NOMAD_SERVER_DATACENTERS }}" \
+             # __NAMESPACE__="${{ secrets.NOMAD_SERVER_NAMESPACE }}" \
+             __NAMESPACE__="${{ env.NOMAD_SERVER_NAMESPACE }}" \
              # __USERNAME__="${{ secrets.GITLAB_CONTAINER_USERNAME }}" \
              # __PASSWORD__="${{ secrets.GITLAB_CONTAINER_TOKEN }}" \
              # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
