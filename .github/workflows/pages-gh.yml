@@ -42,11 +42,6 @@ concurrency:
   group: ${{ github.repository }}-coastal-pages
   cancel-in-progress: true
 
-# # Default to bash
-# defaults:
-#   run:
-#     shell: bash
-
 jobs:
   generate-timestamp:
     permissions: {}
@@ -161,7 +156,7 @@ jobs:
         uses: actions/deploy-pages@v4
 
   # Create and publish a prod docker image          
-  build_and_push_prod_image:
+  build-website-and-container-build:
     environment: docker-image
 
     # if: github.ref == 'refs/heads/main'
@@ -314,7 +309,7 @@ jobs:
           docker push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
   
   # Create and publish a prod docker image          
-  deploy_prod_image:
+  deploy-service-prod:
     #if: false
     #if: github.ref == 'refs/heads/main'
     environment: 
@@ -324,7 +319,7 @@ jobs:
       contents: read
       packages: read
     needs:
-      - build_and_push_prod_image
+      - build-website-and-container-build
     runs-on: [ self-hosted, rcg ]
     container:
       image: alpine:3.18
@@ -340,6 +335,20 @@ jobs:
              apk update
              apk add gettext nomad
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive) # failing on ubuntu container
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+          # set-safe-directory: '/__w/coastal-science.github.io/coastal-science.github.io' # The process '/usr/bin/git' failed with exit code 128
+          set-safe-directory: '${{ env.REPO_NAME }}/${{ env.REPO_NAME }}' # The process '/usr/bin/git' failed with exit code 128, resorting to manual call
+
+          
+      # - name: Set safe directory workaround
+      #   run: |
+      #     # git config --global --add safe.directory /__w/coastal-science.github.io/coastal-science.github.io
+      #     git config --global --add safe.directory /__w/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}
+      
       - name: Test Nomad
         run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad status
 
@@ -367,13 +376,13 @@ jobs:
 
   # Cleanup workspace on the runner
   cleanup:
-    # if: ${{ always() }}
+    if: ${{ always() }}
     permissions: {}
     needs: 
       # - build-website
       # - deploy-gh-pages
-      - build_and_push_prod_image
-      - deploy_prod_image
+      - build-website-and-container-build
+      - deploy-service-prod
     # runs-on: ubuntu-latest
     runs-on: [ self-hosted, rcg ]
     steps:
