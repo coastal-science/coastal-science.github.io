@@ -29,7 +29,7 @@ on:
         
 env:
   SERVICE: "${{ vars.SERVICE }}"
-  CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name
+  # CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extacted from `github.resposity` by removing `github.owner`
   WEB_URL: "${{ secrets.DOMAIN_NAME }}"
 
 
@@ -48,13 +48,16 @@ jobs:
     permissions: {}
     runs-on: ubuntu-latest
     steps:
-      - name: Set TIMESTAMP
+      - name: Set TIMESTAMP and get REPO_NAME
         id: date
         run: |
              export DATE=$(date +'%Y%m%d-%H%M%S')
+             REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}
              echo "TIMESTAMP=$DATE" >> $GITHUB_ENV
+             echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
     outputs:
       TIMESTAMP: ${{ env.TIMESTAMP }}
+      REPO_NAME: ${{ env.REPO_NAME }}
 
   configure-pages:
     runs-on: ubuntu-latest
@@ -317,6 +320,7 @@ jobs:
     env:      
         REGISTRY: ghcr.io # docker.github.sfu.ca 
         IMAGE_NAME: ${{ github.repository }}
+        CONTAINER_PROJECT: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
         ENVIRONMENT: "production"
  
     steps:
