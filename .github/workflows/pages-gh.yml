@@ -31,11 +31,8 @@ on:
       NOMAD_SERVER_NAMESPACE:
         required: false
         
-env:
-  SERVICE: "${{ vars.__SERVICE__ }}"
-  # CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.resposity` by removing `github.owner`
-  WEB_URL: "${{ secrets.__DOMAIN_NAME__ }}"
-  JOB_DRIVER: "${{ vars.__JOB_DRIVER__ }}"
+# env:
+#   CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.resposity` by removing `github.owner`
 
 # Allow one concurrent deployment
 concurrency:
