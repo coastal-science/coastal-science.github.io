@@ -15,17 +15,17 @@ on:
       token:
         required: false
       DOMAIN_NAME:
-        required: true
+        required: false
       OAUTH_GITHUB_CLIENT_SECRET:
-        required: true
+        required: false
       NOMAD_SERVER_TOKEN:
-        required: true
+        required: false
       NOMAD_SERVER_ADDRESS:
-        required: true
+        required: false
       NOMAD_SERVER_DATACENTERS:
-        required: true
+        required: false
       NOMAD_SERVER_NAMESPACE:
-        required: true
+        required: false
         
 env:
   SERVICE: "${{ vars.SERVICE }}"
