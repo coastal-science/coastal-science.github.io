@@ -29,13 +29,13 @@ on:
         
 env:
   SERVICE: "${{ vars.SERVICE }}"
-  # CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extacted from `github.resposity` by removing `github.owner`
+  # CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.resposity` by removing `github.owner`
   WEB_URL: "${{ secrets.DOMAIN_NAME }}"
 
 
 # Allow one concurrent deployment
 concurrency:
-  group: ${{ github.repository }}-pages
+  group: ${{ github.repository }}-coastal-pages
   cancel-in-progress: true
 
 # Default to bash
