@@ -329,10 +329,17 @@ jobs:
         __REGISTRY__: ghcr.io # docker.github.sfu.ca 
         # CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.resposity` by removing `github.owner`
         CONTAINER_PROJECT: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
+        # __IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}"
         IMAGE_NAME: ${{ vars.__REGISTRY__ }}/${{ github.repository }}
         IMAGE_TAG: latest
+        #__DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
+        # __NAMESPACE__="${{ secrets.NOMAD_SERVER_NAMESPACE }}" \
         NOMAD_SERVER_DATACENTERS: "${{ vars.__DATACENTERS__ }}"
         NOMAD_SERVER_NAMESPACE:  "${{ vars.__NAMESPACE__ }}"
+        # __USERNAME__="${{ secrets.GITLAB_CONTAINER_USERNAME }}" \
+        # __PASSWORD__="${{ secrets.GITLAB_CONTAINER_TOKEN }}" \
+        # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
+
  
     steps:
       - name: Prepare Environment
@@ -363,16 +370,10 @@ jobs:
              __ENVIRONMENT__="${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}" \
              __WEB_URL__="${{ env.WEB_URL }}" \
              __JOB_NAME__="${{ env.SERVICE }}-${{ env.ENVIRONMENT }}" \
-             #__IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}" \
              __IMAGE_NAME__="${{ env.IMAGE_NAME }}" \
              __IMAGE_TAG__="${{ needs.generate-timestamp.outputs.TIMESTAMP }}" \
-             #__DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
              __DATACENTERS__="${{ env.NOMAD_SERVER_DATACENTERS }}" \
-             # __NAMESPACE__="${{ secrets.NOMAD_SERVER_NAMESPACE }}" \
              __NAMESPACE__="${{ env.NOMAD_SERVER_NAMESPACE }}" \
-             # __USERNAME__="${{ secrets.GITLAB_CONTAINER_USERNAME }}" \
-             # __PASSWORD__="${{ secrets.GITLAB_CONTAINER_TOKEN }}" \
-             # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
              envsubst < nomad/template.hcl > ${{ env.SERVICE }}.hcl
              cat ${{ env.SERVICE }}.hcl
 
