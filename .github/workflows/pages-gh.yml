@@ -32,10 +32,10 @@ on:
         required: false
         
 env:
-  SERVICE: "${{ vars.SERVICE }}"
+  SERVICE: "${{ vars.__SERVICE__ }}"
   # CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.resposity` by removing `github.owner`
-  WEB_URL: "${{ secrets.DOMAIN_NAME }}"
-
+  WEB_URL: "${{ secrets.__DOMAIN_NAME__ }}"
+  JOB_DRIVER: "${{ vars.__JOB_DRIVER__ }}"
 
 # Allow one concurrent deployment
 concurrency:
@@ -315,7 +315,7 @@ jobs:
   
   # Create and publish a prod docker image          
   deploy_prod_image:
-    if: false
+    #if: false
     #if: github.ref == 'refs/heads/main'
     environment: 
       name: docker-image
@@ -329,8 +329,8 @@ jobs:
     container:
       image: alpine:3.18
     env:      
-        REGISTRY: ghcr.io # docker.github.sfu.ca 
-        IMAGE_NAME: ${{ github.repository }}
+        __REGISTRY__: ghcr.io # docker.github.sfu.ca 
+        IMAGE_NAME: ${{vars.__REGISTRY__}}/${{ github.repository }}
         CONTAINER_PROJECT: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
         ENVIRONMENT: "production"
  
@@ -346,11 +346,11 @@ jobs:
       - name: Setup Nomad Job
         run: |
              __SERVICE__="${{ env.SERVICE }}" \
-             __JOB_DRIVER__="docker" \
-             __ENVIRONMENT__="${{ env.ENVIRONMENT }}" \
+             __JOB_DRIVER__="${{ env.JOB_DRIVER }}" \
+             __ENVIRONMENT__="${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}" \
              __WEB_URL__="${{ env.WEB_URL }}" \
              __JOB_NAME__="${{ env.SERVICE }}-${{ env.ENVIRONMENT }}" \
-             # __IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}" \
+             #__IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}" \
              __IMAGE_NAME__="${{ env.IMAGE_NAME }}" \
              __IMAGE_TAG__="${{ needs.generate-timestamp.outputs.TIMESTAMP }}" \
              __DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
@@ -362,7 +362,8 @@ jobs:
              cat ${{ env.SERVICE }}.hcl
 
       - name: Deploy TIMESTAMPED Website To Nomad
-        run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run ${{ env.SERVICE }}.hcl
+        # run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run ${{ env.SERVICE }}.hcl
+        run: echo NOMAD_TOKEN=xxx NOMAD_ADDR=yyy nomad job run ${{ env.SERVICE }}.hcl
 
   # Cleanup workspace on the runner
   cleanup:
