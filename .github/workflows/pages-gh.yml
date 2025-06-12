@@ -318,6 +318,11 @@ jobs:
     needs:
       - generate-timestamp
       - build-website-and-container-build
+    outputs:
+      prod_url: ${{ secrets.__DOMAIN_NAME__ }}
+      nomad_url_1: ${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
+      nomad_url_2: ${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputing.ca
+      
     runs-on: [ self-hosted, rcg ]
     container:
       image: alpine:3.18
