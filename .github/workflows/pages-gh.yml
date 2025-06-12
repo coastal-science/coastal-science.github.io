@@ -35,7 +35,7 @@ env:
 
 # Allow one concurrent deployment
 concurrency:
-  group: "pages"
+  group: ${{ github.repository }}-pages
   cancel-in-progress: true
 
 # Default to bash
