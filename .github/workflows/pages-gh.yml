@@ -324,10 +324,15 @@ jobs:
     container:
       image: alpine:3.18
     env:      
-        __REGISTRY__: ghcr.io # docker.github.sfu.ca 
-        IMAGE_NAME: ${{vars.__REGISTRY__}}/${{ github.repository }}
-        CONTAINER_PROJECT: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
+        SERVICE: "${{ vars.__SERVICE__ }}"
+        JOB_DRIVER: "${{ vars.__JOB_DRIVER__ }}"
         ENVIRONMENT: "production"
+        WEB_URL: "${{ secrets.__DOMAIN_NAME__ }}"
+        __REGISTRY__: ghcr.io # docker.github.sfu.ca 
+        # CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.resposity` by removing `github.owner`
+        CONTAINER_PROJECT: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
+        IMAGE_NAME: ${{ vars.__REGISTRY__ }}/${{ github.repository }}
+        IMAGE_TAG: latest
  
     steps:
       - name: Prepare Environment
