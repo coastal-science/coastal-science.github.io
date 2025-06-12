@@ -28,7 +28,6 @@ on:
         required: true
         
 env:
-  HUGO_VERSION: "0.147.8"
   SERVICE: "${{ vars.SERVICE }}"
   CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name
   WEB_URL: "${{ secrets.DOMAIN_NAME }}"
@@ -78,7 +77,7 @@ jobs:
       image: peaceiris/hugo
 
     env:
-      HUGO_VERSION: "${{ env.HUGO_VERSION }}" # 0.147.8 # latest  #  0.126.1 
+      HUGO_VERSION: "${{ vars.HUGO_VERSION }}" # 0.147.8 # latest  #  0.126.1 
       HUGO_FORMS: ${{ vars.HUGO_FORMS }}
       HUGO_GOOGLEANALYTICS: ${{ vars.HUGO_GOOGLEANALYTICS }}
 
@@ -90,7 +89,7 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: ${{ env.HUGO_VERSION }}
+          hugo-version: ${{ vars.HUGO_VERSION }}
           extended: true
 
       - name: Pre-Build ls
@@ -155,7 +154,7 @@ jobs:
     needs:
       - generate-timestamp
     env:
-      HUGO_VERSION: ${{ env.HUGO_VERSION }} # 0.147.8 # latest  #  0.126.1 
+      HUGO_VERSION: ${{ vars.HUGO_VERSION }} # 0.147.8 # latest  #  0.126.1 
       HUGO_FORMS: ${{ vars.HUGO_FORMS }}
       HUGO_GOOGLEANALYTICS: ${{ vars.HUGO_GOOGLEANALYTICS }}
       
@@ -245,7 +244,7 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: ${{ env.HUGO_VERSION }}
+          hugo-version: ${{ vars.HUGO_VERSION }}
           extended: true
 
       - name: Build and Minify with Hugo
