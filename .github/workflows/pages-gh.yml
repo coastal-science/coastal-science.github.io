@@ -385,6 +385,16 @@ jobs:
       - name: Deploy TIMESTAMPED Website To Nomad
         run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run ${{ env.SERVICE }}.hcl
 
+      - name: Summary output URLs
+        run: |
+          {
+            echo 'SUMMARY_URLS<<EOF'
+            ${{ secrets.__DOMAIN_NAME__ }}
+            ${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
+            ${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputing.ca
+            echo EOF
+          } >> "$GITHUB_STEP_SUMMARY"
+
   # Cleanup workspace on the runner
   cleanup:
     if: ${{ always() }}
