@@ -42,10 +42,10 @@ concurrency:
   group: ${{ github.repository }}-coastal-pages
   cancel-in-progress: true
 
-# Default to bash
-defaults:
-  run:
-    shell: bash
+# # Default to bash
+# defaults:
+#   run:
+#     shell: bash
 
 jobs:
   generate-timestamp:
