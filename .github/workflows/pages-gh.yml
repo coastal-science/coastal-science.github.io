@@ -5,43 +5,62 @@ run-name: Build/deploy Pages/Production
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main", "gha-"]
+    branches: ["main", "gha-patch-reusable-workflow"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-env:
-  SERVICE: "${{ vars.SERVICE }}"
-  CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name
-  WEB_URL: "${{ secrets.DOMAIN_NAME }}"
-
+  
+  workflow_call: # allows reusing the workflow
+    # inputs:
+    #   target:
+    #     required: false
+    #     type: string
+    secrets:
+      token:
+        required: false
+      DOMAIN_NAME:
+        required: false
+      OAUTH_GITHUB_CLIENT_SECRET:
+        required: false
+      NOMAD_SERVER_TOKEN:
+        required: false
+      NOMAD_SERVER_ADDRESS:
+        required: false
+      NOMAD_SERVER_DATACENTERS:
+        required: false
+      NOMAD_SERVER_NAMESPACE:
+        required: false
+        
+# env:
+#   CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.resposity` by removing `github.owner`
 
 # Allow one concurrent deployment
 concurrency:
-  group: "pages"
+  group: ${{ github.repository }}-coastal-pages
   cancel-in-progress: true
-
-# Default to bash
-defaults:
-  run:
-    shell: bash
 
 jobs:
   generate-timestamp:
     permissions: {}
     runs-on: ubuntu-latest
     steps:
-      - name: Set TIMESTAMP
+      - name: Set TIMESTAMP and get REPO_NAME
         id: date
         run: |
              export DATE=$(date +'%Y%m%d-%H%M%S')
+             REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}
              echo "TIMESTAMP=$DATE" >> $GITHUB_ENV
+             echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
     outputs:
       TIMESTAMP: ${{ env.TIMESTAMP }}
+      REPO_NAME: ${{ env.REPO_NAME }}
 
   configure-pages:
     runs-on: ubuntu-latest
-    permissions: read-all
+    permissions: # read-all
+      contents: read
+      pages: read
+
     steps:
       - name: Setup Pages
         id: pages
@@ -60,9 +79,10 @@ jobs:
       image: peaceiris/hugo
 
     env:
-      HUGO_VERSION: 0.147.8 # latest  #  0.126.1 
+      HUGO_VERSION: "${{ vars.HUGO_VERSION }}" # 0.147.8 # latest  #  0.126.1 
       HUGO_FORMS: ${{ vars.HUGO_FORMS }}
       HUGO_GOOGLEANALYTICS: ${{ vars.HUGO_GOOGLEANALYTICS }}
+      REPO_NAME: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
 
     # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
     permissions:
@@ -72,7 +92,7 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: ${{ env.HUGO_VERSION }}
+          hugo-version: ${{ vars.HUGO_VERSION }}
           extended: true
 
       - name: Pre-Build ls
@@ -86,11 +106,14 @@ jobs:
         with:
           submodules: true  # Fetch Hugo themes (true OR recursive) # failing on ubuntu container
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
-          # set-safe-directory: '/__w/coastal-science.github.io/coastal-science.github.io'
+          # set-safe-directory: '/__w/coastal-science.github.io/coastal-science.github.io' # The process '/usr/bin/git' failed with exit code 128
+          # set-safe-directory: '/__w/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}' # The process '/usr/bin/git' failed with exit code 128, resorting to manual call
+
           
       - name: Set safe directory workaround
         run: |
-          git config --global --add safe.directory /__w/coastal-science.github.io/coastal-science.github.io
+          # git config --global --add safe.directory /__w/coastal-science.github.io/coastal-science.github.io
+          git config --global --add safe.directory /__w/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}
           
       - name: Build with Hugo
         env:
@@ -130,14 +153,14 @@ jobs:
         uses: actions/deploy-pages@v4
 
   # Create and publish a prod docker image          
-  build_and_push_prod_image:
+  build-website-and-container-build:
     environment: docker-image
 
     if: github.ref == 'refs/heads/main'
     needs:
       - generate-timestamp
     env:
-      HUGO_VERSION: 0.147.8 # latest  #  0.126.1 
+      HUGO_VERSION: ${{ vars.HUGO_VERSION }} # 0.147.8 # latest  #  0.126.1 
       HUGO_FORMS: ${{ vars.HUGO_FORMS }}
       HUGO_GOOGLEANALYTICS: ${{ vars.HUGO_GOOGLEANALYTICS }}
       
@@ -184,11 +207,12 @@ jobs:
             
             # Get the current commit datetime (without timezone)
             commit_date=$(git show -s --format=%ci HEAD)
-            
             # remove last five characters (timezone information)
             commit_date=${commit_date:0:${#commit_date}-5} #-5 digits causes 'expression < 0' error. Instead dynamically get the string length.
             
-            
+            # Get the current commit datetime (without timezone)
+            commit_date=$(git show -s --date=format:'%Y%m%d-%H%M' --format=%cd HEAD)
+
             # Combine the parts into the desired format
             result="${branch_name}_${commit_hash}_${commit_date}"
             
@@ -205,7 +229,7 @@ jobs:
             commit_hash=$(echo "$commit_hash" | sed 's/[ :\-]/_/g')
             
             commit_date=$(echo $commit_date | xargs)
-            commit_date=$(echo "$commit_date" | sed 's/[ :\-]/_/g')
+            #commit_date=$(echo "$commit_date" | sed 's/[ :\-]/_/g')
             
             # Print the final result and return it
             echo "$formatted_result"
@@ -227,7 +251,7 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: ${{ env.HUGO_VERSION }}
+          hugo-version: ${{ vars.HUGO_VERSION }}
           extended: true
 
       - name: Build and Minify with Hugo
@@ -283,68 +307,108 @@ jobs:
           docker push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
   
   # Create and publish a prod docker image          
-  deploy_prod_image:
-    if: false
-    #if: github.ref == 'refs/heads/main'
-    environment: docker-image
+  deploy-service-prod:
+    #if: false
+    if: github.ref == 'refs/heads/main'
+    environment: 
+      name: docker-image
+      # url: ${{ vars.HUGO_BASEURL }} # may contain secret.__DOMAIN_NAME
+      url: "${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca"
     permissions:
       contents: read
       packages: read
     needs:
-      - build_and_push_prod_image
-    runs-on: [ self-hosted, rcg ]
-    env:      
-        REGISTRY: ghcr.io # docker.github.sfu.ca 
-        IMAGE_NAME: ${{ github.repository }}
-        ENVIRONMENT: "production"
+      - generate-timestamp
+      - build-website-and-container-build
+    outputs:
+      prod_url: ${{ secrets.__DOMAIN_NAME__ }}
+      nomad_url_1: ${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
+      nomad_url_2: ${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputing.ca
+      
+    runs-on: ubuntu-latest
+    # runs-on: [ self-hosted, rcg ]
     container:
       image: alpine:3.18
- 
+    env:      
+        SERVICE: "${{ vars.__SERVICE__ }}"
+        JOB_DRIVER: "${{ vars.__JOB_DRIVER__ }}"
+        ENVIRONMENT: "production"
+        WEB_URL: "${{ secrets.__DOMAIN_NAME__ }}"
+        __REGISTRY__: ghcr.io # docker.github.sfu.ca 
+        # CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.resposity` by removing `github.owner`
+        CONTAINER_PROJECT: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
+        # __IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}"
+        IMAGE_NAME: ${{ vars.__REGISTRY__ }}/${{ github.repository }}
+        IMAGE_TAG: latest
+            # needs.generate-timestamp.outputs.TIMESTAMP or even better commit_date
+        #__DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
+        # __NAMESPACE__="${{ secrets.NOMAD_SERVER_NAMESPACE }}" \
+        NOMAD_SERVER_DATACENTERS: "${{ vars.__DATACENTERS__ }}"
+        NOMAD_SERVER_NAMESPACE:  "${{ vars.__NAMESPACE__ }}"
+        # __USERNAME__="${{ secrets.GITLAB_CONTAINER_USERNAME }}" \
+        # __PASSWORD__="${{ secrets.GITLAB_CONTAINER_TOKEN }}" \
+        # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
+
     steps:
       - name: Prepare Environment
         run: |
              apk update
-             apk add gettext nomad
+             apk add gettext nomad git
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive) # failing on ubuntu container
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+          # set-safe-directory: '/__w/coastal-science.github.io/coastal-science.github.io' # The process '/usr/bin/git' failed with exit code 128
+          # set-safe-directory: '${{ env.REPO_NAME }}/${{ env.REPO_NAME }}' # The process '/usr/bin/git' failed with exit code 128, resorting to manual call
+
+      - name: Set safe directory workaround
+        run: |
+          # git config --global --add safe.directory /__w/coastal-science.github.io/coastal-science.github.io
+          git config --global --add safe.directory /__w/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}
+      
       - name: Test Nomad
         run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad status
 
       - name: Setup Nomad Job
         run: |
              __SERVICE__="${{ env.SERVICE }}" \
-             __JOB_DRIVER__="docker" \
-             __ENVIRONMENT__="${{ env.ENVIRONMENT }}" \
+             __JOB_DRIVER__="${{ env.JOB_DRIVER }}" \
+             __ENVIRONMENT__="${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}" \
              __WEB_URL__="${{ env.WEB_URL }}" \
              __JOB_NAME__="${{ env.SERVICE }}-${{ env.ENVIRONMENT }}" \
-             # __IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}" \
              __IMAGE_NAME__="${{ env.IMAGE_NAME }}" \
-             __IMAGE_TAG__="${{ needs.generate-timestamp.outputs.TIMESTAMP }}" \
-             __DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}"" \
-             __NAMESPACE__="${{ secrets.NOMAD_SERVER_NAMESPACE }}" \
-             #__USERNAME__="${{ secrets.GITLAB_CONTAINER_USERNAME }}" \
-             #__PASSWORD__="${{ secrets.GITLAB_CONTAINER_TOKEN }}" \
-             # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
+             __IMAGE_TAG__="${{ env.IMAGE_TAG }}" \
+             __DATACENTERS__="${{ env.NOMAD_SERVER_DATACENTERS }}" \
+             __NAMESPACE__="${{ env.NOMAD_SERVER_NAMESPACE }}" \
              envsubst < nomad/template.hcl > ${{ env.SERVICE }}.hcl
              cat ${{ env.SERVICE }}.hcl
 
       - name: Deploy TIMESTAMPED Website To Nomad
         run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run ${{ env.SERVICE }}.hcl
 
+      - name: Summary output URLs
+        run: |
+          echo "${{ secrets.__DOMAIN_NAME__ }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca" >> "$GITHUB_STEP_SUMMARY"
+          echo "${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputing.ca" >> "$GITHUB_STEP_SUMMARY"
+          
   # Cleanup workspace on the runner
   cleanup:
-    # if: ${{ always() }}
+    if: ${{ always() }}
     permissions: {}
     needs: 
       # - build-website
       # - deploy-gh-pages
-      - build_and_push_prod_image
-      - deploy_prod_image
-    # runs-on: ubuntu-latest
-    runs-on: [ self-hosted, rcg ]
+      - build-website-and-container-build
+      - deploy-service-prod
+    runs-on: ubuntu-latest
+    # runs-on: [ self-hosted, rcg ]
     steps:
       - name: Current workspace
         run: du -shc ${GITHUB_WORKSPACE}
       - name: Clean Up Docker Images
-        run: docker rmi -f $(docker images '${{ needs.build_and_push_prod_image.outputs.tags }}' -a -q)
+        run: docker rmi -f $(docker images '${{ needs.build-website-and-container-build.outputs.tags }}' -a -q) || echo "No docker images found to remove."
       - name: Clean Up Workspace
         run: rm -rf ${GITHUB_WORKSPACE}
