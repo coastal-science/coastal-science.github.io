@@ -156,7 +156,7 @@ jobs:
   build-website-and-container-build:
     environment: docker-image
 
-    # if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     needs:
       - generate-timestamp
     env:
@@ -309,7 +309,7 @@ jobs:
   # Create and publish a prod docker image          
   deploy-service-prod:
     #if: false
-    #if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     environment: 
       name: docker-image
       # url: ${{ vars.HUGO_BASEURL }} # may contain secret.__DOMAIN_NAME
