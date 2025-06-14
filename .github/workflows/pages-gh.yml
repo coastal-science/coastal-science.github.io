@@ -325,7 +325,8 @@ jobs:
       nomad_url_1: ${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
       nomad_url_2: ${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputing.ca
       
-    runs-on: [ self-hosted, rcg ]
+    runs-on: ubuntu-latest
+    # runs-on: [ self-hosted, rcg ]
     container:
       image: alpine:3.18
     env:      
@@ -402,8 +403,8 @@ jobs:
       # - deploy-gh-pages
       - build-website-and-container-build
       - deploy-service-prod
-    # runs-on: ubuntu-latest
-    runs-on: [ self-hosted, rcg ]
+    runs-on: ubuntu-latest
+    # runs-on: [ self-hosted, rcg ]
     steps:
       - name: Current workspace
         run: du -shc ${GITHUB_WORKSPACE}
