@@ -207,11 +207,12 @@ jobs:
             
             # Get the current commit datetime (without timezone)
             commit_date=$(git show -s --format=%ci HEAD)
-            
             # remove last five characters (timezone information)
             commit_date=${commit_date:0:${#commit_date}-5} #-5 digits causes 'expression < 0' error. Instead dynamically get the string length.
             
-            
+            # Get the current commit datetime (without timezone)
+            commit_date=$(git show -s --date=format:'%Y%m%d-%H%M' --format=%cd HEAD)
+
             # Combine the parts into the desired format
             result="${branch_name}_${commit_hash}_${commit_date}"
             
@@ -228,7 +229,7 @@ jobs:
             commit_hash=$(echo "$commit_hash" | sed 's/[ :\-]/_/g')
             
             commit_date=$(echo $commit_date | xargs)
-            commit_date=$(echo "$commit_date" | sed 's/[ :\-]/_/g')
+            #commit_date=$(echo "$commit_date" | sed 's/[ :\-]/_/g')
             
             # Print the final result and return it
             echo "$formatted_result"
