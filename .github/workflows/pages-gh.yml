@@ -1,4 +1,4 @@
-# Sample workflow for building and deploying a Hugo site to GitHub Pages
+=# Sample workflow for building and deploying a Hugo site to GitHub Pages
 name: Deploy Hugo site to Pages and build docker image [GitHub.com]
 run-name: Build/deploy Pages/Production
 
@@ -284,6 +284,8 @@ jobs:
           CMS_BACKEND_DEBUG: ${{ vars.CMS_BACKEND_DEBUG || ''}}
           
         run: |
+          echo "${{ steps.meta.outputs.labels }}"
+          echo "${{ steps.meta.outputs.tags }}"
           docker compose -f docker-compose.yaml -f docker-compose.override.yaml build website
           docker tag website ${{ steps.meta.outputs.tags }}
           # docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.branch_name }}
