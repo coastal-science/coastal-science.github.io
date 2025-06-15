@@ -312,8 +312,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment: 
       name: docker-image
-      url: ${{ vars.HUGO_BASEURL }} # may contain secret.__DOMAIN_NAME__
-      # url: "${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca"
+      url: https://${{ vars.HUGO_BASEURL }} # may contain secret.__DOMAIN_NAME__
+      # url: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
     permissions:
       contents: read
       packages: read
