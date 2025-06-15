@@ -16,20 +16,6 @@ on:
     #     required: false
     #     type: string
     secrets:
-      token:
-        required: false
-      DOMAIN_NAME:
-        required: false
-      OAUTH_GITHUB_CLIENT_SECRET:
-        required: false
-      NOMAD_SERVER_TOKEN:
-        required: false
-      NOMAD_SERVER_ADDRESS:
-        required: false
-      NOMAD_SERVER_DATACENTERS:
-        required: false
-      NOMAD_SERVER_NAMESPACE:
-        required: false
         
 # env:
 #   CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.resposity` by removing `github.owner`
@@ -321,7 +307,7 @@ jobs:
       - generate-timestamp
       - build-website-and-container-build
     outputs:
-      prod_url: https://${{ secrets.__DOMAIN_NAME__ }}
+      prod_url: https://${{ secrets.__DOMAIN_.NAME__ }}
       nomad_url_1: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
       nomad_url_2: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputing.ca
       
