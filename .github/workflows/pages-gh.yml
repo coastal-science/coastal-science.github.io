@@ -96,7 +96,6 @@ jobs:
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
           # set-safe-directory: '/__w/coastal-science.github.io/coastal-science.github.io' # The process '/usr/bin/git' failed with exit code 128
           # set-safe-directory: '/__w/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}' # The process '/usr/bin/git' failed with exit code 128, resorting to manual call
-          set-safe-directory: '/__w/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}'
           
       - name: Set safe directory workaround
         run: |
