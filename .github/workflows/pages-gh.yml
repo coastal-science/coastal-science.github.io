@@ -377,9 +377,9 @@ jobs:
 
       - name: Summary output URLs
         run: |
-          echo "${{ secrets.__DOMAIN_NAME__ }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca" >> "$GITHUB_STEP_SUMMARY"
-          echo "${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputing.ca" >> "$GITHUB_STEP_SUMMARY"
+          echo https://"${{ secrets.__DOMAIN_NAME__ }}" >> "$GITHUB_STEP_SUMMARY"
+          echo https://"${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca" >> "$GITHUB_STEP_SUMMARY"
+          echo https://"${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputing.ca" >> "$GITHUB_STEP_SUMMARY"
           
   # Cleanup workspace on the runner
   cleanup:
