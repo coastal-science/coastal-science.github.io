@@ -300,7 +300,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment: 
       name: docker-image
-      url: https://${{ vars.HUGO_BASEURL }} # may contain secret.__DOMAIN_NAME__
+      url: https://${{ vars.HUGO_BASEURL }} # may contain secrets.__DOMAIN_NAME__
       # url: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
     permissions:
       contents: read
@@ -397,6 +397,6 @@ jobs:
       - name: Current workspace
         run: du -shc ${GITHUB_WORKSPACE}
       - name: Clean Up Docker Images
-        run: docker rmi -f $(docker images '${{ needs.build-website-and-container-build.outputs.tags }}' -a -q) || echo "No docker images found to remove."
+        run: docker rmi -f $(docker images '${{ needs.build-website-and-container-build.outputs.tags }}' -a -q) || echo "No docker images found to remove...skipping removal."
       - name: Clean Up Workspace
         run: rm -rf ${GITHUB_WORKSPACE}
