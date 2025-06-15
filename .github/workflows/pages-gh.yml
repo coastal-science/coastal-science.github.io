@@ -15,7 +15,9 @@ on:
     #   target:
     #     required: false
     #     type: string
-    secrets:
+    # secrets:
+    #   token:
+    #     required: false
         
 # env:
 #   CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.resposity` by removing `github.owner`
