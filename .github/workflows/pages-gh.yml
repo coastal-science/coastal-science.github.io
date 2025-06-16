@@ -297,7 +297,6 @@ jobs:
             public=./public
             nginx=./nginx
           tags: ${{ steps.meta.outputs.tags }}
-          # tags: ${{ steps.meta.outputs.tags }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.type-of-build.outputs.TYPE_OF_BUILD }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag-builder.outputs.TAG }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag-builder.outputs.EXTRA_TAG }}
           labels: ${{ steps.meta.outputs.labels }}
           push: true
 
