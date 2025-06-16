@@ -328,7 +328,7 @@ jobs:
   # Deploy a prod docker image to orchestrator          
   deploy-service-prod:
     # if: false
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
     environment: 
       name: docker-image
       url: https://${{ vars.HUGO_BASEURL }} # may contain secrets.__DOMAIN_NAME__
