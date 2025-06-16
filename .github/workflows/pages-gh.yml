@@ -276,28 +276,44 @@ jobs:
           labels: |
             org.opencontainers.image.version=${{ needs.generate-timestamp.outputs.TIMESTAMP }}
 
-      - name: Build website with Dockerfile.prod
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v6
         env:
           HUGO_BASEURL: "${{ vars.HUGO_BASEURL }}"
-          ORIGINS: "${{ vars.ORIGINS }}"
-          OAUTH_CLIENT_ID: "${{ vars.OAUTH_GITHUB_CLIENT_ID }}"
-          OAUTH_GITHUB_CLIENT_SECRET: "${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}"
-          CMS_BACKEND_DEBUG: ${{ vars.CMS_BACKEND_DEBUG || ''}}
+        with:
+          context: .
+          file: Dockerfile.prod
+          build-contexts: |
+            public=./public
+            nginx=./nginx
+          tags: ${{ steps.meta.outputs.tags }}
+          # tags: ${{ steps.meta.outputs.tags }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.type-of-build.outputs.TYPE_OF_BUILD }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag-builder.outputs.TAG }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag-builder.outputs.EXTRA_TAG }}
+          labels: ${{ steps.meta.outputs.labels }}
+          push: true
+
+      # - name: Build website with Dockerfile.prod
+      #   env:
+      #     HUGO_BASEURL: "${{ vars.HUGO_BASEURL }}"
+      #     ORIGINS: "${{ vars.ORIGINS }}"
+      #     OAUTH_CLIENT_ID: "${{ vars.OAUTH_GITHUB_CLIENT_ID }}"
+      #     OAUTH_GITHUB_CLIENT_SECRET: "${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}"
+      #     CMS_BACKEND_DEBUG: ${{ vars.CMS_BACKEND_DEBUG || ''}}
           
-        run: |
-          echo "${{ steps.meta.outputs.labels }}"
-          prefix="--label "
-          LABELS=$(sed "s/^/$prefix/" <<< "${{ steps.meta.outputs.labels }}")                           
-          echo $LABELS
-          echo "${{ steps.meta.outputs.tags }}"
-          docker compose -f docker-compose.yaml -f docker-compose.override.yaml build website
-          docker tag website ${{ steps.meta.outputs.tags }}
-          # docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.branch_name }}
-          docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.commit_hash }}
-          docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.commit_date }}
-          docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+      #   run: |
+      #     echo "${{ steps.meta.outputs.labels }}"
+      #     prefix="--label "
+      #     LABELS=$(sed "s/^/$prefix/" <<< "${{ steps.meta.outputs.labels }}")                           
+      #     echo $LABELS
+      #     echo "${{ steps.meta.outputs.tags }}"
+      #     docker compose -f docker-compose.yaml -f docker-compose.override.yaml build website
+      #     docker tag website ${{ steps.meta.outputs.tags }}
+      #     # docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.branch_name }}
+      #     docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.commit_hash }}
+      #     docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tags.outputs.commit_date }}
+      #     docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           
-          docker push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      #     docker push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
   
   # Deploy a prod docker image to orchestrator          
   deploy-service-prod:
