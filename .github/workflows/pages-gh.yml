@@ -282,6 +282,7 @@ jobs:
             type=ref,event=pr
             # minimal (short sha)
             type=sha
+            type=raw,value=${{ steps.tags.outputs.commit_date }}
 
       - name: Build and push Docker image
         id: build-and-push
