@@ -43,6 +43,10 @@ jobs:
       TIMESTAMP: ${{ env.TIMESTAMP }}
       REPO_NAME: ${{ env.REPO_NAME }}
 
+######################################################
+## Build and publish a staging site to GitHub Pages ##
+######################################################
+
   configure-pages:
     runs-on: ubuntu-latest
     permissions: # read-all
@@ -221,9 +225,7 @@ jobs:
             
             # Print the final result and return it
             echo "$formatted_result"
-            
-            echo "TAG=${TAG-random}" >> "$GITHUB_OUTPUT"
-            echo "EXTRA_TAG=${EXTRA_TAG}" >> "$GITHUB_OUTPUT"
+
             #echo "branch_name=${branch_name}" >> "$GITHUB_OUTPUT"
             echo "commit_hash=${commit_hash}" >> "$GITHUB_OUTPUT"
             echo "commit_date=${commit_date}" >> "$GITHUB_OUTPUT"
@@ -325,8 +327,8 @@ jobs:
   
   # Deploy a prod docker image to orchestrator          
   deploy-service-prod:
-    #if: false
-    # if: github.ref == 'refs/heads/main'
+    # if: false
+    if: github.ref == 'refs/heads/main'
     environment: 
       name: docker-image
       url: https://${{ vars.HUGO_BASEURL }} # may contain secrets.__DOMAIN_NAME__
