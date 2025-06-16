@@ -275,6 +275,13 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} # /${{ env.SERVICE }}
           labels: |
             org.opencontainers.image.version=${{ needs.generate-timestamp.outputs.TIMESTAMP }}
+          tags: |
+            # branch event
+            type=ref,event=branch
+            # pull request event
+            type=ref,event=pr
+            # minimal (short sha)
+            type=sha
 
       - name: Build and push Docker image
         id: build-and-push
