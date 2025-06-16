@@ -139,11 +139,12 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-  # Create and publish a prod docker image          
+############################################
+## Create and publish a prod docker image ##
+############################################
   build-website-and-container-build:
     environment: docker-image
-
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
     needs:
       - generate-timestamp
     env:
@@ -295,10 +296,10 @@ jobs:
           
           docker push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
   
-  # Create and publish a prod docker image          
+  # Deploy a prod docker image to orchestrator          
   deploy-service-prod:
     #if: false
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
     environment: 
       name: docker-image
       url: https://${{ vars.HUGO_BASEURL }} # may contain secrets.__DOMAIN_NAME__
