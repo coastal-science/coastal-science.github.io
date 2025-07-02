@@ -363,6 +363,7 @@ jobs:
         CONTAINER_PROJECT: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
         # __IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}"
         IMAGE_NAME: ${{ vars.__REGISTRY__ }}/${{ github.repository }}
+        FORCE_PULL: ${{ vars.__IMAGE_FORCE_PULL__ }}
         IMAGE_TAG: latest
             # needs.generate-timestamp.outputs.TIMESTAMP or even better commit_date
         #__DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
@@ -404,6 +405,7 @@ jobs:
              __JOB_NAME__="${{ env.SERVICE }}-${{ env.ENVIRONMENT }}" \
              __IMAGE_NAME__="${{ env.IMAGE_NAME }}" \
              __IMAGE_TAG__="${{ env.IMAGE_TAG }}" \
+             __IMAGE_FORCE_PULL__="${{ env.FORCE_PULL || 'false' }}" \
              __DATACENTERS__="${{ env.NOMAD_SERVER_DATACENTERS }}" \
              __NAMESPACE__="${{ env.NOMAD_SERVER_NAMESPACE }}" \
              envsubst < nomad/template.hcl > ${{ env.SERVICE }}.hcl
