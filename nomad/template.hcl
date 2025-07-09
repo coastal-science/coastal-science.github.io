@@ -2,11 +2,17 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
   datacenters = ${__DATACENTERS__}
   namespace = "${__NAMESPACE__}"
 
-  # constraint {
-  #   attribute = "${meta.role}"
-  #   operator  = "!="
-  #   value     = "rcg-ingress"
-  # }
+  #constraint {
+  #  attribute = "${meta.role}"
+  #  operator  = "!="
+  #  value     = "rcg-ingress"
+  #}
+
+  constraint {
+    attribute = "${node.unique.name}"
+    operator  = "="
+    value     = "nomad-hallo-apps.novalocal"
+  }
 
   constraint {
     distinct_hosts = true
@@ -42,10 +48,10 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
       config {
         image = "${__IMAGE_NAME__}:${__IMAGE_TAG__}"
         ports = ["http"]
-        auth {
-          username = "${__USERNAME__}"
-          password = "${__PASSWORD__}"
-        }
+        # auth {
+        #   username = "${__USERNAME__}"
+        #   password = "${__PASSWORD__}"
+        # }
       }
 
     service {
@@ -59,8 +65,12 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
         "traefik.http.routers.rcg-${__SERVICE__}-${__ENVIRONMENT__}.tls=true",
         "traefik.http.routers.rcg-${__SERVICE__}-${__ENVIRONMENT__}.entrypoints=websecure",
         
-        "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}.rule=Host(`ruthjoy.researchcomputinggroup.ca`)",
-        "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}-nossl.rule=Host(`ruthjoy.researchcomputinggroup.ca`)",
+        "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}.rule=Host(`${__SERVICE__}-${__ENVIRONMENT__}.ruthjoy.researchcomputing.ca`)",
+        "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}-nossl.rule=Host(`${__SERVICE__}-${__ENVIRONMENT__}.ruthjoy.researchcomputing.ca`)",
+        "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}.tls=true",
+
+        "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}.rule=Host(`${__SERVICE__}-${__ENVIRONMENT__}.ruthjoy.researchcomputinggroup.ca`)",
+        "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}-nossl.rule=Host(`${__SERVICE__}-${__ENVIRONMENT__}.ruthjoy.researchcomputinggroup.ca`)",
         "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}.tls=true",
         "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}.entrypoints=websecure",
       ]
