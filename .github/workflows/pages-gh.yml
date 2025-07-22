@@ -373,6 +373,7 @@ jobs:
         # __USERNAME__="${{ secrets.GITLAB_CONTAINER_USERNAME }}" \
         # __PASSWORD__="${{ secrets.GITLAB_CONTAINER_TOKEN }}" \
         # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
+        __RESEARCHER__:  "${{ secrets.__RESEARCHER__ }}"
 
     steps:
       - name: Prepare Environment
@@ -408,11 +409,11 @@ jobs:
              __IMAGE_FORCE_PULL__="${{ env.FORCE_PULL || 'false' }}" \
              __DATACENTERS__="${{ env.NOMAD_SERVER_DATACENTERS }}" \
              __NAMESPACE__="${{ env.NOMAD_SERVER_NAMESPACE }}" \
-             envsubst < nomad/template.hcl > ${{ env.SERVICE }}.hcl
-             cat ${{ env.SERVICE }}.hcl
+             envsubst < nomad/template.nomad > ${{ env.SERVICE }}.nomad
+             cat ${{ env.SERVICE }}.nomad
 
       - name: Deploy TIMESTAMPED Website To Nomad
-        run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run ${{ env.SERVICE }}.hcl
+        run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run ${{ env.SERVICE }}.nomad
 
       - name: Summary output URLs
         run: |
