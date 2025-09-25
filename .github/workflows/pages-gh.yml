@@ -373,7 +373,7 @@ jobs:
         # __USERNAME__="${{ secrets.GITLAB_CONTAINER_USERNAME }}" \
         # __PASSWORD__="${{ secrets.GITLAB_CONTAINER_TOKEN }}" \
         # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
-        __RESEARCHER__:  "${{ secrets.__RESEARCHER__ }}"
+        __RESEARCHER__:  "${{ vars.__RESEARCHER__ }}"
 
     steps:
       - name: Prepare Environment
