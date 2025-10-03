@@ -415,10 +415,10 @@ jobs:
         run: |
           # NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job stop -verbose whales-latest
           NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job stop -verbose ${{ env.SERVICE }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}
-          echo "Nomad job is stopped=$? \n"
+          echo "Nomad job is stopped=$?"
           sleep 5s
           NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run -verbose ${{ env.SERVICE }}.nomad
-          echo "Nomad job is deployed=$? \n"
+          echo "Nomad job is deployed=$?"
           
       - name: Summary output URLs
         run: |
