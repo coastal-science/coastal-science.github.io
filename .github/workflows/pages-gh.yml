@@ -413,7 +413,8 @@ jobs:
 
       - name: Deploy TIMESTAMPED Website To Nomad
         run: |
-          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job stop whales-latest && NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run ${{ env.SERVICE }}.nomad
+          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job stop whales\-latest
+          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run ${{ env.SERVICE }}.nomad
           # NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job stop ${{ env.SERVICE }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }} || true
           
 
@@ -421,7 +422,6 @@ jobs:
         run: |
           echo https://"${{ secrets.__DOMAIN_NAME__ }}" >> "$GITHUB_STEP_SUMMARY"
           echo https://"${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca" >> "$GITHUB_STEP_SUMMARY"
-          echo https://"${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputing.ca" >> "$GITHUB_STEP_SUMMARY"
           
   # Cleanup workspace on the runner
   cleanup:
