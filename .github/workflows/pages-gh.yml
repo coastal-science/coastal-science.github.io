@@ -412,7 +412,9 @@ jobs:
              cat ${{ env.SERVICE }}.nomad
 
       - name: Deploy TIMESTAMPED Website To Nomad
-        run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run ${{ env.SERVICE }}.nomad
+        run: |
+          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job stop "${{ env.SERVICE }}-${{ env.ENVIRONMENT }}" || true
+          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run ${{ env.SERVICE }}.nomad
 
       - name: Summary output URLs
         run: |
