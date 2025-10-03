@@ -413,12 +413,12 @@ jobs:
 
       - name: Deploy TIMESTAMPED Website To Nomad
         run: |
-          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job stop -verbose whales-latest
+          # NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job stop -verbose whales-latest
+          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job stop -verbose ${{ env.SERVICE }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}
           echo "Nomad job is stopped=$? \n"
           sleep 5s
           NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run -verbose ${{ env.SERVICE }}.nomad
           echo "Nomad job is deployed=$? \n"
-          # NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job stop ${{ env.SERVICE }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }} || true
           
       - name: Summary output URLs
         run: |
