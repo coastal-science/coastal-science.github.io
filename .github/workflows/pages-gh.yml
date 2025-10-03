@@ -346,7 +346,6 @@ jobs:
     outputs:
       prod_url: https://${{ secrets.__DOMAIN_NAME__ }}
       nomad_url_1: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
-      nomad_url_2: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputing.ca
       
     runs-on: ubuntu-latest
     # runs-on: [ self-hosted, rcg ]
