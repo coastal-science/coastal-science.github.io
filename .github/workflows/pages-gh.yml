@@ -20,7 +20,7 @@ on:
     #     required: false
         
 # env:
-#   CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.resposity` by removing `github.owner`
+#   CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.respository` by removing `github.owner`
 
 # Allow one concurrent deployment
 concurrency:
