@@ -54,10 +54,10 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
       config {
         image = "${__IMAGE_NAME__}:${__IMAGE_TAG__}"
         ports = ["http"]
-        # auth {
-        #   username = "${__USERNAME__}"
-        #   password = "${__PASSWORD__}"
-        # }
+        auth {
+          username = "${__REGISTRY_USERNAME__}"
+          password = "${__REGISTRY_PASSWORD__}"
+        }
       }
 
     service {

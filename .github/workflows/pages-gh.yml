@@ -369,8 +369,8 @@ jobs:
         # __NAMESPACE__="${{ secrets.NOMAD_SERVER_NAMESPACE }}" \
         NOMAD_SERVER_DATACENTERS: "${{ vars.__DATACENTERS__ }}"
         NOMAD_SERVER_NAMESPACE:  "${{ vars.__NAMESPACE__ }}"
-        # __USERNAME__="${{ secrets.GITLAB_CONTAINER_USERNAME }}" \
-        # __PASSWORD__="${{ secrets.GITLAB_CONTAINER_TOKEN }}" \
+        __REGISTRY_USERNAME__: "${{ github.actor }}"  # "${{ secrets.GITLAB_CONTAINER_USERNAME }}"
+        __REGISTRY_PASSWORD__: "${{ secrets.GITHUB_TOKEN }}"  # "${{ secrets.GITLAB_CONTAINER_TOKEN }}"
         # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
         __RESEARCHER__:  "${{ vars.__RESEARCHER__ }}"
 
