@@ -345,25 +345,24 @@ jobs:
       - build-website-and-container-build
     outputs:
       prod_url: https://${{ secrets.__DOMAIN_NAME__ }}
-      nomad_url_1: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
+      nomad_url_1: https://${{ vars.__SERVICE__ }}-${{ steps.set-env.outputs.environment_suffix }}.${{ vars.__RESEARCHER__ }}.researchcomputinggroup.ca
+      environment_suffix: ${{ steps.set-env.outputs.environment_suffix }}
+      environment: ${{ steps.set-env.outputs.environment }}
       
     runs-on: ubuntu-latest
     # runs-on: [ self-hosted, rcg ]
     container:
       image: alpine:3.18
     env: 
-        REPO_NAME: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
-        SERVICE: "${{ vars.__SERVICE__ }}"
-        JOB_DRIVER: "${{ vars.__JOB_DRIVER__ }}"
-        ENVIRONMENT: "production"
-        WEB_URL: "${{ github.ref == 'refs/heads/main' && secrets.__DOMAIN_NAME__ || '' }}"
-        __REGISTRY__: ghcr.io # docker.github.sfu.ca 
-        # CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.resposity` by removing `github.owner`
-        CONTAINER_PROJECT: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
-        # __IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}"
-        IMAGE_NAME: ${{ vars.__REGISTRY__ }}/${{ github.repository }}
-        FORCE_PULL: ${{ vars.__IMAGE_FORCE_PULL__ }}
-        IMAGE_TAG: latest
+      REPO_NAME: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
+      SERVICE: "${{ vars.__SERVICE__ }}"
+      JOB_DRIVER: "${{ vars.__JOB_DRIVER__ }}"
+      __REGISTRY__: ghcr.io # docker.github.sfu.ca 
+      # CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.resposity` by removing `github.owner`
+      CONTAINER_PROJECT: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
+      # __IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}"
+      IMAGE_NAME: ${{ vars.__REGISTRY__ }}/${{ github.repository }}
+      FORCE_PULL: ${{ vars.__IMAGE_FORCE_PULL__ }}
             # needs.generate-timestamp.outputs.TIMESTAMP or even better commit_date
         #__DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
         # __NAMESPACE__="${{ secrets.NOMAD_SERVER_NAMESPACE }}" \
@@ -375,6 +374,19 @@ jobs:
         __RESEARCHER__:  "${{ secrets.__RESEARCHER__ }}"
 
     steps:
+      - name: Determine environment and suffix
+        id: set-env
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            ENVIRONMENT="production"
+            ENVIRONMENT_SUFFIX="latest"
+          else
+            ENVIRONMENT="development"
+            ENVIRONMENT_SUFFIX="dev"
+          fi
+          echo "environment=${ENVIRONMENT}" >> $GITHUB_OUTPUT
+          echo "environment_suffix=${ENVIRONMENT_SUFFIX}" >> $GITHUB_OUTPUT
+          echo "Determined environment: ${ENVIRONMENT}, suffix: ${ENVIRONMENT_SUFFIX}"
       - name: Prepare Environment
         run: |
              apk update
@@ -397,12 +409,17 @@ jobs:
         run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad status
 
       - name: Setup Nomad Job
+        env:
+          ENVIRONMENT_SUFFIX: ${{ steps.set-env.outputs.environment_suffix }}
+          ENVIRONMENT: ${{ steps.set-env.outputs.environment }}
+          WEB_URL: "${{ github.ref == 'refs/heads/main' && secrets.__DOMAIN_NAME__ || '' }}"
+          IMAGE_TAG: ${{ steps.set-env.outputs.environment_suffix }}
         run: |
              __SERVICE__="${{ env.SERVICE }}" \
              __JOB_DRIVER__="${{ env.JOB_DRIVER }}" \
-             __ENVIRONMENT__="${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}" \
+             __ENVIRONMENT__="${{ env.ENVIRONMENT_SUFFIX }}" \
              __WEB_URL__="${{ env.WEB_URL }}" \
-             __JOB_NAME__="${{ env.SERVICE }}-${{ env.ENVIRONMENT }}" \
+             __JOB_NAME__="${{ env.SERVICE }}-${{ env.ENVIRONMENT_SUFFIX }}" \
              __IMAGE_NAME__="${{ env.IMAGE_NAME }}" \
              __IMAGE_TAG__="${{ env.IMAGE_TAG }}" \
              __IMAGE_FORCE_PULL__="${{ env.FORCE_PULL || 'false' }}" \
@@ -412,10 +429,12 @@ jobs:
              cat ${{ env.SERVICE }}.nomad
 
       - name: Deploy TIMESTAMPED Website To Nomad
+        env:
+          ENVIRONMENT_SUFFIX: ${{ steps.set-env.outputs.environment_suffix }}
         run: |
           # NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job stop -verbose whales-latest
           NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
-            nomad job stop -verbose ${{ env.SERVICE }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }} \
+            nomad job stop -verbose ${{ env.SERVICE }}-${{ env.ENVIRONMENT_SUFFIX }} \
             || true 
           echo "Nomad job is stopped=$?"
           sleep 10s
@@ -423,9 +442,11 @@ jobs:
           echo "Nomad job is deployed=$?"
           
       - name: Summary output URLs
+        env:
+          ENVIRONMENT_SUFFIX: ${{ steps.set-env.outputs.environment_suffix }}
         run: |
           echo https://"${{ secrets.__DOMAIN_NAME__ }}" >> "$GITHUB_STEP_SUMMARY"
-          echo https://"${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca" >> "$GITHUB_STEP_SUMMARY"
+          echo https://"${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT_SUFFIX }}.${{ vars.__RESEARCHER__ }}.researchcomputinggroup.ca" >> "$GITHUB_STEP_SUMMARY"
           
   # Cleanup workspace on the runner
   cleanup:
