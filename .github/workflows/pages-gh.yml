@@ -553,8 +553,6 @@ jobs:
   # Cleanup Nomad deployment when PR is closed/merged
   cleanup-pr-deployment:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    needs:
-      - generate-timestamp
     permissions:
       contents: read
       packages: read
@@ -564,7 +562,6 @@ jobs:
     container:
       image: alpine:3.18
     env: 
-      REPO_NAME: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
       SERVICE: "${{ vars.__SERVICE__ }}"
       PR_NUMBER: ${{ github.event.pull_request.number }}
 
