@@ -348,7 +348,8 @@ jobs:
       statuses: write
     environment: 
       name: docker-image
-      url: https://${{ vars.HUGO_BASEURL }}
+      # url: https://${{ vars.HUGO_BASEURL }}
+      url: ${{ steps.set-env.outputs.nomad_url }}
       # url: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
     runs-on: ubuntu-latest
     # runs-on: [ self-hosted, rcg ]
