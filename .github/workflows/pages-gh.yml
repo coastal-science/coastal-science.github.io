@@ -378,6 +378,7 @@ jobs:
     outputs:
       prod_url: ${{ steps.set-env.outputs.prod_url }}
       nomad_url_1: ${{ steps.set-env.outputs.nomad_url }}
+      url: ${{ steps.set-env.outputs.nomad_url }}
       environment_suffix: ${{ steps.set-env.outputs.environment_suffix }}
       environment: ${{ steps.set-env.outputs.environment }}
 
