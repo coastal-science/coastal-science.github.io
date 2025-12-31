@@ -76,6 +76,14 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
         "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}.tls=true",
         "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}.entrypoints=websecure",
       ]
+
+      check {
+        type     = "http"
+        path     = "/health"
+        interval = "10s"
+        timeout  = "2s"
+        method   = "GET"
+      }
     }
 
     resources {
