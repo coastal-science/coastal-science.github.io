@@ -2,17 +2,23 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
   datacenters = ${__DATACENTERS__}
   namespace = "${__NAMESPACE__}"
 
-  #constraint {
-  #  attribute = "${meta.role}"
-  #  operator  = "!="
-  #  value     = "rcg-ingress"
-  #}
-
   constraint {
-    attribute = "${node.unique.name}"
-    operator  = "="
-    value     = "nomad-hallo-apps.novalocal"
+    attribute = "${meta.role}"
+    operator  = "set_contains"
+    value     = "non-data-portal"
   }
+  
+  constraint {
+    attribute = "${meta.role}"
+    operator  = "!="
+    value     = "rcg-ingress"
+  }
+
+  #constraint {
+  #  attribute = "${node.unique.name}"
+  #  operator  = "="
+  #  value     = "nomad-hallo-apps.novalocal"
+  #}
 
   constraint {
     distinct_hosts = true
@@ -48,10 +54,10 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
       config {
         image = "${__IMAGE_NAME__}:${__IMAGE_TAG__}"
         ports = ["http"]
-        # auth {
-        #   username = "${__USERNAME__}"
-        #   password = "${__PASSWORD__}"
-        # }
+        auth {
+          username = "${__REGISTRY_USERNAME__}"
+          password = "${__REGISTRY_PASSWORD__}"
+        }
       }
 
     service {
