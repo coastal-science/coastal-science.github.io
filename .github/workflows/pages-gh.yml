@@ -1,11 +1,15 @@
-# Sample workflow for building and deploying a Hugo site to GitHub Pages
-name: Deploy Hugo site to Pages and build docker image [GitHub.com]
-run-name: Build/deploy Pages/Production
+# Workflow for building and deploying Hugo site (Production + Preview)
+name: Deploy Hugo site - Production and Preview
+run-name: ${{ github.event_name == 'pull_request' && format('Preview deployment for PR #{0}', github.event.pull_request.number) || format('Build/deploy Pages/Production - {0}', github.ref_name) }}
 
 on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main", "gha-patch-reusable-workflow"]
+
+  # Runs on pull requests for Deploy Preview Links
+  pull_request:
+    types: [opened, synchronize, reopened]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -24,7 +28,7 @@ on:
 
 # Allow one concurrent deployment
 concurrency:
-  group: ${{ github.repository }}-coastal-pages
+  group: ${{ github.repository }}-coastal-pages-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -103,7 +107,6 @@ jobs:
           
       - name: Set safe directory workaround
         run: |
-          # git config --global --add safe.directory /__w/coastal-science.github.io/coastal-science.github.io
           git config --global --add safe.directory /__w/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}
           
       - name: Build with Hugo
@@ -144,7 +147,8 @@ jobs:
         uses: actions/deploy-pages@v4
 
 ############################################
-## Create and publish a prod docker image ##
+## Create and publish docker image        ##
+## (handles both production and preview)  ##
 ############################################
   build-website-and-container-build:
     environment: docker-image
@@ -170,6 +174,8 @@ jobs:
 
     outputs: 
       tags: ${{ steps.meta.outputs.tags }}
+      commit_sha: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+      pr_number: ${{ github.event.pull_request.number || '' }}
 
     steps:
       - name: Checkout
@@ -182,10 +188,8 @@ jobs:
        
       - name: Set safe directory workaround
         run: |
-          # git config --global --add safe.directory /__w/coastal-science.github.io/coastal-science.github.io
           git config --global --add safe.directory /__w/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}
 
-      
       - name: Generate tags
         id: tags
         run: |
@@ -241,7 +245,6 @@ jobs:
           echo The current workspace repo is..
           pwd
 
-      # GH Actions
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
@@ -251,8 +254,8 @@ jobs:
       - name: Build and Minify with Hugo
         env:
           # For maximum backward compatibility with Hugo modules
-          HUGO_ENVIRONMENT: production
-          HUGO_ENV: production
+          HUGO_ENVIRONMENT: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+          HUGO_ENV: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
         run: |
           hugo \
             --gc \
@@ -265,7 +268,6 @@ jobs:
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
         uses: docker/login-action@v3 #343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
         with:
           registry: ${{ env.REGISTRY }}
@@ -285,10 +287,14 @@ jobs:
             # branch event
             type=ref,event=branch
             # pull request event
-            type=ref,event=pr
+            type=ref,event=pr,format=pr-{{number}}
             # minimal (short sha)
             type=sha
+            # pull request sha with prefix
+            type=sha,prefix=pr-
+            # commit date tag (for branches only)
             type=raw,value=${{ steps.tags.outputs.commit_date }}
+            # latest tag (for branches only)
             type=raw,value=latest
 
       - name: Build and push Docker image
@@ -329,26 +335,21 @@ jobs:
           
       #     docker push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
   
-  # Deploy a prod docker image to orchestrator          
-  deploy-service-prod:
+  # Deploy docker image to orchestrator (handles both production and preview)
+  deploy-service:
     # if: false
     # if: github.ref == 'refs/heads/main'
-    environment: 
-      name: docker-image
-      url: https://${{ vars.HUGO_BASEURL }} # may contain secrets.__DOMAIN_NAME__
-      # url: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
-    permissions:
-      contents: read
-      packages: read
     needs:
       - generate-timestamp
       - build-website-and-container-build
-    outputs:
-      prod_url: https://${{ secrets.__DOMAIN_NAME__ }}
-      nomad_url_1: https://${{ vars.__SERVICE__ }}-${{ steps.set-env.outputs.environment_suffix }}.${{ vars.__RESEARCHER__ }}.researchcomputinggroup.ca
-      environment_suffix: ${{ steps.set-env.outputs.environment_suffix }}
-      environment: ${{ steps.set-env.outputs.environment }}
-      
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
+    environment: 
+      name: docker-image
+      url: https://${{ vars.HUGO_BASEURL }}
+      # url: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
     runs-on: ubuntu-latest
     # runs-on: [ self-hosted, rcg ]
     container:
@@ -363,34 +364,85 @@ jobs:
       # __IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}"
       IMAGE_NAME: ${{ vars.__REGISTRY__ }}/${{ github.repository }}
       FORCE_PULL: ${{ vars.__IMAGE_FORCE_PULL__ }}
-      # needs.generate-timestamp.outputs.TIMESTAMP or even better commit_date
       #__DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
       # __NAMESPACE__="${{ secrets.NOMAD_SERVER_NAMESPACE }}" \
       NOMAD_SERVER_DATACENTERS: "${{ vars.__DATACENTERS__ }}"
       NOMAD_SERVER_NAMESPACE:  "${{ vars.__NAMESPACE__ }}"
-      __REGISTRY_USERNAME__: "${{ github.actor }}"  # "${{ secrets.GITLAB_CONTAINER_USERNAME }}"
-      __REGISTRY_PASSWORD__: "${{ secrets.GITHUB_TOKEN }}"  # "${{ secrets.GITLAB_CONTAINER_TOKEN }}"
-      # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
+      __REGISTRY_USERNAME__: "${{ github.actor }}"
+      __REGISTRY_PASSWORD__: "${{ secrets.GITHUB_TOKEN }}"
       __RESEARCHER__:  "${{ secrets.__RESEARCHER__ }}"
+
+      PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+      PR_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+
+    outputs:
+      prod_url: ${{ steps.set-env.outputs.prod_url }}
+      nomad_url_1: ${{ steps.set-env.outputs.nomad_url }}
+      environment_suffix: ${{ steps.set-env.outputs.environment_suffix }}
+      environment: ${{ steps.set-env.outputs.environment }}
 
     steps:
       - name: Determine environment and suffix
         id: set-env
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            ENVIRONMENT="production"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            ENVIRONMENT="preview"
+            ENVIRONMENT_SUFFIX="pr-${{ github.event.pull_request.number }}"
+            NOMAD_FILE="${{ vars.__SERVICE__ }}-preview.nomad"
+            IMAGE_TAG="pr-${{ github.event.pull_request.number }}"
+          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            ENVIRONMENT="production" # suspicion that the variable is unused and can be removed
             ENVIRONMENT_SUFFIX="latest"
+            NOMAD_FILE="${{ vars.__SERVICE__ }}.nomad"
+            IMAGE_TAG="latest" # tag should be update to `main` and use latest for any latest commit.
           else
             ENVIRONMENT="development"
             ENVIRONMENT_SUFFIX="dev"
+            NOMAD_FILE="${{ vars.__SERVICE__ }}.nomad"
+            # Extract branch name from refs/heads/branch-name, fallback to commit SHA
+            # GITHUB_REF is automatically set by GitHub Actions (e.g., refs/heads/branch-name)
+            # GITHUB_SHA is automatically set by GitHub Actions (full commit SHA)
+            BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+            if [ -n "${BRANCH_NAME}" ] && [ "${BRANCH_NAME}" != "${GITHUB_REF}" ]; then
+              IMAGE_TAG="${BRANCH_NAME}"
+            else
+              IMAGE_TAG="${GITHUB_SHA}"
+            fi
           fi
+          
+          # Construct URL from Nomad template pattern: ${__SERVICE__}-${__ENVIRONMENT__}.${__RESEARCHER__}.researchcomputinggroup.ca
+          NOMAD_URL="https://${{ vars.__SERVICE__ }}-${ENVIRONMENT_SUFFIX}.${{ secrets.__RESEARCHER__ }}.researchcomputinggroup.ca"
+          PROD_URL="${NOMAD_URL}" # TODO: suspicion that the variable is duplicate of NOMAD_URL and can be consolidated
+          
+          # Determine WEB_URL based on event type
+          # WEB_URL="${{ github.ref == 'refs/heads/main' && secrets.__DOMAIN_NAME__ || '' }}"
+          # Determine PREVIEW_URL based on event type
+          # PREVIEW_URL="${{ github.event_name == "pull_request" && NOMAD_URL || '' }}"
+          WEB_URL=""
+          PREVIEW_URL=""
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # For PRs
+            PREVIEW_URL="${NOMAD_URL}"
+          fi
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            # For production main branch
+            WEB_URL="${{ secrets.__DOMAIN_NAME__ }}"
+          fi
+          
           echo "environment=${ENVIRONMENT}" >> $GITHUB_OUTPUT
           echo "environment_suffix=${ENVIRONMENT_SUFFIX}" >> $GITHUB_OUTPUT
-          echo "Determined environment: ${ENVIRONMENT}, suffix: ${ENVIRONMENT_SUFFIX}"
+          echo "nomad_url=${NOMAD_URL}" >> $GITHUB_OUTPUT
+          echo "web_url=${WEB_URL}" >> $GITHUB_OUTPUT
+          echo "nomad_file=${NOMAD_FILE}" >> $GITHUB_OUTPUT
+          echo "preview_url=${PREVIEW_URL}" >> $GITHUB_OUTPUT
+          echo "prod_url=${PROD_URL}" >> $GITHUB_OUTPUT
+          echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+          echo "Determined environment: ${ENVIRONMENT}, suffix: ${ENVIRONMENT_SUFFIX}, image_tag: ${IMAGE_TAG}"
+
       - name: Prepare Environment
         run: |
-             apk update
-             apk add gettext nomad git
+          apk update
+          apk add gettext nomad git curl jq
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -402,68 +454,110 @@ jobs:
 
       - name: Set safe directory workaround
         run: |
-          # git config --global --add safe.directory /__w/coastal-science.github.io/coastal-science.github.io
           git config --global --add safe.directory /__w/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}
       
       - name: Test Nomad
         run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad status
 
       - name: Setup Nomad Job
+        id: setup-nomad
         env:
           ENVIRONMENT_SUFFIX: ${{ steps.set-env.outputs.environment_suffix }}
           ENVIRONMENT: ${{ steps.set-env.outputs.environment }}
-          WEB_URL: "${{ github.ref == 'refs/heads/main' && secrets.__DOMAIN_NAME__ || '' }}"
-          IMAGE_TAG: ${{ steps.set-env.outputs.environment_suffix }}
+          WEB_URL: ${{ steps.set-env.outputs.web_url }}
+          NOMAD_FILE: ${{ steps.set-env.outputs.nomad_file }}
+          IMAGE_TAG: ${{ steps.set-env.outputs.image_tag }}
+
         run: |
-             __SERVICE__="${{ env.SERVICE }}" \
-             __JOB_DRIVER__="${{ env.JOB_DRIVER }}" \
-             __ENVIRONMENT__="${{ env.ENVIRONMENT_SUFFIX }}" \
-             __WEB_URL__="${{ env.WEB_URL }}" \
-             __JOB_NAME__="${{ env.SERVICE }}-${{ env.ENVIRONMENT_SUFFIX }}" \
-             __IMAGE_NAME__="${{ env.IMAGE_NAME }}" \
-             __IMAGE_TAG__="${{ env.IMAGE_TAG }}" \
-             __IMAGE_FORCE_PULL__="${{ env.FORCE_PULL || 'false' }}" \
-             __DATACENTERS__="${{ env.NOMAD_SERVER_DATACENTERS }}" \
-             __NAMESPACE__="${{ env.NOMAD_SERVER_NAMESPACE }}" \
-             envsubst < nomad/template.nomad > ${{ env.SERVICE }}.nomad
-             cat ${{ env.SERVICE }}.nomad
+          # Use ENVIRONMENT_SUFFIX consistently for both PRs and branches
+          JOB_NAME="${{ env.SERVICE }}-${ENVIRONMENT_SUFFIX}"
+          
+          __SERVICE__="${{ env.SERVICE }}" \
+          __JOB_DRIVER__="${{ env.JOB_DRIVER }}" \
+          __ENVIRONMENT__="${ENVIRONMENT_SUFFIX}" \
+          __WEB_URL__="${WEB_URL}" \
+          __JOB_NAME__="${JOB_NAME}" \
+          __IMAGE_NAME__="${{ env.IMAGE_NAME }}" \
+          __IMAGE_TAG__="${IMAGE_TAG}" \
+          __IMAGE_FORCE_PULL__="${{ env.FORCE_PULL || 'false' }}" \
+          __DATACENTERS__="${{ env.NOMAD_SERVER_DATACENTERS }}" \
+          __NAMESPACE__="${{ env.NOMAD_SERVER_NAMESPACE }}" \
+          envsubst < nomad/template.nomad > ${NOMAD_FILE}
+          cat ${NOMAD_FILE}
+          echo "nomad_file=${NOMAD_FILE}" >> $GITHUB_OUTPUT
+          echo "job_name=${JOB_NAME}" >> $GITHUB_OUTPUT
 
       - name: Deploy TIMESTAMPED Website To Nomad
-        if: github.ref == 'refs/heads/main'
+        # if: github.event_name != 'pull_request'
+        id: deploy
         env:
-          ENVIRONMENT_SUFFIX: ${{ steps.set-env.outputs.environment_suffix }}
+          JOB_NAME: ${{ steps.setup-nomad.outputs.job_name }}
+          NOMAD_FILE: ${{ steps.setup-nomad.outputs.nomad_file }}
         run: |
-          # NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job stop -verbose whales-latest
           NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
-            nomad job stop -verbose ${{ env.SERVICE }}-${{ env.ENVIRONMENT_SUFFIX }} \
-            || true 
-          echo "Nomad job is stopped=$?"
+            nomad job stop -verbose ${JOB_NAME} || true
+          echo "Nomad job stop result=$?"
           sleep 10s
-          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run -verbose ${{ env.SERVICE }}.nomad
-          echo "Nomad job is deployed=$?"
-          
-      - name: Summary output URLs
+          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
+            nomad job run -verbose ${NOMAD_FILE}
+          DEPLOY_RESULT=$?
+          echo "Nomad job deploy result=${DEPLOY_RESULT}"
+          echo "deploy_success=$([ ${DEPLOY_RESULT} -eq 0 ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub commit status for deployment
+        if: github.event_name == 'pull_request'
         env:
-          ENVIRONMENT_SUFFIX: ${{ steps.set-env.outputs.environment_suffix }}
+          PREVIEW_URL: ${{ steps.set-env.outputs.preview_url }}
+          DEPLOY_SUCCESS: ${{ steps.deploy.outputs.deploy_success }}
         run: |
-          echo https://"${{ secrets.__DOMAIN_NAME__ }}" >> "$GITHUB_STEP_SUMMARY"
-          echo https://"${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT_SUFFIX }}.${{ vars.__RESEARCHER__ }}.researchcomputinggroup.ca" >> "$GITHUB_STEP_SUMMARY"
+          STATUS_URL="https://api.github.com/repos/${{ github.repository }}/statuses/${{ env.PR_SHA }}"
+          
+          # Determine status parameters based on deployment result
+          if [ "${DEPLOY_SUCCESS}" = "true" ]; then
+            STATE="success"
+            TARGET_URL="${PREVIEW_URL}"
+            DESCRIPTION="Preview deployment ready"
+          else
+            STATE="failure"
+            TARGET_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            DESCRIPTION="Preview deployment failed"
+          fi
+          
+          curl -X POST "${STATUS_URL}" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "{
+              \"state\": \"${STATE}\",
+              \"target_url\": \"${TARGET_URL}\",
+              \"description\": \"${DESCRIPTION}\",
+              \"context\": \"deploy/preview\"
+            }"
+          
+          echo "Created commit status: deploy/preview -> ${STATE} (${TARGET_URL})"
+
+      - name: Summary output URLs
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo https://"${{ secrets.__DOMAIN_NAME__ }}" >> "$GITHUB_STEP_SUMMARY"
+            echo "${{ steps.set-env.outputs.prod_url }}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "${{ steps.set-env.outputs.preview_url }}" >> "$GITHUB_STEP_SUMMARY"
+          fi
           
   # Cleanup workspace on the runner
   cleanup:
     if: ${{ always() }}
     permissions: {}
     needs: 
-      # - build-website
-      # - deploy-gh-pages
       - build-website-and-container-build
-      - deploy-service-prod
+      - deploy-service
     runs-on: ubuntu-latest
     # runs-on: [ self-hosted, rcg ]
     steps:
       - name: Current workspace
         run: du -shc ${GITHUB_WORKSPACE}
       - name: Clean Up Docker Images
+        if: needs.build-website-and-container-build.result != 'skipped'
         run: docker rmi -f $(docker images '${{ needs.build-website-and-container-build.outputs.tags }}' -a -q) || echo "No docker images found to remove...skipping removal."
       - name: Clean Up Workspace
         run: rm -rf ${GITHUB_WORKSPACE}
