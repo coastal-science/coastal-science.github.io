@@ -363,15 +363,15 @@ jobs:
       # __IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}"
       IMAGE_NAME: ${{ vars.__REGISTRY__ }}/${{ github.repository }}
       FORCE_PULL: ${{ vars.__IMAGE_FORCE_PULL__ }}
-            # needs.generate-timestamp.outputs.TIMESTAMP or even better commit_date
-        #__DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
-        # __NAMESPACE__="${{ secrets.NOMAD_SERVER_NAMESPACE }}" \
-        NOMAD_SERVER_DATACENTERS: "${{ vars.__DATACENTERS__ }}"
-        NOMAD_SERVER_NAMESPACE:  "${{ vars.__NAMESPACE__ }}"
-        __REGISTRY_USERNAME__: "${{ github.actor }}"  # "${{ secrets.GITLAB_CONTAINER_USERNAME }}"
-        __REGISTRY_PASSWORD__: "${{ secrets.GITHUB_TOKEN }}"  # "${{ secrets.GITLAB_CONTAINER_TOKEN }}"
-        # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
-        __RESEARCHER__:  "${{ secrets.__RESEARCHER__ }}"
+      # needs.generate-timestamp.outputs.TIMESTAMP or even better commit_date
+      #__DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
+      # __NAMESPACE__="${{ secrets.NOMAD_SERVER_NAMESPACE }}" \
+      NOMAD_SERVER_DATACENTERS: "${{ vars.__DATACENTERS__ }}"
+      NOMAD_SERVER_NAMESPACE:  "${{ vars.__NAMESPACE__ }}"
+      __REGISTRY_USERNAME__: "${{ github.actor }}"  # "${{ secrets.GITLAB_CONTAINER_USERNAME }}"
+      __REGISTRY_PASSWORD__: "${{ secrets.GITHUB_TOKEN }}"  # "${{ secrets.GITLAB_CONTAINER_TOKEN }}"
+      # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
+      __RESEARCHER__:  "${{ secrets.__RESEARCHER__ }}"
 
     steps:
       - name: Determine environment and suffix
