@@ -372,7 +372,7 @@ jobs:
         __REGISTRY_USERNAME__: "${{ github.actor }}"  # "${{ secrets.GITLAB_CONTAINER_USERNAME }}"
         __REGISTRY_PASSWORD__: "${{ secrets.GITHUB_TOKEN }}"  # "${{ secrets.GITLAB_CONTAINER_TOKEN }}"
         # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
-        __RESEARCHER__:  "${{ vars.__RESEARCHER__ }}"
+        __RESEARCHER__:  "${{ secrets.__RESEARCHER__ }}"
 
     steps:
       - name: Prepare Environment
