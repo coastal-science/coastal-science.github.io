@@ -378,6 +378,7 @@ jobs:
     outputs:
       prod_url: ${{ steps.set-env.outputs.prod_url }}
       nomad_url_1: ${{ steps.set-env.outputs.nomad_url }}
+      url: ${{ steps.set-env.outputs.nomad_url }}
       environment_suffix: ${{ steps.set-env.outputs.environment_suffix }}
       environment: ${{ steps.set-env.outputs.environment }}
 
@@ -394,7 +395,7 @@ jobs:
             ENVIRONMENT="production" # suspicion that the variable is unused and can be removed
             ENVIRONMENT_SUFFIX="latest"
             NOMAD_FILE="${{ vars.__SERVICE__ }}.nomad"
-            IMAGE_TAG="latest" # tag should be update to `main` and use latest for any latest commit.
+            IMAGE_TAG="main" # branch name of production main branch
           else
             ENVIRONMENT="development"
             ENVIRONMENT_SUFFIX="dev"
