@@ -382,7 +382,6 @@ jobs:
 
     outputs:
       url: ${{ steps.set-env.outputs.nomad_url }}
-      prod_url: ${{ steps.set-env.outputs.prod_url }}
       nomad_url_1: ${{ steps.set-env.outputs.nomad_url }}
       environment_suffix: ${{ steps.set-env.outputs.environment_suffix }}
       environment: ${{ steps.set-env.outputs.environment }}
@@ -418,7 +417,6 @@ jobs:
           
           # Construct URL from Nomad template pattern: ${__SERVICE__}-${__ENVIRONMENT__}.${__RESEARCHER__}.researchcomputinggroup.ca
           NOMAD_URL="https://${{ vars.__SERVICE__ }}-${ENVIRONMENT_SUFFIX}.${{ secrets.__RESEARCHER__ }}.researchcomputinggroup.ca"
-          PROD_URL="${NOMAD_URL}" # TODO: suspicion that the variable is duplicate of NOMAD_URL and can be consolidated
           
           # Determine WEB_URL based on event type
           # WEB_URL="${{ github.ref == 'refs/heads/main' && secrets.__DOMAIN_NAME__ || '' }}"
@@ -441,7 +439,6 @@ jobs:
           echo "web_url=${WEB_URL}" >> $GITHUB_OUTPUT
           echo "nomad_file=${NOMAD_FILE}" >> $GITHUB_OUTPUT
           echo "preview_url=${PREVIEW_URL}" >> $GITHUB_OUTPUT
-          echo "prod_url=${PROD_URL}" >> $GITHUB_OUTPUT
           echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
           echo "Determined environment: ${ENVIRONMENT}, suffix: ${ENVIRONMENT_SUFFIX}, image_tag: ${IMAGE_TAG}"
 
@@ -545,7 +542,7 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" != "pull_request" ]; then
             echo https://"${{ secrets.__DOMAIN_NAME__ }}" >> "$GITHUB_STEP_SUMMARY"
-            echo "${{ steps.set-env.outputs.prod_url }}" >> "$GITHUB_STEP_SUMMARY"
+            echo "${{ steps.set-env.outputs.nomad_url }}" >> "$GITHUB_STEP_SUMMARY"
           else
             echo "${{ steps.set-env.outputs.preview_url }}" >> "$GITHUB_STEP_SUMMARY"
           fi
