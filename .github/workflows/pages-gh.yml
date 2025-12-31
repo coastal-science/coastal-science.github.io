@@ -409,7 +409,6 @@ jobs:
         run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad status
 
       - name: Setup Nomad Job
-        if: github.ref == 'refs/heads/main'
         env:
           ENVIRONMENT_SUFFIX: ${{ steps.set-env.outputs.environment_suffix }}
           ENVIRONMENT: ${{ steps.set-env.outputs.environment }}
@@ -430,6 +429,7 @@ jobs:
              cat ${{ env.SERVICE }}.nomad
 
       - name: Deploy TIMESTAMPED Website To Nomad
+        if: github.ref == 'refs/heads/main'
         env:
           ENVIRONMENT_SUFFIX: ${{ steps.set-env.outputs.environment_suffix }}
         run: |
