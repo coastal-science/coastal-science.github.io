@@ -9,7 +9,7 @@ on:
 
   # Runs on pull requests for Deploy Preview Links
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, closed]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -153,6 +153,8 @@ jobs:
   build-website-and-container-build:
     environment: docker-image
     # if: github.ref == 'refs/heads/main'
+    # Skip build if PR is closed (cleanup job handles that)
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     needs:
       - generate-timestamp
     env:
@@ -337,6 +339,8 @@ jobs:
   
   # Deploy docker image to orchestrator (handles both production and preview)
   deploy-service:
+    # Skip deployment if PR is closed (cleanup job handles that)
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     # if: false
     # if: github.ref == 'refs/heads/main'
     needs:
@@ -544,6 +548,69 @@ jobs:
             echo "${{ steps.set-env.outputs.prod_url }}" >> "$GITHUB_STEP_SUMMARY"
           else
             echo "${{ steps.set-env.outputs.preview_url }}" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  # Cleanup Nomad deployment when PR is closed/merged
+  cleanup-pr-deployment:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    needs:
+      - generate-timestamp
+    permissions:
+      contents: read
+      packages: read
+    environment: 
+      name: docker-image
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:3.18
+    env: 
+      REPO_NAME: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
+      SERVICE: "${{ vars.__SERVICE__ }}"
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+
+    steps:
+      - name: Prepare Environment
+        run: |
+          apk update
+          apk add nomad curl
+
+      - name: Determine Nomad Job Name
+        id: job-name
+        run: |
+          JOB_NAME="${{ env.SERVICE }}-pr-${{ env.PR_NUMBER }}"
+          echo "job_name=${JOB_NAME}" >> $GITHUB_OUTPUT
+          echo "Cleaning up Nomad job: ${JOB_NAME}"
+
+      - name: Stop and Purge Nomad Job
+        id: cleanup
+        env:
+          JOB_NAME: ${{ steps.job-name.outputs.job_name }}
+        run: |
+          echo "Stopping Nomad job: ${JOB_NAME}"
+          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
+            nomad job stop -purge -verbose ${JOB_NAME} || true
+          STOP_RESULT=$?
+          echo "Nomad job stop/purge result=${STOP_RESULT}"
+          
+          # Verify job is gone
+          sleep 5s
+          if NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
+             nomad job status ${JOB_NAME} 2>/dev/null; then
+            echo "⚠️  Warning: Job ${JOB_NAME} still exists after cleanup attempt"
+            echo "cleanup_success=false" >> $GITHUB_OUTPUT
+          else
+            echo "✓ Successfully cleaned up job: ${JOB_NAME}"
+            echo "cleanup_success=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Summary
+        run: |
+          if [ "${{ steps.cleanup.outputs.cleanup_success }}" = "true" ]; then
+            echo "✓ PR deployment cleanup completed successfully" >> "$GITHUB_STEP_SUMMARY"
+            echo "Cleaned up Nomad job: ${{ steps.job-name.outputs.job_name }}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "⚠️  PR deployment cleanup completed with warnings" >> "$GITHUB_STEP_SUMMARY"
+            echo "Job: ${{ steps.job-name.outputs.job_name }}" >> "$GITHUB_STEP_SUMMARY"
           fi
           
   # Cleanup workspace on the runner
