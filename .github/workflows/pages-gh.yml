@@ -390,13 +390,10 @@ jobs:
       - name: Determine environment and suffix
         id: set-env
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            ENVIRONMENT="preview"
-            ENVIRONMENT_SUFFIX="pr-${{ github.event.pull_request.number }}"
-            NOMAD_FILE="${{ vars.__SERVICE__ }}-preview.nomad"
-            IMAGE_TAG="pr-${{ github.event.pull_request.number }}"
-          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            ENVIRONMENT="production" # suspicion that the variable is unused and can be removed
+          # TODO: Option (based on needs) to deploy to nomad url with ENVIRONMENT_SUFFIX=commit_sha (if not a PR)
+          # GITHUB_SHA_SHORT="${{ github.sha }}".SubString(0, 8))"
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            ENVIRONMENT="production" # TODO: suspicion that the variable is unused and can be removed
             ENVIRONMENT_SUFFIX="latest"
             NOMAD_FILE="${{ vars.__SERVICE__ }}.nomad"
             IMAGE_TAG="main" # branch name of production main branch
