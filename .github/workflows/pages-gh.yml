@@ -1,6 +1,6 @@
 # Workflow for building and deploying Hugo site (Production + Preview)
 name: Deploy Hugo site - Production and Preview
-run-name: ${{ github.event_name == 'pull_request' && format('Preview deployment for PR-{0}', github.event.pull_request.number) || format('Build/deploy Pages/Production - {0}', github.ref_name) }}
+run-name: ${{ github.event_name == 'pull_request' && format('Preview deployment for PR {0}', github.event.pull_request.number) || format('Build/deploy Pages/Production - {0}', github.ref_name) }}
 
 on:
   # Runs on pushes targeting the default branch
@@ -420,8 +420,8 @@ jobs:
           
           # Determine WEB_URL based on event type
           # WEB_URL="${{ github.ref == 'refs/heads/main' && secrets.__DOMAIN_NAME__ || '' }}"
-          # Determine PREVIEW_URL based on event type
-          # PREVIEW_URL uses shell logic below instead of GitHub expression to avoid parsing issues
+          # Determine WEB_URL and PREVIEW_URL based on event type
+          # Using shell logic below instead of GitHub expressions to avoid parsing issues
           WEB_URL=""
           PREVIEW_URL=""
           if [ "${{ github.event_name }}" = "pull_request" ]; then
