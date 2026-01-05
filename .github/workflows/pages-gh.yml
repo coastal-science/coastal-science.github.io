@@ -1,6 +1,6 @@
 # Workflow for building and deploying Hugo site (Production + Preview)
 name: Deploy Hugo site - Production and Preview
-run-name: ${{ github.event_name == 'pull_request' && format('Preview deployment for PR {0}', github.event.pull_request.number) || format('Build/deploy Pages/Production - {0}', github.ref_name) }}
+run-name: ${{ github.event_name == 'pull_request' && format('Preview deployment for PR - {0}', github.event.pull_request.number) || format('Build/deploy Pages/Production - {0}', github.ref_name) }}
 
 on:
   # Runs on pushes targeting the default branch
