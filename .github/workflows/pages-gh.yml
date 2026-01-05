@@ -5,7 +5,7 @@ run-name: ${{ github.event_name == 'pull_request' && format('Preview deployment 
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main", "gha-patch-reusable-workflow"]
+    branches: ["main", "gha-patch-reusable-workflow", "gha-decap"]
 
   # Runs on pull requests for Deploy Preview Links
   pull_request:
