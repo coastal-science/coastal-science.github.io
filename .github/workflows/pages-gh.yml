@@ -423,11 +423,11 @@ jobs:
           # Determine WEB_URL and PREVIEW_URL based on event type
           # Using shell logic below instead of GitHub expressions to avoid parsing issues
           WEB_URL=""
-          PREVIEW_URL=""
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            # For PRs
-            PREVIEW_URL="${NOMAD_URL}"
-          fi
+          # PREVIEW_URL="" # TODO: (remove) PREVIEW_URL was used for PRs, but now we use NOMAD_URL
+          # if [ "${{ github.event_name }}" = "pull_request" ]; then
+          #   # For PRs
+          #   PREVIEW_URL="${NOMAD_URL}"
+          # fi
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             # For production main branch
             WEB_URL="${{ secrets.__DOMAIN_NAME__ }}"
@@ -509,16 +509,13 @@ jobs:
 
       - name: Create GitHub commit status for deployment
         if: github.event_name == 'pull_request'
-        env:
-          PREVIEW_URL: ${{ steps.set-env.outputs.preview_url }}
-          DEPLOY_SUCCESS: ${{ steps.deploy.outputs.deploy_success }}
         run: |
           STATUS_URL="https://api.github.com/repos/${{ github.repository }}/statuses/${{ env.PR_SHA }}"
           
           # Determine status parameters based on deployment result
-          if [ "${DEPLOY_SUCCESS}" = "true" ]; then
+          if [ "${{ steps.deploy.outputs.deploy_success }}" = "true" ]; then
             STATE="success"
-            TARGET_URL="${PREVIEW_URL}"
+            TARGET_URL="${{ steps.set-env.outputs.nomad_url }}"
             DESCRIPTION="Preview deployment ready"
           else
             STATE="failure"
@@ -544,7 +541,7 @@ jobs:
             echo https://"${{ secrets.__DOMAIN_NAME__ }}" >> "$GITHUB_STEP_SUMMARY"
             echo "${{ steps.set-env.outputs.nomad_url }}" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "${{ steps.set-env.outputs.preview_url }}" >> "$GITHUB_STEP_SUMMARY"
+            echo "${{ steps.set-env.outputs.nomad_url }}" >> "$GITHUB_STEP_SUMMARY"
           fi
 
   # Cleanup Nomad deployment when PR is closed/merged
