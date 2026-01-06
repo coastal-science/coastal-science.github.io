@@ -1,18 +1,18 @@
-
+{{ $text := or (.Get "text") "" }}
 <script>
     // Prepopulate contact form from URL query parameters
-    $(function () {
-    // Get URL parameters
-    var urlParams = new URLSearchParams(window.location.search)
-    var subject = urlParams.get('subject')
-    
-    // If subject parameter exists, populate the subject field
-    if (subject) {
-        var subjectField = $('#subject')
-        if (subjectField.length) {
-        // Decode the URL-encoded value
-        subjectField.val(decodeURIComponent(subject))
+    document.addEventListener('DOMContentLoaded', function() {
+        var urlParams = new URLSearchParams(window.location.search)
+        var urlSubject = urlParams.get('subject')
+        var subject = urlSubject !== null ? urlSubject : {{ $text | jsonify }}
+        
+        // Populate the subject field if we have a value
+        if (subject) {
+            var subjectField = document.getElementById('subject')
+            if (subjectField) {
+                // Decode URL-encoded value if it came from URL params
+                subjectField.value = urlSubject !== null ? decodeURIComponent(subject) : subject
+            }
         }
-    }
     })
 </script>
