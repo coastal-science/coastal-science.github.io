@@ -1,0 +1,21 @@
+{{ $email_subject := or (.Get "email_subject") "" }}
+<script>
+    // Prepopulate contact form from URL query parameters
+    document.addEventListener('DOMContentLoaded', function() {
+        var urlParams = new URLSearchParams(window.location.search)
+        var urlSubject = urlParams.get('subject')
+        var subject = urlSubject !== null ? urlSubject : {{ $email_subject }}
+                // console.log({'email_subject':{{ $email_subject }}, urlSubject:urlSubject, subject:subject})
+
+        // Populate the subject field if we have a value
+        if (subject) {
+            var subjectField = document.getElementById('subject')
+            if (subjectField) {
+                // Decode URL-encoded value if it came from URL params
+                new_subject = urlSubject !== null ? decodeURIComponent(subject) : subject
+                // console.log({new_subject: new_subject})
+                subjectField.value = new_subject;
+            }
+        }
+    })
+</script>
