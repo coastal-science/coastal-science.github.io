@@ -16,4 +16,4 @@ Please feel free to contact us.
 
 ## Email us via the contact form below
 
-{{< contact_subject >}}
+{{< contact_subject email_subject="[General Inquiry]: " >}}
