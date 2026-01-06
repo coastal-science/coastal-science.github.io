@@ -15,3 +15,5 @@ Please feel free to contact us.
 #### {{<icon class="fa fa-github">}}&nbsp;[See our GitHub repo](https://github.com/coastal-science)
 
 ## Email us via the contact form below
+
+{{< contact_subject >}}

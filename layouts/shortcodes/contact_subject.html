@@ -1,0 +1,18 @@
+
+<script>
+    // Prepopulate contact form from URL query parameters
+    $(function () {
+    // Get URL parameters
+    var urlParams = new URLSearchParams(window.location.search)
+    var subject = urlParams.get('subject')
+    
+    // If subject parameter exists, populate the subject field
+    if (subject) {
+        var subjectField = $('#subject')
+        if (subjectField.length) {
+        // Decode the URL-encoded value
+        subjectField.val(decodeURIComponent(subject))
+        }
+    }
+    })
+</script>
