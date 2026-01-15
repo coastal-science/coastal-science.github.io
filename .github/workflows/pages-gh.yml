@@ -416,7 +416,7 @@ jobs:
           NOMAD_URL="https://${{ vars.__SERVICE__ }}-${ENVIRONMENT_SUFFIX}.${{ secrets.__RESEARCHER__ }}.researchcomputinggroup.ca"
           
           # Determine WEB_URL based on event type
-          # WEB_URL="${{ github.ref == 'refs/heads/main' && secrets.__DOMAIN_NAME__ || '' }}"
+          # WEB_URL="${{ github.ref == 'refs/heads/main' && secrets.__DOMAIN_NAME__ || 'sinkhole' }}"
           # Determine WEB_URL and PREVIEW_URL based on event type
           # Using shell logic below instead of GitHub expressions to avoid parsing issues
           WEB_URL=""
