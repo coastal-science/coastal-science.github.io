@@ -419,7 +419,7 @@ jobs:
           # WEB_URL="${{ github.ref == 'refs/heads/main' && secrets.__DOMAIN_NAME__ || 'sinkhole' }}"
           # Determine WEB_URL and PREVIEW_URL based on event type
           # Using shell logic below instead of GitHub expressions to avoid parsing issues
-          WEB_URL="sinkhole"
+          WEB_URL="sinkhole.${__RESEARCHER__}.researchcomputinggroup.ca"
           # PREVIEW_URL="" # TODO: (remove) PREVIEW_URL was used for PRs, but now we use NOMAD_URL
           # if [ "${{ github.event_name }}" = "pull_request" ]; then
           #   # For PRs
