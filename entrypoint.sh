@@ -15,6 +15,11 @@ if [ -d "/etc/nginx/sites-available" ]; then
     done
 fi
 
+# Test nginx configuration after processing all configs
+# This validates the final configuration with all environment variables substituted
+echo "Testing nginx configuration..."
+nginx -t
+
 # Execute the original nginx entrypoint
 # This will also process any .template files in /etc/nginx/templates/ if they exist
 exec /docker-entrypoint.sh "$@"
