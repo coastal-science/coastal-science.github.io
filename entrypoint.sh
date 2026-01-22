@@ -8,9 +8,10 @@ if [ -d "/etc/nginx/sites-available" ]; then
     find /etc/nginx/sites-available -maxdepth 1 -name "*.conf" -type f | while read -r conf_file; do
         # Get the base filename without path
         filename=$(basename "$conf_file")
-        # Process with envsubst and output to conf.d
-        # envsubst replaces ${VAR} or $VAR with environment variable values
-        envsubst < "$conf_file" > "/etc/nginx/conf.d/$filename"
+        # Process with envsubst, only substituting specific variables
+        # This prevents envsubst from replacing nginx variables like $http_host, $remote_addr, etc.
+        # Only variables explicitly listed in the format string will be substituted
+        envsubst '$DOMAIN' < "$conf_file" > "/etc/nginx/conf.d/$filename"
         echo "Processed $conf_file -> /etc/nginx/conf.d/$filename"
     done
 fi
