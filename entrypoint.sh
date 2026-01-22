@@ -17,7 +17,11 @@ if [ -d "/etc/nginx/sites-available" ]; then
 fi
 
 echo "Contents of /etc/nginx/conf.d/:"
-cat /etc/nginx/conf.d/*.conf
+find /etc/nginx/conf.d -maxdepth 1 -name "*.conf" -type f | while read -r conf_file; do
+    echo "==> $conf_file"
+    cat "$conf_file"
+    echo ""
+done
 
 # Test nginx configuration after processing all configs
 # This validates the final configuration with all environment variables substituted
