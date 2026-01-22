@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+
+# Process site configurations from sites-available using envsubst
+# and copy them to /etc/nginx/conf.d/
+if [ -d "/etc/nginx/sites-available" ]; then
+    # Use find to handle cases where no .conf files exist
+    find /etc/nginx/sites-available -maxdepth 1 -name "*.conf" -type f | while read -r conf_file; do
+        # Get the base filename without path
+        filename=$(basename "$conf_file")
+        # Process with envsubst and output to conf.d
+        # envsubst replaces ${VAR} or $VAR with environment variable values
+        envsubst < "$conf_file" > "/etc/nginx/conf.d/$filename"
+        echo "Processed $conf_file -> /etc/nginx/conf.d/$filename"
+    done
+fi
+
+# Execute the original nginx entrypoint
+# This will also process any .template files in /etc/nginx/templates/ if they exist
+exec /docker-entrypoint.sh "$@"

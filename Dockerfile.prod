@@ -1,4 +1,14 @@
-
 FROM nginx:alpine
+
+# Copy HTML content
 COPY --from=public --chown=$USER:$USER . /usr/share/nginx/html
+
+# Copy nginx configuration (includes sites-available from nginx build context)
 COPY --from=nginx --chown=nginx:nginx . /etc/nginx/
+
+# Copy custom entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Set custom entrypoint that processes sites-available and calls original nginx entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
