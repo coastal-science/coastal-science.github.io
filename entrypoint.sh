@@ -16,12 +16,13 @@ if [ -d "/etc/nginx/sites-available" ]; then
     done
 fi
 
+cat /etc/nginx/conf.d/*.conf
+
 # Test nginx configuration after processing all configs
 # This validates the final configuration with all environment variables substituted
 echo "Testing nginx configuration..."
 nginx -t
 
-cat /etc/nginx/conf.d/*.conf
 
 echo Starting NGINX...
 # Start NGINX
