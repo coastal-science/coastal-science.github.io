@@ -16,6 +16,7 @@ if [ -d "/etc/nginx/sites-available" ]; then
     done
 fi
 
+echo "Contents of /etc/nginx/conf.d/:"
 cat /etc/nginx/conf.d/*.conf
 
 # Test nginx configuration after processing all configs
