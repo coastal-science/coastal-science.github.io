@@ -16,6 +16,12 @@ if [ -d "/etc/nginx/sites-available" ]; then
     done
 fi
 
+
+if [ ! -f /etc/nginx/conf.d/server.conf ] && [ -f /etc/nginx/conf.d/server.conf.local ]; then
+    mv /etc/nginx/conf.d/server.conf.local /etc/nginx/conf.d/server.conf
+    echo "Renamed server.conf.local to server.conf in /etc/nginx/conf.d/"
+fi
+
 echo "Contents of /etc/nginx/conf.d/:"
 find /etc/nginx/conf.d /etc/nginx/sites-available /etc/nginx/sites-unavailable -maxdepth 1 -name "*.conf" | tr '\n' ' '; echo
 
