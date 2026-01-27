@@ -54,6 +54,7 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
       config {
         image = "${__IMAGE_NAME__}:${__IMAGE_TAG__}"
         ports = ["http"]
+        force_pull = true
         auth {
           username = "${__REGISTRY_USERNAME__}"
           password = "${__REGISTRY_PASSWORD__}"
