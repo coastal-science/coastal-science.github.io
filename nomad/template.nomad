@@ -59,6 +59,29 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
           username = "${__REGISTRY_USERNAME__}"
           password = "${__REGISTRY_PASSWORD__}"
         }
+        volumes = [
+          "local/server.conf:/etc/nginx/conf.d/server.conf:ro"
+        ]
+      }
+
+      template {
+        data = <<EOH
+upstream site_upstream {
+    # server {{ range service "${__SERVICE__}-${__ENVIRONMENT__}" }}{{ .Address }}:{{ .Port }}{{ end }};
+    server {{ env "NOMAD_ADDR_http" }};
+}
+upstream cms_upstream {
+    # server {{ range service "${__SERVICE__}-${__ENVIRONMENT__}-decap-cms" }}{{ .Address }}:{{ .Port }}{{ end }};
+    server {{ env "NOMAD_ADDR_decap-http" }};
+
+}
+EOH
+        destination = "local/server.conf"
+        change_mode = "restart"
+      }
+
+      env {
+        SITE_HOST_PORT = "${NOMAD_ADDR_http}"
       }
 
     service {
