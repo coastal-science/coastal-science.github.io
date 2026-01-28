@@ -405,8 +405,9 @@ jobs:
             # GITHUB_REF is automatically set by GitHub Actions (e.g., refs/heads/branch-name)
             # GITHUB_SHA is automatically set by GitHub Actions (full commit SHA)
             BRANCH_NAME="${GITHUB_REF#refs/heads/}"
-            
-            echo BRANCH_NAME=${BRANCH_NAME}, GITHUB_REF=${GITHUB_REF}
+            BRANCH_NAME="$GITHUB_REF_NAME"
+
+            echo BRANCH_NAME=${BRANCH_NAME}, GITHUB_REF=${GITHUB_REF}, GITHUB_REF_NAME=${GITHUB_REF_NAME}
             if [ -n "${BRANCH_NAME}" ] && [ "${BRANCH_NAME}" != "${GITHUB_REF}" ]; then
               IMAGE_TAG="${BRANCH_NAME}"
             else
