@@ -73,7 +73,6 @@ upstream site_upstream {
 upstream cms_upstream {
     # server {{ range service "${__SERVICE__}-${__ENVIRONMENT__}-decap-cms" }}{{ .Address }}:{{ .Port }}{{ end }};
     server {{ env "NOMAD_ADDR_decap-http" }};
-
 }
 EOH
         destination = "local/server.conf"
