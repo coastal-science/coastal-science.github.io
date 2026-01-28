@@ -392,6 +392,7 @@ jobs:
         run: |
           # TODO: Option (based on needs) to deploy to nomad url with ENVIRONMENT_SUFFIX=commit_sha (if not a PR)
           # GITHUB_SHA_SHORT="${{ github.sha }}".SubString(0, 8))"
+          GITHUB_SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             ENVIRONMENT="production" # TODO: suspicion that the variable is unused and can be removed
             ENVIRONMENT_SUFFIX="latest"
@@ -404,16 +405,34 @@ jobs:
             # Extract branch name from refs/heads/branch-name, fallback to commit SHA
             # GITHUB_REF is automatically set by GitHub Actions (e.g., refs/heads/branch-name)
             # GITHUB_SHA is automatically set by GitHub Actions (full commit SHA)
-            BRANCH_NAME="${GITHUB_REF#refs/heads/}"
-            BRANCH_NAME="$GITHUB_REF_NAME"
-
-            echo BRANCH_NAME=${BRANCH_NAME}, GITHUB_REF=${GITHUB_REF}, GITHUB_REF_NAME=${GITHUB_REF_NAME}
-            if [ -n "${BRANCH_NAME}" ] && [ "${BRANCH_NAME}" != "${GITHUB_REF}" ]; then
-              IMAGE_TAG="${BRANCH_NAME}"
+          fi    
+          
+          BRANCH_NAME="$GITHUB_REF_NAME"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          
+          # If GITHUB_REF_NAME matches '<pr_number>/merge', extract just the branch name for BRANCH_NAME.
+          # Otherwise, use GITHUB_REF_NAME as-is.
+          # GITHUB_REF_NAME format for PRs: "<pr_number>/merge"
+          if [[ "${GITHUB_REF_NAME}" =~ ^[0-9]+/merge$ ]]; then
+            # For PRs, get the source branch name from github.head_ref if available
+            if [ -n "${{ github.head_ref }}" ]; then
+              BRANCH_NAME="${{ github.head_ref }}"
+              IMAGE_TAG="pr-${PR_NUMBER}"
+            fi
+          # fi
+          #   else
+          #     # Fallback to using GITHUB_REF_NAME (could be empty on some events)
+          #     BRANCH_NAME="${GITHUB_REF_NAME}"
+          #   fi
+          else
+            if [ -n "${GITHUB_REF_NAME}" ]; then
+              IMAGE_TAG="${GITHUB_REF_NAME}"
             else
-              IMAGE_TAG="${GITHUB_SHA}"
+              IMAGE_TAG="${GITHUB_SHORT_SHA}"
             fi
           fi
+            
+          echo BRANCH_NAME=${BRANCH_NAME}, GITHUB_REF=${GITHUB_REF}, GITHUB_REF_NAME=${GITHUB_REF_NAME}, github.head_ref=${{ github.head_ref }}, PR_NUMBER=${PR_NUMBER}, IMAGE_TAG=${IMAGE_TAG}
           
           # Construct URL from Nomad template pattern: ${__SERVICE__}-${__ENVIRONMENT__}.${__RESEARCHER__}.researchcomputinggroup.ca
           NOMAD_URL="https://${{ vars.__SERVICE__ }}-${ENVIRONMENT_SUFFIX}.${{ secrets.__RESEARCHER__ }}.researchcomputinggroup.ca"
