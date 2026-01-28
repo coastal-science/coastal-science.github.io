@@ -80,7 +80,7 @@ EOH
       }
 
       env {
-        SITE_HOST_PORT = "${NOMAD_ADDR_http}"
+        # 
       }
 
     service {
