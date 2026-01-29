@@ -80,7 +80,7 @@ upstream cms_upstream {
     # server {{ env "NOMAD_ADDR_decap_api" }};
     
     # TODO: Temporarily reusing site_upstream since decap_api is not deployed yet.
-    server {{ env "NOMAD_ADDR_decap_http" }};
+    # server {{ env "NOMAD_ADDR_decap_http" }};
 }
 EOH
         destination = "local/server.conf"
