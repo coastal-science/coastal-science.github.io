@@ -357,8 +357,8 @@ jobs:
       # url: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
     runs-on: ubuntu-latest
     # runs-on: [ self-hosted, rcg ]
-    container:
-      image: ubuntu-24.04
+    # container:
+    #   image: alpine:3.18
     env:
       NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       REPO_NAME: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
