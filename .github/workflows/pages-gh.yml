@@ -463,16 +463,12 @@ jobs:
           echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
           echo "Determined environment: ${ENVIRONMENT}, suffix: ${ENVIRONMENT_SUFFIX}, image_tag: ${IMAGE_TAG}"
 
-      - name: Prepare Environment
-        run: |
-          # apt-get update
-          # apt-get install -y nomad
-          wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-          apt update && apt install nomad
-          
-          nomad version
-
+      - name: Prepare Environment. Setup `nomad` CLI.
+        id: setup-nomad-cli
+        uses: hashicorp/setup-nomad@main
+        with:
+          version: ${{ env.NOMAD_VERSION}} # Specify the desired version, or "latest"
+        
       - name: Checkout
         uses: actions/checkout@v4
         with:
