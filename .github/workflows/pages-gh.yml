@@ -360,7 +360,7 @@ jobs:
     container:
       image: alpine:3.18
     env:
-      NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.7.4' }}
+      NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       REPO_NAME: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
       SERVICE: "${{ vars.__SERVICE__ }}"
       JOB_DRIVER: "${{ vars.__JOB_DRIVER__ }}"
