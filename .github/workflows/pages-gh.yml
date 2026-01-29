@@ -358,7 +358,7 @@ jobs:
     runs-on: ubuntu-latest
     # runs-on: [ self-hosted, rcg ]
     container:
-      image: alpine:3.18
+      image: ubuntu-24.04
     env:
       NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       REPO_NAME: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
@@ -465,16 +465,10 @@ jobs:
 
       - name: Prepare Environment
         run: |
-          apk update
-          # Alpine community repo may not be up to date; install Nomad from HashiCorp binary below.
-          apk add gettext git curl jq unzip
-          curl -fsSL "https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip" -o nomad.zip
-          unzip -o nomad.zip 
-          mv nomad /usr/bin/
-          rm nomad.zip
-          ls -lah /usr/bin/nomad
-          echo $PATH
-          /usr/bin/nomad version
+          apt-get update
+          apt-get install -y nomad
+
+          nomad version
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -623,7 +617,7 @@ jobs:
       name: docker-image
     runs-on: ubuntu-latest
     container:
-      image: alpine:3.18
+      image: ubuntu-24.04
     env:
       NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       SERVICE: "${{ vars.__SERVICE__ }}"
