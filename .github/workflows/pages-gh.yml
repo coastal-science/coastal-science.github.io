@@ -469,7 +469,7 @@ jobs:
           # Alpine community repo may not be up to date; install Nomad from HashiCorp binary below.
           apk add gettext git curl jq unzip
           curl -fsSL "https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip" -o nomad.zip
-          unzip -o nomad.zip && mv nomad /usr/local/bin/ && rm nomad.zip
+          unzip -o nomad.zip && mv nomad /usr/bin/ && rm nomad.zip
           nomad version
 
       - name: Checkout
@@ -632,7 +632,7 @@ jobs:
           # Alpine community repo may not be up to date; install Nomad from HashiCorp binary below.
           apk add curl unzip
           curl -fsSL "https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip" -o nomad.zip
-          unzip -o nomad.zip && mv nomad /usr/local/bin/ && rm nomad.zip
+          unzip -o nomad.zip && mv nomad /usr/bin/ && rm nomad.zip
           nomad version
 
       - name: Determine Nomad Job Name
