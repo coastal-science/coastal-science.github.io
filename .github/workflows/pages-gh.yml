@@ -359,7 +359,8 @@ jobs:
     # runs-on: [ self-hosted, rcg ]
     container:
       image: alpine:3.18
-    env: 
+    env:
+      NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.7.4' }}
       REPO_NAME: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
       SERVICE: "${{ vars.__SERVICE__ }}"
       JOB_DRIVER: "${{ vars.__JOB_DRIVER__ }}"
@@ -465,7 +466,11 @@ jobs:
       - name: Prepare Environment
         run: |
           apk update
-          apk add gettext nomad git curl jq
+          # Alpine community repo may not be up to date; install Nomad from HashiCorp binary below.
+          apk add gettext git curl jq unzip
+          curl -fsSL "https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip" -o nomad.zip
+          unzip -o nomad.zip && mv nomad /usr/local/bin/ && rm nomad.zip
+          nomad version
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -556,6 +561,7 @@ jobs:
           JOB_NAME: ${{ steps.setup-nomad.outputs.job_name }}
           NOMAD_FILE: ${{ steps.setup-nomad.outputs.nomad_file }}
         run: |
+          nomad version
           NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
             nomad job stop -verbose ${JOB_NAME} || true
           echo "Nomad job stop result=$?"
@@ -614,7 +620,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: alpine:3.18
-    env: 
+    env:
+      NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       SERVICE: "${{ vars.__SERVICE__ }}"
       PR_NUMBER: ${{ github.event.pull_request.number }}
 
@@ -622,7 +629,11 @@ jobs:
       - name: Prepare Environment
         run: |
           apk update
-          apk add nomad curl
+          # Alpine community repo may not be up to date; install Nomad from HashiCorp binary below.
+          apk add curl unzip
+          curl -fsSL "https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip" -o nomad.zip
+          unzip -o nomad.zip && mv nomad /usr/local/bin/ && rm nomad.zip
+          nomad version
 
       - name: Determine Nomad Job Name
         id: job-name
