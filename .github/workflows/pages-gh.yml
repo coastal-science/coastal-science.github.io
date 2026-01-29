@@ -472,6 +472,7 @@ jobs:
           unzip -o nomad.zip 
           mv nomad /usr/bin/
           rm nomad.zip
+          ls -lah /usr/bin/nomad
           nomad version
 
       - name: Checkout
