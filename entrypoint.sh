@@ -40,14 +40,10 @@ nginx -t
 
 
 echo Starting NGINX...
-# Start NGINX
-exec nginx -g "daemon off;"
-
-# Execute the original nginx entrypoint
-# This will also process any .template files in /etc/nginx/templates/ if they exist
-# If no arguments provided, use default nginx command to run in foreground
-# if [ $# -eq 0 ]; then
-#     exec /docker-entrypoint.sh nginx -g "daemon off;"
-# else
-#     exec /docker-entrypoint.sh "$@"
-# fi
+# Hand off to the original nginx entrypoint (runs /docker-entrypoint.d/, then nginx).
+# Keeps behavior aligned with the default nginx:alpine image (e.g. logging).
+if [ $# -eq 0 ]; then
+    exec /docker-entrypoint.sh nginx -g "daemon off;"
+else
+    exec /docker-entrypoint.sh "$@"
+fi
