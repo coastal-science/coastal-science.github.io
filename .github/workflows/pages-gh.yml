@@ -615,23 +615,20 @@ jobs:
     environment: 
       name: docker-image
     runs-on: ubuntu-latest
-    container:
-      image: ubuntu-24.04
+    # container:
+    #   image: alpine:3.18
     env:
       NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       SERVICE: "${{ vars.__SERVICE__ }}"
       PR_NUMBER: ${{ github.event.pull_request.number }}
 
     steps:
-      - name: Prepare Environment
-        run: |
-          apk update
-          # Alpine community repo may not be up to date; install Nomad from HashiCorp binary below.
-          apk add curl unzip
-          curl -fsSL "https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip" -o nomad.zip
-          unzip -o nomad.zip && mv nomad /usr/bin/ && rm nomad.zip
-          nomad version
-
+      - name: Prepare Environment. Setup `nomad` CLI.
+        id: setup-nomad-cli-cleanup
+        uses: hashicorp/setup-nomad@main
+        with:
+          version: ${{ env.NOMAD_VERSION}} # Specify the desired version, or "latest"
+          
       - name: Determine Nomad Job Name
         id: job-name
         run: |
