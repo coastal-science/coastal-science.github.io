@@ -35,7 +35,7 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
   }
 
   group "${__SERVICE__}-${__ENVIRONMENT__}" {
-      count = 2
+      count = 1
 
       scaling {
         enabled = true
