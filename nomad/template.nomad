@@ -77,10 +77,10 @@ upstream site_upstream {
 }
 upstream cms_upstream {
     # Using env for now. TODO: Lookup service with service discovery/service mesh.
-    # server {{ env "NOMAD_ADDR_decap_api" }};
+    server {{ env "NOMAD_ADDR_decap_api" }};
     
     # TODO: Temporarily reusing site_upstream since decap_api is not deployed yet.
-    server {{ env "NOMAD_ADDR_decap_http" }};
+    # server {{ env "NOMAD_ADDR_decap_http" }};
 }
 EOH
         destination = "local/server.conf"
