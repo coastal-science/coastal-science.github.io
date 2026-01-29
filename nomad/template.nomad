@@ -1,4 +1,8 @@
 job "${__SERVICE__}-${__ENVIRONMENT__}" {
+  meta {
+    run_uuid = "${uuidv4()}"
+  }
+
   datacenters = ${__DATACENTERS__}
   namespace = "${__NAMESPACE__}"
 
@@ -53,6 +57,7 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
       driver = "${__JOB_DRIVER__}"
       config {
         image = "${__IMAGE_NAME__}:${__IMAGE_TAG__}"
+        image_pull_timeout = "10m"
         ports = ["http"]
         force_pull = true
         auth {
