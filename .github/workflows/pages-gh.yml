@@ -406,7 +406,8 @@ jobs:
             # GITHUB_REF is automatically set by GitHub Actions (e.g., refs/heads/branch-name)
             # GITHUB_SHA is automatically set by GitHub Actions (full commit SHA)
           fi    
-          
+
+          echo NOMAD_FILE=${NOMAD_FILE}
           BRANCH_NAME="$GITHUB_REF_NAME"
           PR_NUMBER="${{ github.event.pull_request.number }}"
           
