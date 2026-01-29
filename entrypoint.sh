@@ -31,7 +31,10 @@ find /etc/nginx/conf.d -maxdepth 1 -name "*.conf" -type f | while read -r conf_f
     echo ""
 done
 
-cat /etc/nginx/nginx.conf
+conf_file=/etc/nginx/nginx.conf
+echo "==> $conf_file"
+cat "$conf_file"
+echo ""
 
 # Test nginx configuration after processing all configs
 # This validates the final configuration with all environment variables substituted
