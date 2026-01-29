@@ -22,9 +22,10 @@ if [ ! -f /etc/nginx/conf.d/server.conf ] && [ -f /etc/nginx/conf.d/server.conf.
     echo "Renamed server.conf.local to server.conf in /etc/nginx/conf.d/"
 fi
 
-echo "Contents of /etc/nginx/conf.d/:"
+echo "All *.conf files in /etc/nginx/conf.d/, /etc/nginx/sites-available/, and /etc/nginx/sites-unavailable/:"
 find /etc/nginx/conf.d /etc/nginx/sites-available /etc/nginx/sites-unavailable -maxdepth 1 -name "*.conf" | tr '\n' ' '; echo
 
+echo "Contents of /etc/nginx/conf.d/:"
 find /etc/nginx/conf.d -maxdepth 1 -name "*.conf" -type f | while read -r conf_file; do
     echo "==> $conf_file"
     cat "$conf_file"
