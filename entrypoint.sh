@@ -6,11 +6,11 @@ set -e
 if [ -d "/etc/nginx/sites-available" ]; then
     # Use find to handle cases where no .template files exist
     find /etc/nginx/sites-available -maxdepth 1 -name "*.template" -type f | while read -r template_file; do
-        # Get the base filename without path
+        # Get the base filename without path and .template suffix
         basefile=$(basename "$template_file" .template)
+        [ -z "$basefile" ] && continue
         # Process with envsubst, only substituting specific variables
         # This prevents envsubst from replacing nginx variables like $http_host, $remote_addr, etc.
-        # Only variables explicitly listed in the format string will be substituted
         envsubst '$DOMAIN' < "$template_file" > "/etc/nginx/conf.d/$basefile"
         echo "Processed $template_file -> /etc/nginx/conf.d/$basefile"
     done
