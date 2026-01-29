@@ -67,11 +67,11 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
       template {
         data = <<EOH
 upstream site_upstream {
-    # server {{ range service "${__SERVICE__}-${__ENVIRONMENT__}" }}{{ .Address }}:{{ .Port }}{{ end }};
+    # Using env for now. TODO: Lookup service with service discovery/service mesh.
     server {{ env "NOMAD_ADDR_http" }};
 }
 upstream cms_upstream {
-    # server {{ range service "${__SERVICE__}-${__ENVIRONMENT__}-decap-cms" }}{{ .Address }}:{{ .Port }}{{ end }};
+    # Using env for now. TODO: Lookup service with service discovery/service mesh.
     server {{ env "NOMAD_ADDR_decap_http" }};
 }
 EOH
