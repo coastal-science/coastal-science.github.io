@@ -4,15 +4,15 @@ set -e
 # Process site configurations from sites-available using envsubst
 # and copy them to /etc/nginx/conf.d/
 if [ -d "/etc/nginx/sites-available" ]; then
-    # Use find to handle cases where no .conf files exist
-    find /etc/nginx/sites-available -maxdepth 1 -name "*.conf" -type f | while read -r conf_file; do
+    # Use find to handle cases where no .template files exist
+    find /etc/nginx/sites-available -maxdepth 1 -name "*.template" -type f | while read -r conf_file; do
         # Get the base filename without path
-        filename=$(basename "$conf_file")
+        basefile=$(basename "$template_file" .template)
         # Process with envsubst, only substituting specific variables
         # This prevents envsubst from replacing nginx variables like $http_host, $remote_addr, etc.
         # Only variables explicitly listed in the format string will be substituted
-        envsubst '$DOMAIN' < "$conf_file" > "/etc/nginx/conf.d/$filename"
-        echo "Processed $conf_file -> /etc/nginx/conf.d/$filename"
+        envsubst '$DOMAIN' < "$conf_file" > "/etc/nginx/conf.d/$basefile"
+        echo "Processed $conf_file -> /etc/nginx/conf.d/$basefile"
     done
 fi
 
