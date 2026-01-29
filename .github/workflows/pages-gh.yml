@@ -527,8 +527,18 @@ jobs:
           echo "===== Rendered Nomad job ====="
           cat "$NOMAD_OUTPUT_FILE"
           
-          # Validate Nomad job
-          echo "===== Validating Nomad job ====="
+          echo "===== Validating substituted variables and rendered Nomad job ====="
+
+          # Extract all remaining __*__ variables after envsubst and report if any non-substituted variables remain
+          REMAINING_SUBSTITUTIONS=$(grep -oE '\$\{__[A-Z_]+__\}' "$NOMAD_OUTPUT_FILE" | sort -u)
+          if [ -n "$REMAINING_SUBSTITUTIONS" ]; then
+            echo "Warning: The following variable substitutions were NOT completed in $NOMAD_OUTPUT_FILE:"
+            echo "$REMAINING_SUBSTITUTIONS"
+            exit 1
+          else
+            echo "All __*__ variables were successfully substituted in $NOMAD_OUTPUT_FILE."
+          fi
+          
           NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
           nomad job validate "$NOMAD_OUTPUT_FILE" || {
             echo "===== Nomad job file ====="
