@@ -4,8 +4,12 @@ server {
     server_name  _;
     # server_name  ${DOMAIN}
 
-    access_log  /var/log/nginx/host.access.log  main;
-    error_log  /var/log/nginx/host.error.log  notice;
+    # Avoid 400 "Request Header Or Cookie Too Large" from LB or clients with large headers/cookies
+    #large_client_header_buffers 4 32k;
+    #client_header_buffer_size 8k;
+
+    #access_log  /var/log/nginx/host.access.log  main;
+    #error_log   /var/log/nginx/host.error.log  notice;
     #access_log /var/log/nginx/${DOMAIN}-access.log;
     #error_log /var/log/nginx/${DOMAIN}-error.log;
 
