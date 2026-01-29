@@ -68,8 +68,7 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
         data = <<EOH
 upstream site_upstream {
     # Using env for now. TODO: Lookup service with service discovery/service mesh.
-    # server {{ env "NOMAD_ADDR_http" }};
-    server {{ range nomadService "orca-dev" }}{{ .Address }}:{{ .Port }}{{ end }};
+    server {{ env "NOMAD_ADDR_http" }};
 }
 upstream cms_upstream {
     # Using env for now. TODO: Lookup service with service discovery/service mesh.
