@@ -494,20 +494,39 @@ jobs:
         run: |
           # Use ENVIRONMENT_SUFFIX consistently for both PRs and branches
           JOB_NAME="${{ env.SERVICE }}-${ENVIRONMENT_SUFFIX}"
+          NOMAD_JOB_TEMPLATE="nomad/template.nomad"
+          NOMAD_OUTPUT_FILE="${NOMAD_FILE}"
+
+          export __SERVICE__="${{ env.SERVICE }}"
+          export __JOB_DRIVER__="${{ env.JOB_DRIVER }}"
+          export __ENVIRONMENT__="${ENVIRONMENT_SUFFIX}"
+          export __WEB_URL__="${WEB_URL}"
+          export __JOB_NAME__="${JOB_NAME}"
+          export __IMAGE_NAME__="${{ env.IMAGE_NAME }}"
+          export __IMAGE_TAG__="${IMAGE_TAG}"
+          export __IMAGE_FORCE_PULL__="${{ env.FORCE_PULL || 'false' }}"
+          export __DATACENTERS__="${{ env.NOMAD_SERVER_DATACENTERS }}"
+          export __NAMESPACE__="${{ env.NOMAD_SERVER_NAMESPACE }}"
+          export __RESEARCHER__="${{ env.__RESEARCHER__ }}"
+          export __REGISTRY_USERNAME__="${{ env.__REGISTRY_USERNAME__ }}"
+          export __REGISTRY_PASSWORD__="${{ env.__REGISTRY_PASSWORD__ }}"
+
+          # Substitute variables in template
+          echo "Extracting __*__ variables from template: $NOMAD_JOB_TEMPLATE"
+          echo "Output file: $NOMAD_OUTPUT_FILE"
+          # GNU gettext envsubst format: '${VAR1} ${VAR2} ${VAR3}'
+          # Extract all ${__*__} patterns, get unique variable names (with __ prefix/suffix)
+          # envsubst only replaces variables in the format string; others (e.g. ${meta.role}, ${node.unique.name}, ${NOMAD_ADDR_http}) are left unchanged.
+          SHELL_FORMAT_STRING=$(grep -oE '\$\{__[A-Z_]+__\}' "$NOMAD_JOB_TEMPLATE" | sort -u | awk '{printf "%s ", $1}')
+          if [ -z "$SHELL_FORMAT_STRING" ]; then
+            echo "Warning: No __*__ variables found in template"
+          fi
+          echo "Substituting variables: $SHELL_FORMAT_STRING"
+          envsubst "$SHELL_FORMAT_STRING" < "$NOMAD_JOB_TEMPLATE" > "$NOMAD_OUTPUT_FILE"
+
+          echo "===== Rendered Nomad job ====="
+          cat "$NOMAD_OUTPUT_FILE"
           
-          __SERVICE__="${{ env.SERVICE }}" \
-          __JOB_DRIVER__="${{ env.JOB_DRIVER }}" \
-          __ENVIRONMENT__="${ENVIRONMENT_SUFFIX}" \
-          __WEB_URL__="${WEB_URL}" \
-          __JOB_NAME__="${JOB_NAME}" \
-          __IMAGE_NAME__="${{ env.IMAGE_NAME }}" \
-          __IMAGE_TAG__="${IMAGE_TAG}" \
-          __IMAGE_FORCE_PULL__="${{ env.FORCE_PULL || 'false' }}" \
-          __DATACENTERS__="${{ env.NOMAD_SERVER_DATACENTERS }}" \
-          __NAMESPACE__="${{ env.NOMAD_SERVER_NAMESPACE }}" \
-          envsubst < nomad/template.nomad > ${NOMAD_FILE}
-          cat ${NOMAD_FILE}
-          echo "nomad_file=${NOMAD_FILE}" >> $GITHUB_OUTPUT
           echo "job_name=${JOB_NAME}" >> $GITHUB_OUTPUT
 
       - name: Deploy TIMESTAMPED Website To Nomad
