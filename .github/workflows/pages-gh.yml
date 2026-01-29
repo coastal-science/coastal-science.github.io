@@ -473,6 +473,7 @@ jobs:
           mv nomad /usr/bin/
           rm nomad.zip
           ls -lah /usr/bin/nomad
+          echo $PATH
           /usr/bin/nomad version
 
       - name: Checkout
