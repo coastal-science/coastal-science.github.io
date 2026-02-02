@@ -563,8 +563,10 @@ jobs:
             nomad job stop -verbose ${JOB_NAME} || true
           echo "Nomad job stop result=$?"
           sleep 10s
+          
+          echo "Submitting job from: ${NOMAD_FILE}"
           NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
-            nomad job run -verbose ${NOMAD_FILE}
+            nomad job run -verbose "${NOMAD_FILE}"
           DEPLOY_RESULT=$?
           echo "Nomad job deploy result=${DEPLOY_RESULT}"
           echo "deploy_success=$([ ${DEPLOY_RESULT} -eq 0 ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
