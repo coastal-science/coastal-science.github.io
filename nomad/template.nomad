@@ -11,7 +11,7 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
     operator  = "set_contains"
     value     = "non-data-portal"
   }
-  
+
   constraint {
     attribute = "${meta.role}"
     operator  = "!="
@@ -111,7 +111,7 @@ EOH
     }
 
     resources {
-      cpu = 500
+      cpu    = 500
       memory = 256
       }
 
