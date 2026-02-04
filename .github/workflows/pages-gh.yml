@@ -544,6 +544,8 @@ jobs:
           # USE_DECAP=true when ENVIRONMENT (lowercase) is main, prod, or production; else false
           env_lower=$(echo "${ENVIRONMENT}" | tr '[:upper:]' '[:lower:]')
           export __USE_DECAP__="$([ "$env_lower" = "main" ] || [ "$env_lower" = "prod" ] || [ "$env_lower" = "production" ] && echo 'true' || echo 'false')"
+          export __DECAP_IMAGE_NAME__="itsmejoeeey/docker-decap-cms-standalone"
+          export __DECAP_IMAGE_TAG__="latest"
 
           # Substitute variables in template
           echo "Extracting __*__ variables from template: $NOMAD_JOB_TEMPLATE"
