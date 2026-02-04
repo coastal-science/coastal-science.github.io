@@ -32,8 +32,18 @@ FROM nginx:alpine
 # WORKDIR /usr/share/nginx/html
 
 # Copy HTML from previous build into the Workdir.
-COPY --from=build --chown=$USER:$USER /opt/HugoApp/public /usr/share/nginx/html
-COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=build --chown=nginx:nginx /opt/HugoApp/public /usr/share/nginx/html
+
+# Copy active site configurations from sites-available
+# These will be processed by entrypoint.sh using envsubst
+COPY nginx/sites-available/ /etc/nginx/sites-available/
+
+# Copy custom entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Set custom entrypoint that processes sites-available and calls original nginx entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
 
 # COPY --from=public --chown=$USER:$USER . /usr/share/nginx/html
 # COPY --from=nginx default.conf /etc/nginx/conf.d/default.conf
