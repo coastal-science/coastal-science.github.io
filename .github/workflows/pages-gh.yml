@@ -698,6 +698,8 @@ jobs:
       NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       SERVICE: "${{ vars.__SERVICE__ }}"
     steps:
+      - name: Checkout repository (required for local action)
+        uses: actions/checkout@v4
       - name: Prepare Environment. Setup `nomad` CLI
         uses: hashicorp/setup-nomad@v1.0.0
         with:
@@ -789,6 +791,8 @@ jobs:
       NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       SERVICE: "${{ vars.__SERVICE__ }}"
     steps:
+      - name: Checkout repository (required for local action)
+        uses: actions/checkout@v4
       - name: Determine Nomad job name (SERVICE-pr-N-SHORT_SHA)
         id: job-name
         run: |
