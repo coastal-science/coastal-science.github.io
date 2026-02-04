@@ -56,7 +56,7 @@ on:
 
 # Allow one concurrent deployment
 concurrency:
-  group: ${{ github.repository }}-${{ github.sha }}
+  group: ${{ github.repository }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('branch-{0}', github.ref_name) }}
   cancel-in-progress: true
 
 jobs:
@@ -575,7 +575,7 @@ jobs:
             env_lower=$(echo "${ENVIRONMENT}" | tr '[:upper:]' '[:lower:]')
             export __USE_DECAP__="$([ "$env_lower" = "main" ] || [ "$env_lower" = "prod" ] || [ "$env_lower" = "production" ] && echo 'true' || echo 'false')"
           fi
-          
+
           export __DECAP_IMAGE_NAME__="itsmejoeeey/docker-decap-cms-standalone"
           export __DECAP_IMAGE_TAG__="latest"
           export __CMS_BACKEND_DEBUG__="${{ vars.CMS_BACKEND_DEBUG || 0 }}"
