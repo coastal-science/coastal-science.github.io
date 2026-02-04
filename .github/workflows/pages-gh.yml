@@ -421,6 +421,12 @@ jobs:
             NOMAD_FILE="${{ vars.__SERVICE__ }}.nomad"
           fi
 
+          # Update from input when it exists and is different from branch-based value
+          if [ -n "${{ inputs.nomad_job_template }}" ] && [ "${{ inputs.nomad_job_template }}" != "${NOMAD_JOB_TEMPLATE}" ]; then
+            echo "::notice title=Nomad template updated::nomad_job_template was '${NOMAD_JOB_TEMPLATE}' (branch-based), updated to '${{ inputs.nomad_job_template }}' (input)."
+            NOMAD_JOB_TEMPLATE="${{ inputs.nomad_job_template }}"
+          fi
+
           echo NOMAD_FILE=${NOMAD_FILE}
           # Extract branch name from refs/heads/branch-name, fallback to commit SHA
           # GITHUB_REF is automatically set by GitHub Actions (e.g., refs/heads/branch-name)
