@@ -430,7 +430,7 @@ jobs:
             IMAGE_TAG="main" # branch name of production main branch
           else
             ENVIRONMENT="development"
-            ENVIRONMENT_SUFFIX="dev"
+            ENVIRONMENT_SUFFIX="dev" # default suffix for development environment. Overridden by PR number for PRs.
             NOMAD_JOB_TEMPLATE=nomad/template.nomad
             NOMAD_FILE="${{ vars.__SERVICE__ }}.nomad"
           fi
@@ -456,6 +456,7 @@ jobs:
             if [ -n "${{ github.head_ref }}" ]; then
               BRANCH_NAME="${{ github.head_ref }}"
               IMAGE_TAG="pr-${PR_NUMBER}"
+              ENVIRONMENT_SUFFIX="pr-${PR_NUMBER}"
             fi
           else
             if [ -n "${GITHUB_REF_NAME}" ]; then
@@ -466,6 +467,7 @@ jobs:
           fi
             
           echo ENVIRONMENT=${ENVIRONMENT}, \
+          ENVIRONMENT_SUFFIX=${ENVIRONMENT_SUFFIX}, \
           BRANCH_NAME=${BRANCH_NAME}, \
           GITHUB_REF=${GITHUB_REF}, \
           GITHUB_REF_NAME=${GITHUB_REF_NAME}, \
