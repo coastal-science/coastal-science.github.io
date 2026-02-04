@@ -28,7 +28,7 @@ on:
 
 # Allow one concurrent deployment
 concurrency:
-  group: ${{ github.repository }}-${{ (github.event_name == 'pull_request' || github.event_name == 'pull_request_target') && format('PR-{0}-{1}', github.event.pull_request.number, github.head_ref) || github.ref_name }}-${{ github.sha }}
+  group: ${{ github.repository }}-${{ github.sha }}
   cancel-in-progress: true
 
 jobs:
