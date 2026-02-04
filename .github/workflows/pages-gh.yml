@@ -682,67 +682,62 @@ jobs:
             echo "${{ steps.set-env.outputs.nomad_url }}" >> "$GITHUB_STEP_SUMMARY"
           fi
 
-  # Cleanup Nomad deployment when PR is closed/merged
-  cleanup-pr-deployment:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+  # Cleanup merged PR's Nomad job after main deploy succeeds (push run only). PR number from merge commit message.
+  cleanup-merged-pr-deployment:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - deploy-service
     permissions:
       contents: read
       packages: read
-    environment: 
+    environment:
       name: docker-image
     runs-on: ubuntu-latest
-    # container:
-    #   image: alpine:3.18
     env:
       NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       SERVICE: "${{ vars.__SERVICE__ }}"
-      PR_NUMBER: ${{ github.event.pull_request.number }}
-
     steps:
-      - name: Prepare Environment. Setup `nomad` CLI.
-        id: setup-nomad-cli-cleanup
-        uses: hashicorp/setup-nomad@v1.0.0
+      - name: Get merged PR number from commit message
+        id: pr
+        run: |
+          MSG="${{ github.event.head_commit.message }}"
+          if echo "${MSG}" | grep -qE '^Merge pull request #([0-9]+) '; then
+            PR_NUM=$(echo "${MSG}" | sed -nE 's/^Merge pull request #([0-9]+) .*/\1/p' | head -1)
+            echo "pr_number=${PR_NUM}" >> $GITHUB_OUTPUT
+            echo "Found merged PR #${PR_NUM}"
+          else
+            echo "pr_number=" >> $GITHUB_OUTPUT
+            echo "Not a merge commit or no PR number; skipping PR job cleanup"
+          fi
+      - name: Cleanup merged PR Nomad job
+        if: steps.pr.outputs.pr_number != ''
+        uses: ./.github/actions/cleanup-pr-nomad-job
         with:
-          version: ${{ env.NOMAD_VERSION}} # Specify the desired version, or "latest"
-          
-      - name: Determine Nomad Job Name
-        id: job-name
-        run: |
-          JOB_NAME="${{ env.SERVICE }}-pr-${{ env.PR_NUMBER }}"
-          echo "job_name=${JOB_NAME}" >> $GITHUB_OUTPUT
-          echo "Cleaning up Nomad job: ${JOB_NAME}"
+          job_name: ${{ env.SERVICE }}-pr-${{ steps.pr.outputs.pr_number }}
+          nomad_version: ${{ env.NOMAD_VERSION }}
+          nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
+          nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
 
-      - name: Stop and Purge Nomad Job
-        id: cleanup
-        env:
-          JOB_NAME: ${{ steps.job-name.outputs.job_name }}
-        run: |
-          echo "Stopping Nomad job: ${JOB_NAME}"
-          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
-            nomad job stop -purge -verbose ${JOB_NAME} || true
-          STOP_RESULT=$?
-          echo "Nomad job stop/purge result=${STOP_RESULT}"
-          
-          # Verify job is gone
-          sleep 5s
-          if NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
-             nomad job status ${JOB_NAME} 2>/dev/null; then
-            echo "⚠️  Warning: Job ${JOB_NAME} still exists after cleanup attempt"
-            echo "cleanup_success=false" >> $GITHUB_OUTPUT
-          else
-            echo "✓ Successfully cleaned up job: ${JOB_NAME}"
-            echo "cleanup_success=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Summary
-        run: |
-          if [ "${{ steps.cleanup.outputs.cleanup_success }}" = "true" ]; then
-            echo "✓ PR deployment cleanup completed successfully" >> "$GITHUB_STEP_SUMMARY"
-            echo "Cleaned up Nomad job: ${{ steps.job-name.outputs.job_name }}" >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "⚠️  PR deployment cleanup completed with warnings" >> "$GITHUB_STEP_SUMMARY"
-            echo "Job: ${{ steps.job-name.outputs.job_name }}" >> "$GITHUB_STEP_SUMMARY"
-          fi
+  # Cleanup Nomad deployment when PR is closed (without merge). When merged, cleanup runs in push run after deploy-service (cleanup-merged-pr-deployment).
+  cleanup-pr-deployment:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == false
+    permissions:
+      contents: read
+      packages: read
+    environment:
+      name: docker-image
+    runs-on: ubuntu-latest
+    env:
+      NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
+      SERVICE: "${{ vars.__SERVICE__ }}"
+    steps:
+      - name: Cleanup PR Nomad job
+        uses: ./.github/actions/cleanup-pr-nomad-job
+        with:
+          job_name: ${{ env.SERVICE }}-pr-${{ github.event.pull_request.number }}
+          nomad_version: ${{ env.NOMAD_VERSION }}
+          nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
+          nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
           
   # Cleanup workspace on the runner
   cleanup:

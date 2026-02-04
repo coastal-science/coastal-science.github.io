@@ -1,0 +1,70 @@
+# Composite action: stop and purge a Nomad job by name.
+# Caller must pass the full job name (e.g. SERVICE-pr-NUMBER) and nomad_token/nomad_addr (e.g. from secrets).
+name: Cleanup PR Nomad job
+description: Stop and purge a Nomad job by name. Caller constructs job_name (e.g. from service and pr_number).
+
+inputs:
+  job_name:
+    description: Full Nomad job name to stop and purge (caller must construct it, e.g. SERVICE-pr-NUMBER).
+    required: true
+  nomad_version:
+    description: Nomad CLI version to install.
+    required: false
+    default: '1.11.1'
+  nomad_token:
+    description: Nomad ACL token (pass from secrets; e.g. secrets.NOMAD_SERVER_TOKEN).
+    required: true
+  nomad_addr:
+    description: Nomad server address (pass from secrets; e.g. secrets.NOMAD_SERVER_ADDRESS).
+    required: true
+  sleep_seconds:
+    description: Seconds to wait after stop/purge before verifying job is gone.
+    required: false
+    default: '5'
+
+outputs:
+  cleanup_success:
+    description: "true if job was removed, false otherwise"
+    value: ${{ steps.cleanup.outputs.cleanup_success }}
+  job_name:
+    description: Nomad job name that was cleaned up
+    value: ${{ inputs.job_name }}
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Nomad CLI
+      uses: hashicorp/setup-nomad@v1.0.0
+      with:
+        version: ${{ inputs.nomad_version }}
+
+    - name: Stop and purge Nomad job
+      id: cleanup
+      env:
+        NOMAD_TOKEN: ${{ inputs.nomad_token }}
+        NOMAD_ADDR: ${{ inputs.nomad_addr }}
+        JOB_NAME: ${{ inputs.job_name }}
+        SLEEP_SECONDS: ${{ inputs.sleep_seconds }}
+      shell: bash
+      run: |
+        echo "Stopping Nomad job: ${JOB_NAME}"
+        nomad job stop -purge -verbose "${JOB_NAME}" || true
+        sleep "${SLEEP_SECONDS}"
+        if nomad job status "${JOB_NAME}" 2>/dev/null; then
+          echo "cleanup_success=false" >> "$GITHUB_OUTPUT"
+          echo "⚠️  Warning: Job ${JOB_NAME} still exists after cleanup attempt"
+        else
+          echo "cleanup_success=true" >> "$GITHUB_OUTPUT"
+          echo "✓ Successfully cleaned up job: ${JOB_NAME}"
+        fi
+
+    - name: Summary
+      shell: bash
+      run: |
+        if [ "${{ steps.cleanup.outputs.cleanup_success }}" = "true" ]; then
+          echo "✓ PR deployment cleanup completed successfully" >> "$GITHUB_STEP_SUMMARY"
+          echo "Cleaned up Nomad job: ${{ inputs.job_name }}" >> "$GITHUB_STEP_SUMMARY"
+        else
+          echo "⚠️  PR deployment cleanup completed with warnings" >> "$GITHUB_STEP_SUMMARY"
+          echo "Job: ${{ inputs.job_name }}" >> "$GITHUB_STEP_SUMMARY"
+        fi
