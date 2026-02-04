@@ -431,7 +431,14 @@ jobs:
             fi
           fi
             
-          echo ENVIRONMENT=${ENVIRONMENT}, BRANCH_NAME=${BRANCH_NAME}, GITHUB_REF=${GITHUB_REF}, GITHUB_REF_NAME=${GITHUB_REF_NAME}, github.head_ref=${{ github.head_ref }}, PR_NUMBER=${PR_NUMBER}, IMAGE_TAG=${IMAGE_TAG}
+          echo ENVIRONMENT=${ENVIRONMENT}, \
+          BRANCH_NAME=${BRANCH_NAME}, \
+          GITHUB_REF=${GITHUB_REF}, \
+          GITHUB_REF_NAME=${GITHUB_REF_NAME}, \
+          github.head_ref=${{ github.head_ref }}, \
+          PR_NUMBER=${PR_NUMBER}, \
+          IMAGE_TAG=${IMAGE_TAG}, \
+          NOMAD_JOB_TEMPLATE=${NOMAD_JOB_TEMPLATE}
           
           # Construct URL from Nomad template pattern: ${__SERVICE__}-${__ENVIRONMENT__}.${__RESEARCHER__}.researchcomputinggroup.ca
           NOMAD_URL="https://${{ vars.__SERVICE__ }}-${ENVIRONMENT_SUFFIX}.${{ secrets.__RESEARCHER__ }}.researchcomputinggroup.ca"
