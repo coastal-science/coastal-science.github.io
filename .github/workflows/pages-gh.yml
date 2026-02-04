@@ -3,11 +3,11 @@ name: Deploy Hugo site - Production and Preview
 run-name: ${{ github.event_name == 'pull_request' && format('Preview [PR {0} - {1}] {2}  ', github.event.pull_request.number, github.head_ref, github.event.head_commit.message) || format('[{0}] {1}', github.ref_name, github.event.head_commit.message) }}
 
 on:
-  # Runs on pushes targeting the default branch
+  # Only push to default branch — avoids double trigger when pushing to a PR branch (push + pull_request synchronize)
   push:
-    # branches: ["main", "gha-patch-reusable-workflow", "gha-decap"]
+    branches: [main]
 
-  # Runs on pull requests for Deploy Preview Links
+  # Runs on pull requests for Deploy Preview Links (one run per commit on a PR)
   pull_request:
     types: [opened, synchronize, reopened, closed]
 
