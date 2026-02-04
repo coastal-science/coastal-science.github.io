@@ -48,7 +48,7 @@ runs:
       shell: bash
       run: |
         echo "Stopping Nomad job: ${JOB_NAME}"
-        nomad job stop -purge -verbose "${JOB_NAME}" || true
+        NOMAD_TOKEN="${NOMAD_TOKEN}" NOMAD_ADDR="${NOMAD_ADDR}" nomad job stop -purge -verbose "${JOB_NAME}" || true
         sleep "${SLEEP_SECONDS}"
         if nomad job status "${JOB_NAME}" 2>/dev/null; then
           echo "cleanup_success=false" >> "$GITHUB_OUTPUT"
