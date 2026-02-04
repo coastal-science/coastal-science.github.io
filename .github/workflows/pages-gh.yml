@@ -22,6 +22,15 @@ on:
           - nomad/template.nomad
           - nomad/decap.template.nomad
         default: nomad/template.nomad
+      use_decap:
+        required: false
+        description: Override Decap usage. Set to "true" or "false" to override branch-based determination; leave as "auto" for automatic.
+        type: choice
+        options:
+          - auto
+          - "true"
+          - "false"
+        default: auto
 
   workflow_call: # allows reusing the workflow (string input; choice not supported for workflow_call)
     # inputs:
@@ -541,9 +550,27 @@ jobs:
           export __REGISTRY_USERNAME__="${{ env.__REGISTRY_USERNAME__ }}"
           export __REGISTRY_PASSWORD__="${{ env.__REGISTRY_PASSWORD__ }}"
           
-          # USE_DECAP=true when ENVIRONMENT (lowercase) is main, prod, or production; else false
-          env_lower=$(echo "${ENVIRONMENT}" | tr '[:upper:]' '[:lower:]')
-          export __USE_DECAP__="$([ "$env_lower" = "main" ] || [ "$env_lower" = "prod" ] || [ "$env_lower" = "production" ] && echo 'true' || echo 'false')"
+          # USE_DECAP: workflow input overrides branch-based determination when set
+          USE_DECAP_INPUT="${{ inputs.use_decap }}"
+          if [ -n "${USE_DECAP_INPUT}" ] && [ "${USE_DECAP_INPUT}" != "auto" ]; then
+          USE_DECAP_INPUT=$(echo "${USE_DECAP_INPUT}" | tr '[:upper:]' '[:lower:]')
+            case "${USE_DECAP_INPUT}" in
+              true | yes)
+                export __USE_DECAP__="true"
+                echo "::notice title=USE_DECAP override::use_decap input set to 'true' (overrides environment/branch-based auto determination)."
+                ;;
+              false | no)
+                export __USE_DECAP__="false"
+                echo "::notice title=USE_DECAP override::use_decap input set to 'false' (overrides environment/branch-based auto determination)."
+                ;;
+              *) echo "::warning title=Invalid use_decap::Ignoring use_decap='${USE_DECAP_INPUT}'; using environment/branch-based value." ;;
+            esac
+          fi
+          if [ -z "${__USE_DECAP__:-}" ]; then
+            env_lower=$(echo "${ENVIRONMENT}" | tr '[:upper:]' '[:lower:]')
+            export __USE_DECAP__="$([ "$env_lower" = "main" ] || [ "$env_lower" = "prod" ] || [ "$env_lower" = "production" ] && echo 'true' || echo 'false')"
+          fi
+          
           export __DECAP_IMAGE_NAME__="itsmejoeeey/docker-decap-cms-standalone"
           export __DECAP_IMAGE_TAG__="latest"
           export __CMS_BACKEND_DEBUG__="${{ vars.CMS_BACKEND_DEBUG || 0 }}"
