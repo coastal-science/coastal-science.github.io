@@ -397,11 +397,13 @@ jobs:
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             ENVIRONMENT="production" # TODO: suspicion that the variable is unused and can be removed
             ENVIRONMENT_SUFFIX="latest"
+            NOMAD_JOB_TEMPLATE=nomad/decap.template.nomad
             NOMAD_FILE="${{ vars.__SERVICE__ }}.nomad"
             IMAGE_TAG="main" # branch name of production main branch
           else
             ENVIRONMENT="development"
             ENVIRONMENT_SUFFIX="dev"
+            NOMAD_JOB_TEMPLATE=nomad/template.nomad
             NOMAD_FILE="${{ vars.__SERVICE__ }}.nomad"
           fi
 
@@ -453,6 +455,7 @@ jobs:
           echo "environment_suffix=${ENVIRONMENT_SUFFIX}" >> $GITHUB_OUTPUT
           echo "nomad_url=${NOMAD_URL}" >> $GITHUB_OUTPUT
           echo "web_url=${WEB_URL}" >> $GITHUB_OUTPUT
+          echo "nomad_job_template=${NOMAD_JOB_TEMPLATE}" >> $GITHUB_OUTPUT
           echo "nomad_file=${NOMAD_FILE}" >> $GITHUB_OUTPUT
           echo "preview_url=${PREVIEW_URL}" >> $GITHUB_OUTPUT
           echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
@@ -485,13 +488,15 @@ jobs:
           ENVIRONMENT_SUFFIX: ${{ steps.set-env.outputs.environment_suffix }}
           ENVIRONMENT: ${{ steps.set-env.outputs.environment }}
           WEB_URL: ${{ steps.set-env.outputs.web_url }}
+          NOMAD_JOB_TEMPLATE: ${{ steps.set-env.outputs.nomad_job_template }}
           NOMAD_FILE: ${{ steps.set-env.outputs.nomad_file }}
           IMAGE_TAG: ${{ steps.set-env.outputs.image_tag }}
 
         run: |
           # Use ENVIRONMENT_SUFFIX consistently for both PRs and branches
           JOB_NAME="${{ env.SERVICE }}-${ENVIRONMENT_SUFFIX}"
-          NOMAD_JOB_TEMPLATE="nomad/template.nomad"
+          # NOMAD_JOB_TEMPLATE="nomad/template.nomad"
+          NOMAD_JOB_TEMPLATE="${NOMAD_JOB_TEMPLATE}"
           NOMAD_OUTPUT_FILE="${NOMAD_FILE}"
 
           export __SERVICE__="${{ env.SERVICE }}"
