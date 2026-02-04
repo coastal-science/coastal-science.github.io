@@ -546,6 +546,11 @@ jobs:
           export __USE_DECAP__="$([ "$env_lower" = "main" ] || [ "$env_lower" = "prod" ] || [ "$env_lower" = "production" ] && echo 'true' || echo 'false')"
           export __DECAP_IMAGE_NAME__="itsmejoeeey/docker-decap-cms-standalone"
           export __DECAP_IMAGE_TAG__="latest"
+          export __CMS_BACKEND_DEBUG__="${{ vars.CMS_BACKEND_DEBUG || 0 }}"
+          export __ORIGINS__="${{ vars.ORIGINS }}"
+          export __OAUTH_CLIENT_ID__="${{ vars.OAUTH_GITHUB_CLIENT_ID }}"
+          export __OAUTH_CLIENT_SECRET__="${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}"
+
 
           # Substitute variables in template
           echo "Extracting __*__ variables from template: $NOMAD_JOB_TEMPLATE"
