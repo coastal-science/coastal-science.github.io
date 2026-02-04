@@ -715,15 +715,15 @@ jobs:
           echo "Current job (keep): ${CURRENT_JOB}"
           echo "Looking for other jobs with prefix: ${PREFIX}"
           # List all jobs and filter by prefix in the first column; skip header row.
-          # Using unfiltered `nomad job status` avoids differences in output format when a prefix matches a single job.
-          JOBS=$(nomad job status 2>/dev/null | awk -v p="${PREFIX}" 'NR>1 && index($1, p) == 1 {print $1}' || true)
+          JOBS=$(NOMAD_TOKEN="${NOMAD_TOKEN}" NOMAD_ADDR="${NOMAD_ADDR}" nomad job status 2>/dev/null \
+            | awk -v p="${PREFIX}" 'NR>1 && index($1, p) == 1 {print $1}' || true)
           echo "Jobs: ${JOBS}"
           CLEANED=0
           for job in ${JOBS}; do
             [ -z "${job}" ] && continue
             if [ "${job}" != "${CURRENT_JOB}" ]; then
               echo "Stopping and purging previous PR job: ${job}"
-              nomad job stop -purge -verbose "${job}" || true
+              NOMAD_TOKEN="${NOMAD_TOKEN}" NOMAD_ADDR="${NOMAD_ADDR}" nomad job stop -purge -verbose "${job}" || true
               CLEANED=$((CLEANED + 1))
             fi
           done
