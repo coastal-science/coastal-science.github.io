@@ -39,6 +39,11 @@ on:
     #     description: The Nomad job template to use for the deployment (e.g. nomad/template.nomad or nomad/decap.template.nomad).
     #     type: string
     #     default: nomad/template.nomad
+    #   use_decap:
+    #     required: false
+    #     description: Override USE_DECAP ("true" or "false"); leave empty for branch-based determination.
+    #     type: string
+    #     default: ""
     #   target:
     #     required: false
     #     type: string
