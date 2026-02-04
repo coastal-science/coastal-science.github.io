@@ -456,7 +456,8 @@ jobs:
             if [ -n "${{ github.head_ref }}" ]; then
               BRANCH_NAME="${{ github.head_ref }}"
               IMAGE_TAG="pr-${PR_NUMBER}"
-              ENVIRONMENT_SUFFIX="pr-${PR_NUMBER}"
+              ENVIRONMENT_SUFFIX="pr-${PR_NUMBER}-${GITHUB_SHORT_SHA}"
+              echo "::notice title=PR environment suffix::pr-${PR_NUMBER}-${GITHUB_SHORT_SHA}"
             fi
           else
             if [ -n "${GITHUB_REF_NAME}" ]; then
