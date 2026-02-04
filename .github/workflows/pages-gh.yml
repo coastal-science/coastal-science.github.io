@@ -414,6 +414,7 @@ jobs:
       nomad_url_1: ${{ steps.set-env.outputs.nomad_url }}
       environment_suffix: ${{ steps.set-env.outputs.environment_suffix }}
       environment: ${{ steps.set-env.outputs.environment }}
+      job_name: ${{ steps.setup-nomad.outputs.job_name }}
 
     steps:
       - name: Determine environment and suffix
@@ -682,9 +683,9 @@ jobs:
             echo "${{ steps.set-env.outputs.nomad_url }}" >> "$GITHUB_STEP_SUMMARY"
           fi
 
-  # Cleanup merged PR's Nomad job after main deploy succeeds (push run only). PR number from merge commit message.
-  cleanup-merged-pr-deployment:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  # Cleanup PR Nomad jobs after deploy: (1) synchronize → stop previous PR job(s) for this PR; (2) push main → stop merged PR's job. Both need deploy-service. Conditionals on steps.
+  cleanup-pr-after-deploy:
+    if: (github.event_name == 'pull_request' && github.event.action == 'synchronize') || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     needs:
       - deploy-service
     permissions:
@@ -697,7 +698,41 @@ jobs:
       NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       SERVICE: "${{ vars.__SERVICE__ }}"
     steps:
+      - name: Prepare Environment. Setup `nomad` CLI
+        uses: hashicorp/setup-nomad@v1.0.0
+        with:
+          version: ${{ env.NOMAD_VERSION }}
+
+      # --- synchronize: stop previous PR job(s) for this PR (keep current) ---
+      - name: Stop and purge previous PR job(s) for this PR
+        if: github.event_name == 'pull_request' && github.event.action == 'synchronize'
+        env:
+          NOMAD_TOKEN: ${{ secrets.NOMAD_SERVER_TOKEN }}
+          NOMAD_ADDR: ${{ secrets.NOMAD_SERVER_ADDRESS }}
+          CURRENT_JOB: ${{ needs.deploy-service.outputs.job_name }}
+          PREFIX: ${{ env.SERVICE }}-pr-${{ github.event.pull_request.number }}-
+        run: |
+          echo "Current job (keep): ${CURRENT_JOB}"
+          echo "Looking for other jobs with prefix: ${PREFIX}"
+          JOBS=$(nomad job status "${PREFIX}" 2>/dev/null | awk 'NR>1 {print $1}' || true)
+          CLEANED=0
+          for job in ${JOBS}; do
+            [ -z "${job}" ] && continue
+            if [ "${job}" != "${CURRENT_JOB}" ]; then
+              echo "Stopping and purging previous PR job: ${job}"
+              nomad job stop -purge -verbose "${job}" || true
+              CLEANED=$((CLEANED + 1))
+            fi
+          done
+          if [ "${CLEANED}" -eq 0 ]; then
+            echo "No previous PR jobs to clean up."
+          else
+            echo "Cleaned up ${CLEANED} previous PR job(s)."
+          fi
+
+      # --- push main: stop merged PR's job (from merge commit message and PR head SHA) ---
       - name: Get merged PR number from commit message
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         id: pr
         run: |
           MSG="${{ github.event.head_commit.message }}"
@@ -707,18 +742,30 @@ jobs:
             echo "Found merged PR #${PR_NUM}"
           else
             echo "pr_number=" >> $GITHUB_OUTPUT
-            echo "Not a merge commit or no PR number; skipping PR job cleanup"
           fi
+      - name: Checkout (for merge commit parent)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.pr.outputs.pr_number != ''
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Determine Nomad job name (SERVICE-pr-N-SHORT_SHA)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.pr.outputs.pr_number != ''
+        id: job-name-merged
+        run: |
+          PR_NUM="${{ steps.pr.outputs.pr_number }}"
+          SHORT_SHA=$(git rev-parse ${{ github.sha }}^2 | cut -c1-7)
+          echo "job_name=${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "Nomad job name: ${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}"
       - name: Cleanup merged PR Nomad job
-        if: steps.pr.outputs.pr_number != ''
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.pr.outputs.pr_number != ''
         uses: ./.github/actions/cleanup-pr-nomad-job
         with:
-          job_name: ${{ env.SERVICE }}-pr-${{ steps.pr.outputs.pr_number }}
+          job_name: ${{ steps.job-name-merged.outputs.job_name }}
           nomad_version: ${{ env.NOMAD_VERSION }}
           nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
           nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
 
-  # Cleanup Nomad deployment when PR is closed (without merge). When merged, cleanup runs in push run after deploy-service (cleanup-merged-pr-deployment).
+  # Cleanup Nomad deployment when PR is closed (without merge). When merged, cleanup runs in cleanup-pr-after-deploy. Job name = SERVICE-pr-N-SHORT_SHA.
   cleanup-pr-deployment:
     if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == false
     permissions:
@@ -731,10 +778,17 @@ jobs:
       NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       SERVICE: "${{ vars.__SERVICE__ }}"
     steps:
+      - name: Determine Nomad job name (SERVICE-pr-N-SHORT_SHA)
+        id: job-name
+        run: |
+          PR_NUM="${{ github.event.pull_request.number }}"
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          echo "job_name=${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "Nomad job name: ${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}"
       - name: Cleanup PR Nomad job
         uses: ./.github/actions/cleanup-pr-nomad-job
         with:
-          job_name: ${{ env.SERVICE }}-pr-${{ github.event.pull_request.number }}
+          job_name: ${{ steps.job-name.outputs.job_name }}
           nomad_version: ${{ env.NOMAD_VERSION }}
           nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
           nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
