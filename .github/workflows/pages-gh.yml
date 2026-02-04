@@ -512,6 +512,10 @@ jobs:
           export __RESEARCHER__="${{ env.__RESEARCHER__ }}"
           export __REGISTRY_USERNAME__="${{ env.__REGISTRY_USERNAME__ }}"
           export __REGISTRY_PASSWORD__="${{ env.__REGISTRY_PASSWORD__ }}"
+          
+          # USE_DECAP=true when ENVIRONMENT (lowercase) is main, prod, or production; else false
+          env_lower=$(echo "${ENVIRONMENT}" | tr '[:upper:]' '[:lower:]')
+          export __USE_DECAP__="$([ "$env_lower" = "main" ] || [ "$env_lower" = "prod" ] || [ "$env_lower" = "production" ] && echo 'true' || echo 'false')"
 
           # Substitute variables in template
           echo "Extracting __*__ variables from template: $NOMAD_JOB_TEMPLATE"
