@@ -491,7 +491,7 @@ jobs:
 
       - name: Prepare Environment. Setup `nomad` CLI.
         id: setup-nomad-cli
-        uses: hashicorp/setup-nomad@main
+        uses: hashicorp/setup-nomad@v1
         with:
           version: ${{ env.NOMAD_VERSION}} # Specify the desired version, or "latest"
         
@@ -659,7 +659,7 @@ jobs:
     steps:
       - name: Prepare Environment. Setup `nomad` CLI.
         id: setup-nomad-cli-cleanup
-        uses: hashicorp/setup-nomad@main
+        uses: hashicorp/setup-nomad@v1
         with:
           version: ${{ env.NOMAD_VERSION}} # Specify the desired version, or "latest"
           
