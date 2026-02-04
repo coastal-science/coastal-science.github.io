@@ -20,6 +20,11 @@ parse_bool() {
 # USE_DECAP=true  -> Decap CMS: decap.conf + server.conf
 # USE_DECAP=false or unset -> static only: default.conf (safe default)
 USE_DECAP=$(parse_bool "${USE_DECAP:-false}") || exit 1
+if [ "$USE_DECAP" = true ]; then
+    echo "USE_DECAP=true: Decap CMS mode enabled. Will generate decap.conf and (if needed) upstreams for CMS/backend."
+else
+    echo "USE_DECAP=false: Decap CMS mode disabled or unset. Serving static-only site with default.conf."
+fi
 
 # sites-available = templates (processed by envsubst); 
 # sites-enabled = generated conf ready for nginx to run
