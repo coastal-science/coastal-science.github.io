@@ -403,12 +403,12 @@ jobs:
             ENVIRONMENT="development"
             ENVIRONMENT_SUFFIX="dev"
             NOMAD_FILE="${{ vars.__SERVICE__ }}.nomad"
-            # Extract branch name from refs/heads/branch-name, fallback to commit SHA
-            # GITHUB_REF is automatically set by GitHub Actions (e.g., refs/heads/branch-name)
-            # GITHUB_SHA is automatically set by GitHub Actions (full commit SHA)
-          fi    
+          fi
 
           echo NOMAD_FILE=${NOMAD_FILE}
+          # Extract branch name from refs/heads/branch-name, fallback to commit SHA
+          # GITHUB_REF is automatically set by GitHub Actions (e.g., refs/heads/branch-name)
+          # GITHUB_SHA is automatically set by GitHub Actions (full commit SHA)
           BRANCH_NAME="$GITHUB_REF_NAME"
           PR_NUMBER="${{ github.event.pull_request.number }}"
           
@@ -421,11 +421,6 @@ jobs:
               BRANCH_NAME="${{ github.head_ref }}"
               IMAGE_TAG="pr-${PR_NUMBER}"
             fi
-          # fi
-          #   else
-          #     # Fallback to using GITHUB_REF_NAME (could be empty on some events)
-          #     BRANCH_NAME="${GITHUB_REF_NAME}"
-          #   fi
           else
             if [ -n "${GITHUB_REF_NAME}" ]; then
               IMAGE_TAG="${GITHUB_REF_NAME}"
