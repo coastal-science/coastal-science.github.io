@@ -21,32 +21,44 @@ parse_bool() {
 # USE_DECAP=false or unset -> static only: default.conf (safe default)
 USE_DECAP=$(parse_bool "${USE_DECAP:-false}") || exit 1
 
-# Process site configurations from sites-available using envsubst
-# and copy them to /etc/nginx/conf.d/
+# sites-available = templates (processed by envsubst); 
+# sites-enabled = generated conf ready for nginx to run
+mkdir -p /etc/nginx/sites-enabled
+
 if [ -d "/etc/nginx/sites-available" ]; then
-    # Use find to handle cases where no .template files exist
-    find /etc/nginx/sites-available -maxdepth 1 -name "*.template" -type f | while read -r template_file; do
-        # Get the base filename without path and .template suffix
-        basefile=$(basename "$template_file" .template)
-        [ -z "$basefile" ] && continue
-        # Process with envsubst, only substituting specific variables
-        # This prevents envsubst from replacing nginx variables like $http_host, $remote_addr, etc.
-        envsubst '$DOMAIN' < "$template_file" > "/etc/nginx/conf.d/$basefile"
-        echo "Processed $template_file -> /etc/nginx/conf.d/$basefile"
-    done
+    if [ "$USE_DECAP" = true ]; then
+        # Decap CMS: server block with /auth, /callback -> cms_upstream; / -> static
+        if [ -f "/etc/nginx/sites-available/decap.conf.template" ]; then
+            envsubst '$DOMAIN' < /etc/nginx/sites-available/decap.conf.template > /etc/nginx/sites-enabled/decap.conf
+            echo "Processed decap.conf.template -> /etc/nginx/sites-enabled/decap.conf (USE_DECAP=true)"
+        fi
+    else
+        # Preview/other: static-only server block
+        if [ -f "/etc/nginx/sites-available/default.conf.template" ]; then
+            envsubst '$DOMAIN' < /etc/nginx/sites-available/default.conf.template > /etc/nginx/sites-enabled/default.conf
+            echo "Processed default.conf.template -> /etc/nginx/sites-enabled/default.conf (USE_DECAP=false)"
+        fi
+    fi
+fi
+# Ensure nginx loads sites-enabled (conf.d/*.conf is included by default)
+printf '%s\n' 'include /etc/nginx/sites-enabled/*.conf;' > /etc/nginx/conf.d/00-sites-enabled.conf
+
+# Upstreams for Decap (main/production/prod only). Skip if server.conf already present (e.g. Nomad mount).
+if [ "$USE_DECAP" = true ] && [ ! -f /etc/nginx/conf.d/server.conf ]; then
+    if [ -f /etc/nginx/conf.d/server.conf.template ]; then
+        envsubst '$SITE_HOST_PORT $CMS_HOST_PORT' < /etc/nginx/conf.d/server.conf.template > /etc/nginx/conf.d/server.conf
+        echo "Processed server.conf.template -> /etc/nginx/conf.d/server.conf"
+    elif [ -f /etc/nginx/conf.d/server.conf.local ]; then
+        cp /etc/nginx/conf.d/server.conf.local /etc/nginx/conf.d/server.conf
+        echo "Copied server.conf.local -> /etc/nginx/conf.d/server.conf"
+    fi
 fi
 
+echo "All *.conf files in /etc/nginx/conf.d/, /etc/nginx/sites-enabled/, /etc/nginx/sites-available/, and /etc/nginx/sites-unavailable/:"
+find /etc/nginx/conf.d /etc/nginx/sites-enabled /etc/nginx/sites-available /etc/nginx/sites-unavailable -maxdepth 1 -name "*.conf" 2>/dev/null | tr '\n' ' '; echo
 
-if [ ! -f /etc/nginx/conf.d/server.conf ] && [ -f /etc/nginx/conf.d/server.conf.local ]; then
-    mv /etc/nginx/conf.d/server.conf.local /etc/nginx/conf.d/server.conf
-    echo "Renamed server.conf.local to server.conf in /etc/nginx/conf.d/"
-fi
-
-echo "All *.conf files in /etc/nginx/conf.d/, /etc/nginx/sites-available/, and /etc/nginx/sites-unavailable/:"
-find /etc/nginx/conf.d /etc/nginx/sites-available /etc/nginx/sites-unavailable -maxdepth 1 -name "*.conf" | tr '\n' ' '; echo
-
-echo "Contents of /etc/nginx/conf.d/:"
-find /etc/nginx/conf.d -maxdepth 1 -name "*.conf" -type f | while read -r conf_file; do
+echo "Contents of /etc/nginx/conf.d/ and /etc/nginx/sites-enabled/:"
+find /etc/nginx/conf.d /etc/nginx/sites-enabled -maxdepth 1 -name "*.conf" -type f 2>/dev/null | while read -r conf_file; do
     echo "==> $conf_file"
     cat "$conf_file"
     echo ""
