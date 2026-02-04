@@ -794,7 +794,7 @@ jobs:
           nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
           
   # Cleanup workspace on the runner
-  cleanup:
+  cleanup-runner-workspace:
     if: ${{ always() }}
     permissions: {}
     needs: 
