@@ -41,6 +41,7 @@ if [ -d "/etc/nginx/sites-available" ]; then
         # Preview/other: static-only server block
         if [ -f "/etc/nginx/sites-available/default.conf.template" ]; then
             envsubst '$DOMAIN' < /etc/nginx/sites-available/default.conf.template > /etc/nginx/sites-enabled/default.conf
+            echo "Using a default.conf from the repo instead of one shipped with the image. This is a workaround for the fact that some images ship with a default.conf , others do not."
             echo "Processed default.conf.template -> /etc/nginx/sites-enabled/default.conf (USE_DECAP=false)"
         fi
     fi
