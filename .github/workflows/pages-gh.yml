@@ -425,7 +425,7 @@ jobs:
           GITHUB_SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             ENVIRONMENT="production" # TODO: suspicion that the variable is unused and can be removed
-            ENVIRONMENT_SUFFIX="latest"
+            ENVIRONMENT_SUFFIX="prod"
             NOMAD_JOB_TEMPLATE=nomad/decap.template.nomad
             NOMAD_FILE="${{ vars.__SERVICE__ }}.nomad"
             IMAGE_TAG="main" # branch name of production main branch
