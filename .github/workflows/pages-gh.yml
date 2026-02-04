@@ -438,7 +438,8 @@ jobs:
           github.head_ref=${{ github.head_ref }}, \
           PR_NUMBER=${PR_NUMBER}, \
           IMAGE_TAG=${IMAGE_TAG}, \
-          NOMAD_JOB_TEMPLATE=${NOMAD_JOB_TEMPLATE}
+          NOMAD_JOB_TEMPLATE=${NOMAD_JOB_TEMPLATE}, \ 
+          NOMAD_FILE=${NOMAD_FILE}
           
           # Construct URL from Nomad template pattern: ${__SERVICE__}-${__ENVIRONMENT__}.${__RESEARCHER__}.researchcomputinggroup.ca
           NOMAD_URL="https://${{ vars.__SERVICE__ }}-${ENVIRONMENT_SUFFIX}.${{ secrets.__RESEARCHER__ }}.researchcomputinggroup.ca"
