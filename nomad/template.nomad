@@ -1,4 +1,8 @@
 job "${__SERVICE__}-${__ENVIRONMENT__}" {
+  meta {
+    run_uuid = "${uuidv4()}"
+  }
+
   datacenters = ${__DATACENTERS__}
   namespace = "${__NAMESPACE__}"
 
@@ -7,7 +11,7 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
     operator  = "set_contains"
     value     = "non-data-portal"
   }
-  
+
   constraint {
     attribute = "${meta.role}"
     operator  = "!="
@@ -35,7 +39,7 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
   }
 
   group "${__SERVICE__}-${__ENVIRONMENT__}" {
-      count = 2
+      count = 1
 
       scaling {
         enabled = true
@@ -53,11 +57,39 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
       driver = "${__JOB_DRIVER__}"
       config {
         image = "${__IMAGE_NAME__}:${__IMAGE_TAG__}"
+        image_pull_timeout = "10m"
         ports = ["http"]
+        force_pull = true
         auth {
           username = "${__REGISTRY_USERNAME__}"
           password = "${__REGISTRY_PASSWORD__}"
         }
+        volumes = [
+          "local/server.conf:/etc/nginx/conf.d/server.conf:ro"
+        ]
+      }
+
+      template {
+        data = <<EOH
+upstream site_upstream {
+    # Using env for now. TODO: Lookup service with service discovery/service mesh.
+    server {{ env "NOMAD_ADDR_http" }};
+}
+upstream cms_upstream {
+    # Using env for now. TODO: Lookup service with service discovery/service mesh.
+    # server {{ env "NOMAD_ADDR_decap_api" }};
+    
+    # TODO: Temporarily reusing site_upstream since decap_api is not deployed yet.
+    server {{ env "NOMAD_ADDR_http" }};
+}
+EOH
+        destination = "local/server.conf"
+        change_mode = "restart"
+      }
+
+      env {
+        # true = Decap CMS (decap.conf + server.conf); false = static only (default.conf)
+        USE_DECAP = "${__USE_DECAP__}"
       }
 
     service {
@@ -79,7 +111,7 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
     }
 
     resources {
-      cpu = 500
+      cpu    = 500
       memory = 256
       }
 

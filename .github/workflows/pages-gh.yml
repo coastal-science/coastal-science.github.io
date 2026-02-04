@@ -1,17 +1,49 @@
-# Sample workflow for building and deploying a Hugo site to GitHub Pages
-name: Deploy Hugo site to Pages and build docker image [GitHub.com]
-run-name: Build/deploy Pages/Production
+# Workflow for building and deploying Hugo site (Production + Preview)
+name: Deploy Hugo site - Production and Preview
+run-name: ${{ github.event_name == 'pull_request' && format('Preview [PR {0} - {1}] {2}  ', github.event.pull_request.number, github.head_ref, github.event.head_commit.message) || format('[{0}] {1}', github.ref_name, github.event.head_commit.message) }}
 
 on:
-  # Runs on pushes targeting the default branch
+  # Only push to default branch — avoids double trigger when pushing to a PR branch (push + pull_request synchronize)
   push:
-    branches: ["main", "gha-patch-reusable-workflow"]
+    branches: [main]
 
-  # Allows you to run this workflow manually from the Actions tab
+  # Runs on pull requests for Deploy Preview Links (one run per commit on a PR)
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+  # Allows you to run this workflow manually from the Actions tab (choice input with options)
   workflow_dispatch:
-  
-  workflow_call: # allows reusing the workflow
+    inputs:
+      nomad_job_template:
+        required: false
+        description: The Nomad job template to use for the deployment.
+        type: choice
+        options:
+          - nomad/template.nomad
+          - nomad/decap.template.nomad
+        default: nomad/template.nomad
+      use_decap:
+        required: false
+        description: Override Decap usage. Set to "true" or "false" to override branch-based determination; leave as "auto" for automatic.
+        type: choice
+        options:
+          - auto
+          - "true"
+          - "false"
+        default: auto
+
+  workflow_call: # allows reusing the workflow (string input; choice not supported for workflow_call)
     # inputs:
+    #   nomad_job_template:
+    #     required: false
+    #     description: The Nomad job template to use for the deployment (e.g. nomad/template.nomad or nomad/decap.template.nomad).
+    #     type: string
+    #     default: nomad/template.nomad
+    #   use_decap:
+    #     required: false
+    #     description: Override USE_DECAP ("true" or "false"); leave empty for branch-based determination.
+    #     type: string
+    #     default: ""
     #   target:
     #     required: false
     #     type: string
@@ -24,7 +56,7 @@ on:
 
 # Allow one concurrent deployment
 concurrency:
-  group: ${{ github.repository }}-coastal-pages
+  group: ${{ github.repository }}-${{ github.sha }}
   cancel-in-progress: true
 
 jobs:
@@ -103,7 +135,6 @@ jobs:
           
       - name: Set safe directory workaround
         run: |
-          # git config --global --add safe.directory /__w/coastal-science.github.io/coastal-science.github.io
           git config --global --add safe.directory /__w/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}
           
       - name: Build with Hugo
@@ -144,11 +175,14 @@ jobs:
         uses: actions/deploy-pages@v4
 
 ############################################
-## Create and publish a prod docker image ##
+## Create and publish docker image        ##
+## (handles both production and preview)  ##
 ############################################
   build-website-and-container-build:
     environment: docker-image
     # if: github.ref == 'refs/heads/main'
+    # Skip build if PR is closed (cleanup job handles that)
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     needs:
       - generate-timestamp
     env:
@@ -170,6 +204,8 @@ jobs:
 
     outputs: 
       tags: ${{ steps.meta.outputs.tags }}
+      commit_sha: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+      pr_number: ${{ github.event.pull_request.number || '' }}
 
     steps:
       - name: Checkout
@@ -182,10 +218,8 @@ jobs:
        
       - name: Set safe directory workaround
         run: |
-          # git config --global --add safe.directory /__w/coastal-science.github.io/coastal-science.github.io
           git config --global --add safe.directory /__w/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}
 
-      
       - name: Generate tags
         id: tags
         run: |
@@ -241,7 +275,6 @@ jobs:
           echo The current workspace repo is..
           pwd
 
-      # GH Actions
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
@@ -251,8 +284,8 @@ jobs:
       - name: Build and Minify with Hugo
         env:
           # For maximum backward compatibility with Hugo modules
-          HUGO_ENVIRONMENT: production
-          HUGO_ENV: production
+          HUGO_ENVIRONMENT: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+          HUGO_ENV: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
         run: |
           hugo \
             --gc \
@@ -265,7 +298,6 @@ jobs:
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
         uses: docker/login-action@v3 #343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
         with:
           registry: ${{ env.REGISTRY }}
@@ -285,10 +317,14 @@ jobs:
             # branch event
             type=ref,event=branch
             # pull request event
-            type=ref,event=pr
+            type=ref,event=pr,format=pr-{{number}}
             # minimal (short sha)
             type=sha
+            # pull request sha with prefix
+            type=sha,prefix=pr-
+            # commit date tag (for branches only)
             type=raw,value=${{ steps.tags.outputs.commit_date }}
+            # latest tag (for branches only)
             type=raw,value=latest
 
       - name: Build and push Docker image
@@ -329,31 +365,30 @@ jobs:
           
       #     docker push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
   
-  # Deploy a prod docker image to orchestrator          
-  deploy-service-prod:
+  # Deploy docker image to orchestrator (handles both production and preview)
+  deploy-service:
+    # Skip deployment if PR is closed (cleanup job handles that)
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     # if: false
     # if: github.ref == 'refs/heads/main'
-    environment: 
-      name: docker-image
-      url: https://${{ vars.HUGO_BASEURL }} # may contain secrets.__DOMAIN_NAME__
-      # url: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
-    permissions:
-      contents: read
-      packages: read
     needs:
       - generate-timestamp
       - build-website-and-container-build
-    outputs:
-      prod_url: https://${{ secrets.__DOMAIN_NAME__ }}
-      nomad_url_1: https://${{ vars.__SERVICE__ }}-${{ steps.set-env.outputs.environment_suffix }}.${{ vars.__RESEARCHER__ }}.researchcomputinggroup.ca
-      environment_suffix: ${{ steps.set-env.outputs.environment_suffix }}
-      environment: ${{ steps.set-env.outputs.environment }}
-      
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
+    environment: 
+      name: docker-image
+      # url: https://${{ vars.HUGO_BASEURL }}
+      url: ${{ steps.set-env.outputs.nomad_url }}
+      # url: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
     runs-on: ubuntu-latest
     # runs-on: [ self-hosted, rcg ]
-    container:
-      image: alpine:3.18
-    env: 
+    # container:
+    #   image: alpine:3.18
+    env:
+      NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       REPO_NAME: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
       SERVICE: "${{ vars.__SERVICE__ }}"
       JOB_DRIVER: "${{ vars.__JOB_DRIVER__ }}"
@@ -363,35 +398,117 @@ jobs:
       # __IMAGE_NAME__="${{ secrets.REGISTRY_SERVER }}/${{ env.CONTAINER_PROJECT }}/${{ env.SERVICE }}"
       IMAGE_NAME: ${{ vars.__REGISTRY__ }}/${{ github.repository }}
       FORCE_PULL: ${{ vars.__IMAGE_FORCE_PULL__ }}
-      # needs.generate-timestamp.outputs.TIMESTAMP or even better commit_date
       #__DATACENTERS__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
       # __NAMESPACE__="${{ secrets.NOMAD_SERVER_NAMESPACE }}" \
       NOMAD_SERVER_DATACENTERS: "${{ vars.__DATACENTERS__ }}"
       NOMAD_SERVER_NAMESPACE:  "${{ vars.__NAMESPACE__ }}"
-      __REGISTRY_USERNAME__: "${{ github.actor }}"  # "${{ secrets.GITLAB_CONTAINER_USERNAME }}"
-      __REGISTRY_PASSWORD__: "${{ secrets.GITHUB_TOKEN }}"  # "${{ secrets.GITLAB_CONTAINER_TOKEN }}"
-      # __REGISTRY__="${{ secrets.NOMAD_SERVER_DATACENTERS }}" \
+      __REGISTRY_USERNAME__: "${{ github.actor }}"
+      __REGISTRY_PASSWORD__: "${{ secrets.GITHUB_TOKEN }}"
       __RESEARCHER__:  "${{ secrets.__RESEARCHER__ }}"
+
+      PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+      PR_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+
+    outputs:
+      url: ${{ steps.set-env.outputs.nomad_url }}
+      nomad_url_1: ${{ steps.set-env.outputs.nomad_url }}
+      environment_suffix: ${{ steps.set-env.outputs.environment_suffix }}
+      environment: ${{ steps.set-env.outputs.environment }}
 
     steps:
       - name: Determine environment and suffix
         id: set-env
         run: |
+          # TODO: Option (based on needs) to deploy to nomad url with ENVIRONMENT_SUFFIX=commit_sha (if not a PR)
+          # GITHUB_SHA_SHORT="${{ github.sha }}".SubString(0, 8))"
+          GITHUB_SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            ENVIRONMENT="production"
+            ENVIRONMENT="production" # TODO: suspicion that the variable is unused and can be removed
             ENVIRONMENT_SUFFIX="latest"
+            NOMAD_JOB_TEMPLATE=nomad/decap.template.nomad
+            NOMAD_FILE="${{ vars.__SERVICE__ }}.nomad"
+            IMAGE_TAG="main" # branch name of production main branch
           else
             ENVIRONMENT="development"
             ENVIRONMENT_SUFFIX="dev"
+            NOMAD_JOB_TEMPLATE=nomad/template.nomad
+            NOMAD_FILE="${{ vars.__SERVICE__ }}.nomad"
           fi
+
+          # Update from input when it exists and is different from branch-based value
+          if [ -n "${{ inputs.nomad_job_template }}" ] && [ "${{ inputs.nomad_job_template }}" != "${NOMAD_JOB_TEMPLATE}" ]; then
+            echo "::notice title=Nomad template updated::nomad_job_template was '${NOMAD_JOB_TEMPLATE}' (branch-based), updated to '${{ inputs.nomad_job_template }}' (input)."
+            NOMAD_JOB_TEMPLATE="${{ inputs.nomad_job_template }}"
+          fi
+
+          echo NOMAD_FILE=${NOMAD_FILE}
+          # Extract branch name from refs/heads/branch-name, fallback to commit SHA
+          # GITHUB_REF is automatically set by GitHub Actions (e.g., refs/heads/branch-name)
+          # GITHUB_SHA is automatically set by GitHub Actions (full commit SHA)
+          BRANCH_NAME="$GITHUB_REF_NAME"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          
+          # If GITHUB_REF_NAME matches '<pr_number>/merge', extract just the branch name for BRANCH_NAME.
+          # Otherwise, use GITHUB_REF_NAME as-is.
+          # GITHUB_REF_NAME format for PRs: "<pr_number>/merge"
+          if [[ "${GITHUB_REF_NAME}" =~ ^[0-9]+/merge$ ]]; then
+            # For PRs, get the source branch name from github.head_ref if available
+            if [ -n "${{ github.head_ref }}" ]; then
+              BRANCH_NAME="${{ github.head_ref }}"
+              IMAGE_TAG="pr-${PR_NUMBER}"
+            fi
+          else
+            if [ -n "${GITHUB_REF_NAME}" ]; then
+              IMAGE_TAG="${GITHUB_REF_NAME}"
+            else
+              IMAGE_TAG="${GITHUB_SHORT_SHA}"
+            fi
+          fi
+            
+          echo ENVIRONMENT=${ENVIRONMENT}, \
+          BRANCH_NAME=${BRANCH_NAME}, \
+          GITHUB_REF=${GITHUB_REF}, \
+          GITHUB_REF_NAME=${GITHUB_REF_NAME}, \
+          github.head_ref=${{ github.head_ref }}, \
+          PR_NUMBER=${PR_NUMBER}, \
+          IMAGE_TAG=${IMAGE_TAG}, \
+          NOMAD_JOB_TEMPLATE=${NOMAD_JOB_TEMPLATE}, \ 
+          NOMAD_FILE=${NOMAD_FILE}
+          
+          # Construct URL from Nomad template pattern: ${__SERVICE__}-${__ENVIRONMENT__}.${__RESEARCHER__}.researchcomputinggroup.ca
+          NOMAD_URL="https://${{ vars.__SERVICE__ }}-${ENVIRONMENT_SUFFIX}.${{ secrets.__RESEARCHER__ }}.researchcomputinggroup.ca"
+          
+          # Determine WEB_URL based on event type
+          # WEB_URL="${{ github.ref == 'refs/heads/main' && secrets.__DOMAIN_NAME__ || 'sinkhole' }}"
+          # Determine WEB_URL and PREVIEW_URL based on event type
+          # Using shell logic below instead of GitHub expressions to avoid parsing issues
+          WEB_URL="sinkhole.${__RESEARCHER__}.researchcomputinggroup.ca"
+          # PREVIEW_URL="" # TODO: (remove) PREVIEW_URL was used for PRs, but now we use NOMAD_URL
+          # if [ "${{ github.event_name }}" = "pull_request" ]; then
+          #   # For PRs
+          #   PREVIEW_URL="${NOMAD_URL}"
+          # fi
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            # For production main branch
+            WEB_URL="${{ secrets.__DOMAIN_NAME__ }}"
+          fi
+          
           echo "environment=${ENVIRONMENT}" >> $GITHUB_OUTPUT
           echo "environment_suffix=${ENVIRONMENT_SUFFIX}" >> $GITHUB_OUTPUT
-          echo "Determined environment: ${ENVIRONMENT}, suffix: ${ENVIRONMENT_SUFFIX}"
-      - name: Prepare Environment
-        run: |
-             apk update
-             apk add gettext nomad git
+          echo "nomad_url=${NOMAD_URL}" >> $GITHUB_OUTPUT
+          echo "web_url=${WEB_URL}" >> $GITHUB_OUTPUT
+          echo "nomad_job_template=${NOMAD_JOB_TEMPLATE}" >> $GITHUB_OUTPUT
+          echo "nomad_file=${NOMAD_FILE}" >> $GITHUB_OUTPUT
+          echo "preview_url=${PREVIEW_URL}" >> $GITHUB_OUTPUT
+          echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+          echo "Determined environment: ${ENVIRONMENT}, suffix: ${ENVIRONMENT_SUFFIX}, image_tag: ${IMAGE_TAG}"
 
+      - name: Prepare Environment. Setup `nomad` CLI.
+        id: setup-nomad-cli
+        uses: hashicorp/setup-nomad@v1.0.0
+        with:
+          version: ${{ env.NOMAD_VERSION}} # Specify the desired version, or "latest"
+        
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -402,68 +519,242 @@ jobs:
 
       - name: Set safe directory workaround
         run: |
-          # git config --global --add safe.directory /__w/coastal-science.github.io/coastal-science.github.io
           git config --global --add safe.directory /__w/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}
       
       - name: Test Nomad
         run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad status
 
       - name: Setup Nomad Job
+        id: setup-nomad
         env:
           ENVIRONMENT_SUFFIX: ${{ steps.set-env.outputs.environment_suffix }}
           ENVIRONMENT: ${{ steps.set-env.outputs.environment }}
-          WEB_URL: "${{ github.ref == 'refs/heads/main' && secrets.__DOMAIN_NAME__ || '' }}"
-          IMAGE_TAG: ${{ steps.set-env.outputs.environment_suffix }}
+          WEB_URL: ${{ steps.set-env.outputs.web_url }}
+          NOMAD_JOB_TEMPLATE: ${{ steps.set-env.outputs.nomad_job_template }}
+          NOMAD_FILE: ${{ steps.set-env.outputs.nomad_file }}
+          IMAGE_TAG: ${{ steps.set-env.outputs.image_tag }}
+
         run: |
-             __SERVICE__="${{ env.SERVICE }}" \
-             __JOB_DRIVER__="${{ env.JOB_DRIVER }}" \
-             __ENVIRONMENT__="${{ env.ENVIRONMENT_SUFFIX }}" \
-             __WEB_URL__="${{ env.WEB_URL }}" \
-             __JOB_NAME__="${{ env.SERVICE }}-${{ env.ENVIRONMENT_SUFFIX }}" \
-             __IMAGE_NAME__="${{ env.IMAGE_NAME }}" \
-             __IMAGE_TAG__="${{ env.IMAGE_TAG }}" \
-             __IMAGE_FORCE_PULL__="${{ env.FORCE_PULL || 'false' }}" \
-             __DATACENTERS__="${{ env.NOMAD_SERVER_DATACENTERS }}" \
-             __NAMESPACE__="${{ env.NOMAD_SERVER_NAMESPACE }}" \
-             envsubst < nomad/template.nomad > ${{ env.SERVICE }}.nomad
-             cat ${{ env.SERVICE }}.nomad
+          # Use ENVIRONMENT_SUFFIX consistently for both PRs and branches
+          JOB_NAME="${{ env.SERVICE }}-${ENVIRONMENT_SUFFIX}"
+          # NOMAD_JOB_TEMPLATE="nomad/template.nomad"
+          NOMAD_JOB_TEMPLATE="${NOMAD_JOB_TEMPLATE}"
+          NOMAD_OUTPUT_FILE="${NOMAD_FILE}"
+
+          export __SERVICE__="${{ env.SERVICE }}"
+          export __JOB_DRIVER__="${{ env.JOB_DRIVER }}"
+          export __ENVIRONMENT__="${ENVIRONMENT_SUFFIX}"
+          export __WEB_URL__="${WEB_URL}"
+          export __JOB_NAME__="${JOB_NAME}"
+          export __IMAGE_NAME__="${{ env.IMAGE_NAME }}"
+          export __IMAGE_TAG__="${IMAGE_TAG}"
+          export __IMAGE_FORCE_PULL__="${{ env.FORCE_PULL || 'false' }}"
+          export __DATACENTERS__="${{ env.NOMAD_SERVER_DATACENTERS }}"
+          export __NAMESPACE__="${{ env.NOMAD_SERVER_NAMESPACE }}"
+          export __RESEARCHER__="${{ env.__RESEARCHER__ }}"
+          export __REGISTRY_USERNAME__="${{ env.__REGISTRY_USERNAME__ }}"
+          export __REGISTRY_PASSWORD__="${{ env.__REGISTRY_PASSWORD__ }}"
+          
+          # USE_DECAP: workflow input overrides branch-based determination when set
+          USE_DECAP_INPUT="${{ inputs.use_decap }}"
+          if [ -n "${USE_DECAP_INPUT}" ] && [ "${USE_DECAP_INPUT}" != "auto" ]; then
+          USE_DECAP_INPUT=$(echo "${USE_DECAP_INPUT}" | tr '[:upper:]' '[:lower:]')
+            case "${USE_DECAP_INPUT}" in
+              true | yes)
+                export __USE_DECAP__="true"
+                echo "::notice title=USE_DECAP override::use_decap input set to 'true' (overrides environment/branch-based auto determination)."
+                ;;
+              false | no)
+                export __USE_DECAP__="false"
+                echo "::notice title=USE_DECAP override::use_decap input set to 'false' (overrides environment/branch-based auto determination)."
+                ;;
+              *) echo "::warning title=Invalid use_decap::Ignoring use_decap='${USE_DECAP_INPUT}'; using environment/branch-based value." ;;
+            esac
+          fi
+          if [ -z "${__USE_DECAP__:-}" ]; then
+            env_lower=$(echo "${ENVIRONMENT}" | tr '[:upper:]' '[:lower:]')
+            export __USE_DECAP__="$([ "$env_lower" = "main" ] || [ "$env_lower" = "prod" ] || [ "$env_lower" = "production" ] && echo 'true' || echo 'false')"
+          fi
+          
+          export __DECAP_IMAGE_NAME__="itsmejoeeey/docker-decap-cms-standalone"
+          export __DECAP_IMAGE_TAG__="latest"
+          export __CMS_BACKEND_DEBUG__="${{ vars.CMS_BACKEND_DEBUG || 0 }}"
+          export __ORIGINS__="${{ vars.ORIGINS }}"
+          export __OAUTH_CLIENT_ID__="${{ vars.OAUTH_GITHUB_CLIENT_ID }}"
+          export __OAUTH_CLIENT_SECRET__="${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}"
+
+
+          # Substitute variables in template
+          echo "Extracting __*__ variables from template: $NOMAD_JOB_TEMPLATE"
+          echo "Output file: $NOMAD_OUTPUT_FILE"
+          # GNU gettext envsubst format: '${VAR1} ${VAR2} ${VAR3}'
+          # Extract all ${__*__} patterns, get unique variable names (with __ prefix/suffix)
+          # envsubst only replaces variables in the format string; others (e.g. ${meta.role}, ${node.unique.name}, ${NOMAD_ADDR_http}) are left unchanged.
+          SHELL_FORMAT_STRING=$(grep -oE '\$\{__[A-Z_]+__\}' "$NOMAD_JOB_TEMPLATE" | sort -u | awk '{printf "%s ", $1}')
+          if [ -z "$SHELL_FORMAT_STRING" ]; then
+            echo "Warning: No __*__ variables found in template"
+          fi
+          echo "Substituting variables: $SHELL_FORMAT_STRING"
+          envsubst "$SHELL_FORMAT_STRING" < "$NOMAD_JOB_TEMPLATE" > "$NOMAD_OUTPUT_FILE"
+
+          echo "===== Rendered Nomad job ====="
+          cat "$NOMAD_OUTPUT_FILE"
+          
+          echo "===== Validating substituted variables and rendered Nomad job ====="
+
+          # Extract all remaining __*__ variables after envsubst and report if any non-substituted variables remain
+          REMAINING_SUBSTITUTIONS=$(grep -oE '\$\{__[A-Z_]+__\}' "$NOMAD_OUTPUT_FILE" | sort -u)
+          if [ -n "$REMAINING_SUBSTITUTIONS" ]; then
+            echo "Warning: The following variable substitutions were NOT completed in $NOMAD_OUTPUT_FILE:"
+            echo "$REMAINING_SUBSTITUTIONS"
+            exit 1
+          else
+            echo "All __*__ variables were successfully substituted in $NOMAD_OUTPUT_FILE."
+          fi
+          
+          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
+          nomad job validate "$NOMAD_OUTPUT_FILE" || {
+            echo "===== Nomad job file ====="
+            cat "$NOMAD_OUTPUT_FILE"
+            exit 1
+            }
+          
+          echo "nomad_file=${NOMAD_OUTPUT_FILE}" >> $GITHUB_OUTPUT
+          echo "job_name=${JOB_NAME}" >> $GITHUB_OUTPUT
 
       - name: Deploy TIMESTAMPED Website To Nomad
-        if: github.ref == 'refs/heads/main'
+        # if: github.event_name != 'pull_request'
+        id: deploy
         env:
-          ENVIRONMENT_SUFFIX: ${{ steps.set-env.outputs.environment_suffix }}
+          JOB_NAME: ${{ steps.setup-nomad.outputs.job_name }}
+          NOMAD_FILE: ${{ steps.setup-nomad.outputs.nomad_file }}
         run: |
-          # NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job stop -verbose whales-latest
+          nomad version
           NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
-            nomad job stop -verbose ${{ env.SERVICE }}-${{ env.ENVIRONMENT_SUFFIX }} \
-            || true 
-          echo "Nomad job is stopped=$?"
+            nomad job stop -verbose ${JOB_NAME} || true
+          echo "Nomad job stop result=$?"
           sleep 10s
-          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} nomad job run -verbose ${{ env.SERVICE }}.nomad
-          echo "Nomad job is deployed=$?"
           
-      - name: Summary output URLs
-        env:
-          ENVIRONMENT_SUFFIX: ${{ steps.set-env.outputs.environment_suffix }}
+          echo "Submitting job from: ${NOMAD_FILE}"
+          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
+            nomad job run -verbose "${NOMAD_FILE}"
+          DEPLOY_RESULT=$?
+          echo "Nomad job deploy result=${DEPLOY_RESULT}"
+          echo "deploy_success=$([ ${DEPLOY_RESULT} -eq 0 ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub commit status for deployment
+        if: github.event_name == 'pull_request'
         run: |
-          echo https://"${{ secrets.__DOMAIN_NAME__ }}" >> "$GITHUB_STEP_SUMMARY"
-          echo https://"${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT_SUFFIX }}.${{ vars.__RESEARCHER__ }}.researchcomputinggroup.ca" >> "$GITHUB_STEP_SUMMARY"
+          STATUS_URL="https://api.github.com/repos/${{ github.repository }}/statuses/${{ env.PR_SHA }}"
+          
+          # Determine status parameters based on deployment result
+          if [ "${{ steps.deploy.outputs.deploy_success }}" = "true" ]; then
+            STATE="success"
+            TARGET_URL="${{ steps.set-env.outputs.nomad_url }}"
+            DESCRIPTION="Preview deployment ready"
+          else
+            STATE="failure"
+            TARGET_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            DESCRIPTION="Preview deployment failed"
+          fi
+          
+          curl -X POST "${STATUS_URL}" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "{
+              \"state\": \"${STATE}\",
+              \"target_url\": \"${TARGET_URL}\",
+              \"description\": \"${DESCRIPTION}\",
+              \"context\": \"deploy/preview\"
+            }"
+          
+          echo "Created commit status: deploy/preview -> ${STATE} (${TARGET_URL})"
+
+      - name: Summary output URLs
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo https://"${{ secrets.__DOMAIN_NAME__ }}" >> "$GITHUB_STEP_SUMMARY"
+            echo "${{ steps.set-env.outputs.nomad_url }}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "${{ steps.set-env.outputs.nomad_url }}" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  # Cleanup Nomad deployment when PR is closed/merged
+  cleanup-pr-deployment:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    permissions:
+      contents: read
+      packages: read
+    environment: 
+      name: docker-image
+    runs-on: ubuntu-latest
+    # container:
+    #   image: alpine:3.18
+    env:
+      NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
+      SERVICE: "${{ vars.__SERVICE__ }}"
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+
+    steps:
+      - name: Prepare Environment. Setup `nomad` CLI.
+        id: setup-nomad-cli-cleanup
+        uses: hashicorp/setup-nomad@v1.0.0
+        with:
+          version: ${{ env.NOMAD_VERSION}} # Specify the desired version, or "latest"
+          
+      - name: Determine Nomad Job Name
+        id: job-name
+        run: |
+          JOB_NAME="${{ env.SERVICE }}-pr-${{ env.PR_NUMBER }}"
+          echo "job_name=${JOB_NAME}" >> $GITHUB_OUTPUT
+          echo "Cleaning up Nomad job: ${JOB_NAME}"
+
+      - name: Stop and Purge Nomad Job
+        id: cleanup
+        env:
+          JOB_NAME: ${{ steps.job-name.outputs.job_name }}
+        run: |
+          echo "Stopping Nomad job: ${JOB_NAME}"
+          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
+            nomad job stop -purge -verbose ${JOB_NAME} || true
+          STOP_RESULT=$?
+          echo "Nomad job stop/purge result=${STOP_RESULT}"
+          
+          # Verify job is gone
+          sleep 5s
+          if NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
+             nomad job status ${JOB_NAME} 2>/dev/null; then
+            echo "⚠️  Warning: Job ${JOB_NAME} still exists after cleanup attempt"
+            echo "cleanup_success=false" >> $GITHUB_OUTPUT
+          else
+            echo "✓ Successfully cleaned up job: ${JOB_NAME}"
+            echo "cleanup_success=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Summary
+        run: |
+          if [ "${{ steps.cleanup.outputs.cleanup_success }}" = "true" ]; then
+            echo "✓ PR deployment cleanup completed successfully" >> "$GITHUB_STEP_SUMMARY"
+            echo "Cleaned up Nomad job: ${{ steps.job-name.outputs.job_name }}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "⚠️  PR deployment cleanup completed with warnings" >> "$GITHUB_STEP_SUMMARY"
+            echo "Job: ${{ steps.job-name.outputs.job_name }}" >> "$GITHUB_STEP_SUMMARY"
+          fi
           
   # Cleanup workspace on the runner
   cleanup:
     if: ${{ always() }}
     permissions: {}
     needs: 
-      # - build-website
-      # - deploy-gh-pages
       - build-website-and-container-build
-      - deploy-service-prod
+      - deploy-service
     runs-on: ubuntu-latest
     # runs-on: [ self-hosted, rcg ]
     steps:
       - name: Current workspace
         run: du -shc ${GITHUB_WORKSPACE}
       - name: Clean Up Docker Images
+        if: needs.build-website-and-container-build.result != 'skipped'
         run: docker rmi -f $(docker images '${{ needs.build-website-and-container-build.outputs.tags }}' -a -q) || echo "No docker images found to remove...skipping removal."
       - name: Clean Up Workspace
         run: rm -rf ${GITHUB_WORKSPACE}
