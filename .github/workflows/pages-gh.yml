@@ -706,7 +706,7 @@ jobs:
           version: ${{ env.NOMAD_VERSION }}
 
       # --- synchronize: stop previous PR job(s) for this PR (keep current) ---
-      - name: Stop and purge previous PR job(s) for this PR
+      - name: 1. Stop and purge previous PR job(s) for this PR
         if: github.event_name == 'pull_request' && github.event.action == 'synchronize'
         env:
           NOMAD_TOKEN: ${{ secrets.NOMAD_SERVER_TOKEN }}
@@ -769,7 +769,7 @@ jobs:
           SHORT_SHA=$(echo "${{ steps.pr.outputs.head_sha }}" | cut -c1-7)
           echo "job_name=${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}" >> $GITHUB_OUTPUT
           echo "Nomad job name: ${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}"
-      - name: Cleanup merged PR Nomad job
+      - name: 2. Cleanup merged PR Nomad job when push to main
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.pr.outputs.pr_number != ''
         uses: ./.github/actions/cleanup-pr-nomad-job
         with:
@@ -800,7 +800,7 @@ jobs:
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
           echo "job_name=${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}" >> $GITHUB_OUTPUT
           echo "Nomad job name: ${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}"
-      - name: Cleanup PR Nomad job
+      - name: 3. Cleanup PR Nomad job when PR is closed (without merge)
         uses: ./.github/actions/cleanup-pr-nomad-job
         with:
           job_name: ${{ steps.job-name.outputs.job_name }}
