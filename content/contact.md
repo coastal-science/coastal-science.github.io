@@ -8,9 +8,9 @@ date: 2026-02-04T02:00:00.000-08:00
 
 # We are here to help you
 
-Are you curious about something? If you have any questions, comments, or feedback, please don't hesitate to reach out to us. 
+Are you curious about something? If you have any questions, comments, or feedback, please do not hesitate to reach out to us. 
 
-## Let's get in touch!
+## Let us get in touch!
 Please feel free to contact us.
 
 #### {{<icon class="fa fa-github">}}&nbsp;[See our GitHub repo](https://github.com/coastal-science)
