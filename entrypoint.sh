@@ -1,6 +1,25 @@
 #!/bin/sh
 set -e
 
+# Reusable: parse a boolean value; echoes "true" or "false", returns 1 on invalid (caller should exit).
+# Usage: VAR=$(parse_bool "${VAR:-false}") || exit 1
+# Unset/empty is treated as false. Accepts: true|True|TRUE|1|yes|Yes|YES -> true; false|False|FALSE|0|no|No|NO|"" -> false.
+parse_bool() {
+    _val="${1:-}"
+    case "$_val" in
+        true|True|TRUE|1|yes|Yes|YES)   echo "true"; return 0 ;;
+        false|False|FALSE|0|no|No|NO|"") echo "false"; return 0 ;;
+        *)
+            echo "Error: Invalid boolean value: '$_val'" >&2
+            return 1
+            ;;
+    esac
+}
+# Config chosen at runtime via USE_DECAP (set by orchestrator). Unset → false.
+# USE_DECAP=true  -> Decap CMS: decap.conf + server.conf
+# USE_DECAP=false or unset -> static only: default.conf (safe default)
+USE_DECAP=$(parse_bool "${USE_DECAP:-false}") || exit 1
+
 # Process site configurations from sites-available using envsubst
 # and copy them to /etc/nginx/conf.d/
 if [ -d "/etc/nginx/sites-available" ]; then
