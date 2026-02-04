@@ -11,11 +11,25 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
 
-  # Allows you to run this workflow manually from the Actions tab
+  # Allows you to run this workflow manually from the Actions tab (choice input with options)
   workflow_dispatch:
-  
-  workflow_call: # allows reusing the workflow
+    inputs:
+      nomad_job_template:
+        required: false
+        description: The Nomad job template to use for the deployment.
+        type: choice
+        options:
+          - nomad/template.nomad
+          - nomad/decap.template.nomad
+        default: nomad/template.nomad
+
+  workflow_call: # allows reusing the workflow (string input; choice not supported for workflow_call)
     # inputs:
+    #   nomad_job_template:
+    #     required: false
+    #     description: The Nomad job template to use for the deployment (e.g. nomad/template.nomad or nomad/decap.template.nomad).
+    #     type: string
+    #     default: nomad/template.nomad
     #   target:
     #     required: false
     #     type: string
