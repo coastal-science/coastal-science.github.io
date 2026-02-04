@@ -15,6 +15,7 @@ parse_bool() {
             ;;
     esac
 }
+
 # Config chosen at runtime via USE_DECAP (set by orchestrator). Unset → false.
 # USE_DECAP=true  -> Decap CMS: decap.conf + server.conf
 # USE_DECAP=false or unset -> static only: default.conf (safe default)
