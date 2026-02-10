@@ -7,9 +7,9 @@ date: 2026-02-10T10:18:00.000-08:00
 ---
 # We are here to help you
 
-Are you curious about something? If you have any questions, comments, or feedback, please do not hesitate to reach out to us. 
+Are you curious about something? If you have any questions, comments, or feedback, please don't hesitate to reach out to us. 
 
-## Let us get in touch!
+## Let's get in touch!
 
 Please feel free to contact us.
 
