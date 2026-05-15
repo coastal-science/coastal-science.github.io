@@ -104,7 +104,7 @@ collections:
   fields:
   - { label: 'Name', name: 'name', widget: 'string', hint: 'Name of the Partner' }
   - { label: 'Logo', name: 'image', widget: 'image', hint: 'Thumbnail image for publication entry.' }
-  - { label: 'URL', name: 'url', widget: 'string', hint: 'URL that redirects to the partner site', pattern: [ '^https?:\/\/\w+(\.\w+)+.*$', 'Must be an http(s) url.' ] }
+  - { label: 'URL', name: 'url', widget: 'string', hint: 'URL that redirects to the partner site', pattern: [ '^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?', 'Must be an http(s) url.' ] }
 
 - name: "applications"
   label: "Applications"
@@ -121,7 +121,7 @@ collections:
 
   - { label: 'Thumbnail', name: 'thumbnail', widget: 'image', required: False }
   - { label: 'Photo Credits', name: 'photocredits', widget: 'string', required: False, hint: 'Provide image credits here or leave blank. The prefix "_Photo Credits:_" will be added.' }
-  - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', required: False, hint: 'Redirect url for the thumbnail image', pattern: [ '^https?:\/\/\w+(\.\w+)+.*$', 'Must be an http(s) url.' ] }
+  - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', required: False, hint: 'Redirect url for the thumbnail image', pattern: [ '^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$', 'Must be an http(s) url.' ] }
 
   - { label: 'Description', name: 'description', widget: 'string', required: False, hint: 'Used for the page listing multiple subpages. If blank, this is populated from the first 100 characters from the page entry.' }
 
@@ -163,7 +163,7 @@ collections:
 
   - { label: 'Thumbnail image', name: 'image', widget: 'image', hint: 'Thumbnail image for partner entry.' }
   - { label: 'DOI', name: 'doi', required: False, widget: 'string', hint: 'Document Object Identifier. Use markdown for formatting and hyperlinks.' }
-  - { label: 'Publication URL', name: 'publicationurl', widget: 'string', hint: 'URL that redirects to the publication', pattern: [ '^https?:\/\/\w+(\.\w+)+.*$', 'Must be an http(s) url.' ] }
+  - { label: 'Publication URL', name: 'publicationurl', widget: 'string', hint: 'URL that redirects to the publication', pattern: [ '^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$', 'Must be an http(s) url.' ] }
 
   - { label: 'Body', name: 'body', widget: 'markdown' }
 
