@@ -669,6 +669,7 @@ jobs:
         env:
           PR_SHA: ${{ steps.setup-nomad.outputs.github_short_sha }}
         run: |
+          echo "PR_SHA=${PR_SHA}"
           STATUS_URL="https://api.github.com/repos/${{ github.repository }}/statuses/${{ env.PR_SHA }}"
           
           # Determine status parameters based on deployment result
