@@ -433,10 +433,11 @@ jobs:
           # TODO: Option (based on needs) to deploy to nomad url with ENVIRONMENT_SUFFIX=commit_sha (if not a PR)
           
           # Generate the 7-character short SHA
-          echo "GITHUB_SHORT_SHA=${FULL_SHA:0:7}" >> $GITHUB_ENV
+          GITHUB_SHORT_SHA=$(echo ${FULL_SHA}} | cut -c1-7)
           
           # GITHUB_SHA_SHORT="${{ github.sha }}".SubString(0, 8))"
           # GITHUB_SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          #echo "GITHUB_SHORT_SHA=${FULL_SHA:0:7}" >> $GITHUB_ENV
           
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             ENVIRONMENT="production" # TODO: suspicion that the variable is unused and can be removed
