@@ -522,7 +522,6 @@ jobs:
           echo "nomad_file=${NOMAD_FILE}" >> $GITHUB_OUTPUT
           echo "preview_url=${PREVIEW_URL}" >> $GITHUB_OUTPUT
           echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
-          echo "github_short_sha=${GITHUB_SHORT_SHA}" >> $GITHUB_OUTPUT
           echo "Determined environment: ${ENVIRONMENT}, suffix: ${ENVIRONMENT_SUFFIX}, image_tag: ${IMAGE_TAG}"
 
       - name: Prepare Environment. Setup `nomad` CLI.
@@ -667,10 +666,9 @@ jobs:
       - name: Create GitHub commit status for deployment
         if: github.event_name == 'pull_request'
         env:
-          PR_SHA: ${{ steps.set-env.outputs.github_short_sha }}
-          IMAGE_: ${{ steps.set-env.outputs.github_short_sha }}
+          PR_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          echo "PR_SHA=${PR_SHA} or ${{env.PR_SHA}}."
+          
           STATUS_URL="https://api.github.com/repos/${{ github.repository }}/statuses/${{ env.PR_SHA }}"
           
           # Determine status parameters based on deployment result
