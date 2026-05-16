@@ -407,7 +407,7 @@ jobs:
       __RESEARCHER__:  "${{ secrets.__RESEARCHER__ }}"
 
       PR_NUMBER: ${{ github.event.pull_request.number || '' }}
-      PR_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      #PR_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
     outputs:
       url: ${{ steps.set-env.outputs.nomad_url }}
@@ -491,6 +491,7 @@ jobs:
           GITHUB_REF_NAME=${GITHUB_REF_NAME}, \
           github.head_ref=${{ github.head_ref }}, \
           PR_NUMBER=${PR_NUMBER}, \
+          GITHUB_SHORT_SHA=${GITHUB_SHORT_SHA}, \
           IMAGE_TAG=${IMAGE_TAG}, \
           NOMAD_JOB_TEMPLATE=${NOMAD_JOB_TEMPLATE}, \ 
           NOMAD_FILE=${NOMAD_FILE}
@@ -521,6 +522,7 @@ jobs:
           echo "nomad_file=${NOMAD_FILE}" >> $GITHUB_OUTPUT
           echo "preview_url=${PREVIEW_URL}" >> $GITHUB_OUTPUT
           echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+          echo "github_short_sha=${GITHUB_SHORT_SHA}" >> $GITHUB_ENV
           echo "Determined environment: ${ENVIRONMENT}, suffix: ${ENVIRONMENT_SUFFIX}, image_tag: ${IMAGE_TAG}"
 
       - name: Prepare Environment. Setup `nomad` CLI.
@@ -648,6 +650,7 @@ jobs:
         env:
           JOB_NAME: ${{ steps.setup-nomad.outputs.job_name }}
           NOMAD_FILE: ${{ steps.setup-nomad.outputs.nomad_file }}
+          PR_SHA: ${{ steps.setup-nomad.outputs.github_short_sha }}
         run: |
           nomad version
           NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
