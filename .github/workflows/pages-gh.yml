@@ -71,6 +71,10 @@ jobs:
              REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}
              echo "TIMESTAMP=$DATE" >> $GITHUB_ENV
              echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
+             echo "${{ github.event_name}} .. ${{ github.event.action }} .. ${{ github.event.pull_request.merged }}"
+             echo "${{ github.event }}" 
+             echo "${{ github.event.pull_request }}"
+
     outputs:
       TIMESTAMP: ${{ env.TIMESTAMP }}
       REPO_NAME: ${{ env.REPO_NAME }}
