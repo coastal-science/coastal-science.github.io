@@ -650,7 +650,6 @@ jobs:
         env:
           JOB_NAME: ${{ steps.setup-nomad.outputs.job_name }}
           NOMAD_FILE: ${{ steps.setup-nomad.outputs.nomad_file }}
-          PR_SHA: ${{ steps.setup-nomad.outputs.github_short_sha }}
         run: |
           nomad version
           NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
@@ -667,6 +666,8 @@ jobs:
 
       - name: Create GitHub commit status for deployment
         if: github.event_name == 'pull_request'
+        env:
+          PR_SHA: ${{ steps.setup-nomad.outputs.github_short_sha }}
         run: |
           STATUS_URL="https://api.github.com/repos/${{ github.repository }}/statuses/${{ env.PR_SHA }}"
           
