@@ -420,9 +420,24 @@ jobs:
       - name: Determine environment and suffix
         id: set-env
         run: |
+          # The Pull Request Problem (and How to Fix It) If you build a Docker image or tag a release on a pull_request event, 
+          # using ${{ github.sha }} will tag it with an unstable, auto-generated merge commit hash. 
+          # If developers search your repository's git history for that short SHA, they will never find it.
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+          # Extract the true head commit of the PR branch
+            FULL_SHA="${{ github.event.pull_request.head.sha }}"
+          else
+            # Fallback to standard push commit
+            FULL_SHA="${{ github.sha }}"
+          fi
           # TODO: Option (based on needs) to deploy to nomad url with ENVIRONMENT_SUFFIX=commit_sha (if not a PR)
+          
+          # Generate the 7-character short SHA
+          echo "GITHUB_SHORT_SHA=${FULL_SHA:0:7}" >> $GITHUB_ENV
+          
           # GITHUB_SHA_SHORT="${{ github.sha }}".SubString(0, 8))"
-          GITHUB_SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          # GITHUB_SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             ENVIRONMENT="production" # TODO: suspicion that the variable is unused and can be removed
             ENVIRONMENT_SUFFIX="prod"
