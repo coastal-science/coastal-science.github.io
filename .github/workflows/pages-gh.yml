@@ -102,7 +102,7 @@ jobs:
     
     runs-on: ubuntu-latest
     container:
-      image: peaceiris/hugo:v${{ vars.HUGO_VERSION }}
+      image: peaceiris/hugo
 
     env:
       HUGO_VERSION: "${{ vars.HUGO_VERSION }}" # 0.147.8 # latest  #  0.126.1 
