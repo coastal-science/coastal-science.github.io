@@ -821,7 +821,9 @@ jobs:
         id: job-name
         run: |
           PR_NUM="${{ github.event.pull_request.number }}"
-          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          # Get the head commit SHA from the PR event (feature branch commit)
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          SHORT_SHA=$(echo "${HEAD_SHA}" | cut -c1-7)
           echo "job_name=${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}" >> $GITHUB_OUTPUT
           echo "Nomad job name: ${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}"
       - name: 3. Cleanup PR Nomad job when PR is closed (without merge)
