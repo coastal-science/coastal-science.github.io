@@ -326,8 +326,8 @@ jobs:
             type=sha,prefix=pr-
             # commit date tag (for branches only)
             type=raw,value=${{ steps.tags.outputs.commit_date }}
-            # latest tag (for branches only)
-            type=raw,value=latest
+            # latest tag (for default branch only)
+            type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build and push Docker image
         id: build-and-push
@@ -659,6 +659,7 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           PR_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           
           STATUS_URL="https://api.github.com/repos/${{ github.repository }}/statuses/${{ env.PR_SHA }}"
@@ -674,15 +675,16 @@ jobs:
             DESCRIPTION="Preview deployment failed"
           fi
           
-          gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            "repos/${GITHUB_REPOSITORY}/statuses/${PR_SHA}" \
-            -f state="${STATE}" \
-            -f target_url="${TARGET_URL}" \
-            -f description="${DESCRIPTION}" \
-            -f context="deploy/preview"
-
+          curl -X POST "${STATUS_URL}" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "{
+              \"state\": \"${STATE}\",
+              \"target_url\": \"${TARGET_URL}\",
+              \"description\": \"${DESCRIPTION}\",
+              \"context\": \"deploy/preview\"
+            }"
+          
           echo "Created commit status: deploy/preview -> ${STATE} (${TARGET_URL})"
 
       - name: Summary output URLs
