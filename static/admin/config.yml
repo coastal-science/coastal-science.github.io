@@ -32,6 +32,9 @@ logo_url: https://orca-prod.ruthjoy.researchcomputinggroup.ca/img/logo.png
 media_folder: "static/img"
 public_folder: "/img"
 
+issue_reports:
+  url: https://github.com/your-org/your-repo/issues/new
+
 collections:
 - name: "main_page"
   label: "Main page and About"
