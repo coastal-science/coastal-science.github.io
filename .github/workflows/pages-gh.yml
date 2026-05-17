@@ -72,9 +72,7 @@ jobs:
              echo "TIMESTAMP=$DATE" >> $GITHUB_ENV
              echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
              echo "${{ github.event_name}} .. ${{ github.event.action }} .. ${{ github.event.pull_request.merged }}"
-             echo "${{ github.event }}" 
-             echo "${{ github.event.pull_request }}"
-
+             
     outputs:
       TIMESTAMP: ${{ env.TIMESTAMP }}
       REPO_NAME: ${{ env.REPO_NAME }}
@@ -294,7 +292,7 @@ jobs:
           hugo \
             --gc \
             --minify \
-            --baseURL "${{ env.HUGO_BASEURL }}/"
+            --baseURL "${{ vars.HUGO_BASEURL }}/"
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -437,7 +435,7 @@ jobs:
           # TODO: Option (based on needs) to deploy to nomad url with ENVIRONMENT_SUFFIX=commit_sha (if not a PR)
           
           # Generate the 7-character short SHA
-          GITHUB_SHORT_SHA=$(echo ${FULL_SHA}} | cut -c1-7)
+          GITHUB_SHORT_SHA=$(echo ${FULL_SHA} | cut -c1-7)
           
           # GITHUB_SHA_SHORT="${{ github.sha }}".SubString(0, 8))"
           # GITHUB_SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
@@ -503,16 +501,7 @@ jobs:
           # Construct URL from Nomad template pattern: ${__SERVICE__}-${__ENVIRONMENT__}.${__RESEARCHER__}.researchcomputinggroup.ca
           NOMAD_URL="https://${{ vars.__SERVICE__ }}-${ENVIRONMENT_SUFFIX}.${{ secrets.__RESEARCHER__ }}.researchcomputinggroup.ca"
           
-          # Determine WEB_URL based on event type
-          # WEB_URL="${{ github.ref == 'refs/heads/main' && secrets.__DOMAIN_NAME__ || 'sinkhole' }}"
-          # Determine WEB_URL and PREVIEW_URL based on event type
-          # Using shell logic below instead of GitHub expressions to avoid parsing issues
           WEB_URL="sinkhole.${__RESEARCHER__}.researchcomputinggroup.ca"
-          # PREVIEW_URL="" # TODO: (remove) PREVIEW_URL was used for PRs, but now we use NOMAD_URL
-          # if [ "${{ github.event_name }}" = "pull_request" ]; then
-          #   # For PRs
-          #   PREVIEW_URL="${NOMAD_URL}"
-          # fi
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             # For production main branch
             WEB_URL="${{ secrets.__DOMAIN_NAME__ }}"
@@ -524,7 +513,6 @@ jobs:
           echo "web_url=${WEB_URL}" >> $GITHUB_OUTPUT
           echo "nomad_job_template=${NOMAD_JOB_TEMPLATE}" >> $GITHUB_OUTPUT
           echo "nomad_file=${NOMAD_FILE}" >> $GITHUB_OUTPUT
-          echo "preview_url=${PREVIEW_URL}" >> $GITHUB_OUTPUT
           echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
           echo "Determined environment: ${ENVIRONMENT}, suffix: ${ENVIRONMENT_SUFFIX}, image_tag: ${IMAGE_TAG}"
 
