@@ -802,9 +802,9 @@ jobs:
           nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
           nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
 
-  # Cleanup Nomad deployment when PR is closed (without merge). When merged, cleanup runs in cleanup-pr-after-deploy. Job name = SERVICE-pr-N-SHORT_SHA.
+  # Cleanup Nomad deployment when PR is closed. Handles both merged and non-merged PRs.
   cleanup-pr-deployment:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == false
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
     permissions:
       contents: read
       packages: read
