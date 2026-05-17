@@ -33,7 +33,7 @@ media_folder: "static/img"
 public_folder: "/img"
 
 issue_reports:
-  url: https://github.com/your-org/your-repo/issues/new
+  url: https://github.com/coastal-science/coastal-science.github.io/issues/new
 
 collections:
 - name: "main_page"
