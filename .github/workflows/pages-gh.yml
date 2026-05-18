@@ -90,7 +90,7 @@ jobs:
     steps:
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v2
+        uses: actions/configure-pages@v5
     outputs:
       base_url: ${{ steps.pages.outputs.base_url }}
       
@@ -116,7 +116,7 @@ jobs:
     
     steps:
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
+        uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: ${{ vars.HUGO_VERSION }}
           extended: true
@@ -128,7 +128,7 @@ jobs:
           echo "${{ needs.configure-pages.outputs.base_url }}/" from env
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: true  # Fetch Hugo themes (true OR recursive) # failing on ubuntu container
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
@@ -155,7 +155,7 @@ jobs:
         run: ls -lah public/
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./public
 
@@ -174,7 +174,7 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
 ############################################
 ## Create and publish docker image        ##
@@ -211,7 +211,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: true  # Fetch Hugo themes (true OR recursive) # failing on ubuntu container
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
@@ -278,7 +278,7 @@ jobs:
           pwd
 
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
+        uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: ${{ vars.HUGO_VERSION }}
           extended: true
@@ -295,12 +295,12 @@ jobs:
             --baseURL "${{ vars.HUGO_BASEURL }}/"
       
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
      
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Log into registry ${{ env.REGISTRY }}
-        uses: docker/login-action@v3 #343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -310,7 +310,7 @@ jobs:
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@v5 #96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} # /${{ env.SERVICE }}
           labels: |
@@ -331,7 +331,7 @@ jobs:
 
       - name: Build and push Docker image
         id: build-and-push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         env:
           HUGO_BASEURL: "${{ vars.HUGO_BASEURL }}"
         with:
@@ -523,7 +523,7 @@ jobs:
           version: ${{ env.NOMAD_VERSION}} # Specify the desired version, or "latest"
         
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: true  # Fetch Hugo themes (true OR recursive) # failing on ubuntu container
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
@@ -711,7 +711,7 @@ jobs:
       SERVICE: "${{ vars.__SERVICE__ }}"
     steps:
       - name: Checkout repository (required for local action)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Prepare Environment. Setup `nomad` CLI
         uses: hashicorp/setup-nomad@v1.0.0
         with:
@@ -804,7 +804,7 @@ jobs:
       SERVICE: "${{ vars.__SERVICE__ }}"
     steps:
       - name: Checkout repository (required for local action)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Determine Nomad job name (SERVICE-pr-N-SHORT_SHA)
         id: job-name
         run: |
