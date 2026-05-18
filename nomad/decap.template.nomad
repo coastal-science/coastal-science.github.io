@@ -34,9 +34,9 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
   update {
     max_parallel      = 1
     stagger           = "10s"
-    health_check      = "checks"
-    min_healthy_time  = "10s"
-    healthy_deadline  = "5m"
+    #health_check      = "checks"
+    #min_healthy_time  = "10s"
+    #healthy_deadline  = "5m"
     progress_deadline = "10m"
     auto_revert       = true
     auto_promote      = false
@@ -173,13 +173,13 @@ EOH
           "traefik.enable=true",
         ]
 
-        check {
-          type     = "http"
-          port     = "decap-api"
-          path     = "/health"
-          interval = "10s"
-          timeout  = "2s"
-        }
+        #check {
+        #  type     = "http"
+        #  port     = "decap-api"
+        #  path     = "/health"
+        #  interval = "10s"
+        #  timeout  = "2s"
+        #}
       }
 
       resources {
