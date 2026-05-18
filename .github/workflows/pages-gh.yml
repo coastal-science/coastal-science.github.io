@@ -567,6 +567,12 @@ jobs:
           export __RESEARCHER__="${{ env.__RESEARCHER__ }}"
           export __REGISTRY_USERNAME__="${{ env.__REGISTRY_USERNAME__ }}"
           export __REGISTRY_PASSWORD__="${{ env.__REGISTRY_PASSWORD__ }}"
+
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            export __GROUP_COUNT__=2
+          else
+            export __GROUP_COUNT__=1
+          fi
           
           # USE_DECAP: workflow input overrides branch-based determination when set
           USE_DECAP_INPUT="${{ inputs.use_decap }}"
@@ -643,11 +649,6 @@ jobs:
           NOMAD_FILE: ${{ steps.setup-nomad.outputs.nomad_file }}
         run: |
           nomad version
-          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
-            nomad job stop -verbose ${JOB_NAME} || true
-          echo "Nomad job stop result=$?"
-          sleep 10s
-          
           echo "Submitting job from: ${NOMAD_FILE}"
           NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
             nomad job run -verbose "${NOMAD_FILE}"

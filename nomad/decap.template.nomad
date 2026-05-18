@@ -6,8 +6,9 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
     run_uuid = "${uuidv4()}"
   }
 
+  type        = "service"
   datacenters = ${__DATACENTERS__}
-  namespace = "${__NAMESPACE__}"
+  namespace   = "${__NAMESPACE__}"
 
   constraint {
     attribute = "${meta.role}"
@@ -31,16 +32,23 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
   }
 
   update {
-    stagger      = "10s"
-    max_parallel = 1
+    max_parallel      = 1
+    stagger           = "10s"
+    health_check      = "checks"
+    min_healthy_time  = "10s"
+    healthy_deadline  = "5m"
+    progress_deadline = "10m"
+    auto_revert       = true
+    auto_promote      = false
+    canary            = 0
   }
 
   group "${__SERVICE__}-${__ENVIRONMENT__}" {
-    count = 1
+    count = ${__GROUP_COUNT__}
 
     scaling {
       enabled = true
-      min     = 1
+      min     = ${__GROUP_COUNT__}
       max     = 10
     }
 
@@ -56,14 +64,14 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
       }
     }
 
-    # Site task (nginx + Hugo); server.conf proxies /auth, /callback to decap-cms in same group
     task "${__SERVICE__}-${__ENVIRONMENT__}" {
       driver = "${__JOB_DRIVER__}"
+
       config {
-        image = "${__IMAGE_NAME__}:${__IMAGE_TAG__}"
+        image              = "${__IMAGE_NAME__}:${__IMAGE_TAG__}"
         image_pull_timeout = "10m"
-        ports = ["http"]
-        force_pull = true
+        ports              = ["http"]
+        force_pull         = true
         auth {
           username = "${__REGISTRY_USERNAME__}"
           password = "${__REGISTRY_PASSWORD__}"
@@ -71,6 +79,9 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
         volumes = [
           "local/server.conf:/etc/nginx/conf.d/server.conf:ro"
         ]
+        healthchecks {
+          disable = true
+        }
       }
 
       template {
@@ -87,13 +98,19 @@ EOH
       }
 
       env {
-        # true = Decap CMS (decap.conf + server.conf); false = static only (default.conf)
         USE_DECAP = "${__USE_DECAP__}"
       }
 
+      restart {
+        attempts = 3
+        interval = "5m"
+        delay    = "15s"
+        mode     = "fail"
+      }
+
       service {
-        name = "${__SERVICE__}-${__ENVIRONMENT__}"
-        port = "http"
+        name     = "${__SERVICE__}-${__ENVIRONMENT__}"
+        port     = "http"
         provider = "nomad"
         tags = [
           "traefik.enable=true",
@@ -107,6 +124,13 @@ EOH
           "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}.tls=true",
           "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}.entrypoints=websecure",
         ]
+
+        check {
+          type     = "http"
+          path     = "/"
+          interval = "10s"
+          timeout  = "2s"
+        }
       }
 
       resources {
@@ -115,28 +139,46 @@ EOH
       }
     }
 
-    # Decap CMS task (same group: site nginx reaches decap via NOMAD_ADDR_decap_api)
     task "decap-cms" {
       driver = "docker"
+
       config {
         image = "${__DECAP_IMAGE_NAME__}:${__DECAP_IMAGE_TAG__}"
         ports = ["decap-http", "decap-api"]
+        healthchecks {
+          disable = true
+        }
       }
 
       env {
-        CMS_BACKEND_DEBUG = "${__CMS_BACKEND_DEBUG__}"
-        ORIGINS           = "${__ORIGINS__}"
-        OAUTH_CLIENT_ID   = "${__OAUTH_CLIENT_ID__}"
+        CMS_BACKEND_DEBUG   = "${__CMS_BACKEND_DEBUG__}"
+        ORIGINS             = "${__ORIGINS__}"
+        OAUTH_CLIENT_ID     = "${__OAUTH_CLIENT_ID__}"
         OAUTH_CLIENT_SECRET = "${__OAUTH_CLIENT_SECRET__}"
       }
 
+      restart {
+        attempts = 3
+        interval = "5m"
+        delay    = "15s"
+        mode     = "fail"
+      }
+
       service {
-        name = "${__SERVICE__}-${__ENVIRONMENT__}-decap-cms"
-        port = "decap-http"
+        name     = "${__SERVICE__}-${__ENVIRONMENT__}-decap-cms"
+        port     = "decap-http"
         provider = "nomad"
         tags = [
           "traefik.enable=true",
         ]
+
+        check {
+          type     = "http"
+          port     = "decap-api"
+          path     = "/health"
+          interval = "10s"
+          timeout  = "2s"
+        }
       }
 
       resources {
