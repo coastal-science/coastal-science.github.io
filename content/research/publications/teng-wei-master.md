@@ -14,7 +14,3 @@ The Southern Resident Killer Whale (SRKW) is an endangered population of killer 
 **KEYWORDS**
 
 **Cite this article as:** Lin, T.-W. (2023). *Forecasting the trajectories of Southern Resident Killer Whales with stochastic continuous-time movement models.* Simon Fraser University.
-
-
-
-**Cite this article as:** Lin, T.-W. (2023). *Forecasting the trajectories of Southern Resident Killer Whales with stochastic continuous-time movement models.* Simon Fraser University.
