@@ -675,16 +675,15 @@ jobs:
             DESCRIPTION="Preview deployment failed"
           fi
           
-          curl -X POST "${STATUS_URL}" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            -d "{
-              \"state\": \"${STATE}\",
-              \"target_url\": \"${TARGET_URL}\",
-              \"description\": \"${DESCRIPTION}\",
-              \"context\": \"deploy/preview\"
-            }"
-          
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            "repos/${GITHUB_REPOSITORY}/statuses/${PR_SHA}" \
+            -f state="${STATE}" \
+            -f target_url="${TARGET_URL}" \
+            -f description="${DESCRIPTION}" \
+            -f context="deploy/preview"
+
           echo "Created commit status: deploy/preview -> ${STATE} (${TARGET_URL})"
 
       - name: Summary output URLs
