@@ -90,7 +90,7 @@ jobs:
     steps:
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
     outputs:
       base_url: ${{ steps.pages.outputs.base_url }}
       
@@ -155,7 +155,7 @@ jobs:
         run: ls -lah public/
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./public
 
@@ -516,9 +516,9 @@ jobs:
           echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
           echo "Determined environment: ${ENVIRONMENT}, suffix: ${ENVIRONMENT_SUFFIX}, image_tag: ${IMAGE_TAG}"
 
-      - name: Prepare Environment. Setup `nomad` CLI.
+      - name: Setup `nomad` CLI.
         id: setup-nomad-cli
-        uses: hashicorp/setup-nomad@v1.0.0
+        uses: hashicorp/setup-nomad@main
         with:
           version: ${{ env.NOMAD_VERSION}} # Specify the desired version, or "latest"
         
@@ -712,8 +712,9 @@ jobs:
     steps:
       - name: Checkout repository (required for local action)
         uses: actions/checkout@v5
-      - name: Prepare Environment. Setup `nomad` CLI
-        uses: hashicorp/setup-nomad@v1.0.0
+      
+      - name: Setup `nomad` CLI
+        uses: hashicorp/setup-nomad@main
         with:
           version: ${{ env.NOMAD_VERSION }}
 
