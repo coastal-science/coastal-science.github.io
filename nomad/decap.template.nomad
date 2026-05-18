@@ -98,6 +98,7 @@ EOH
       }
 
       env {
+        # true = Decap CMS (decap.conf + server.conf); false = static only (default.conf)
         USE_DECAP = "${__USE_DECAP__}"
       }
 
