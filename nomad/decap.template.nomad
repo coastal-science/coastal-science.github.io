@@ -176,7 +176,7 @@ EOH
         check {
           type     = "http"
           port     = "decap-api"
-          path     = "/health"
+          path     = "/"
           interval = "10s"
           timeout  = "2s"
         }
