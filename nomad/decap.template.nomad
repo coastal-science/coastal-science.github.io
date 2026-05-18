@@ -173,13 +173,13 @@ EOH
           "traefik.enable=true",
         ]
 
-        #check {
-        #  type     = "http"
-        #  port     = "decap-api"
-        #  path     = "/health"
-        #  interval = "10s"
-        #  timeout  = "2s"
-        #}
+        check {
+          type     = "http"
+          port     = "decap-api"
+          path     = "/health"
+          interval = "10s"
+          timeout  = "2s"
+        }
       }
 
       resources {
