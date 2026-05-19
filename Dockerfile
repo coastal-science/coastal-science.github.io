@@ -17,7 +17,7 @@ COPY . .
 RUN hugo \
       --gc \
       --minify \
-      --baseURL "${HUGO_BASEURL}/" \
+      --baseURL "${HUGO_BASEURL}" \
       --logLevel info
 
 # Remove git artifacts

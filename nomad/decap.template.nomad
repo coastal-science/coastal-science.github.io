@@ -170,7 +170,7 @@ EOH
         port     = "decap-http"
         provider = "nomad"
         tags = [
-          "traefik.enable=true",
+          "traefik.enable=false",
         ]
 
         check {
