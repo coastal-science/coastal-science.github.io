@@ -2,6 +2,7 @@ baseURL = "http://localhost"
 # baseURL = "https://isahay.github.io/coastal-science.github.io" # "https://devcows.github.io/hugo-universal-theme/" # Configure URL. if using gh-pages https://github.com/<username>/hugo-universal-theme URL: https://<username>.github.io/hugo-universal-theme/
 # baseURL = "https://orca.research.sfu.ca"
 canonifyURLs = false
+relativeURLs = true
 title = "HALLO - Humans and Algorithms Listening to Orcas"
 theme = "hugo-universal-theme"
 #themesDir = "../.."
