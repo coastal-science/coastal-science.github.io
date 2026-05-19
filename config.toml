@@ -147,7 +147,7 @@ enableGitInfo = true
     weight = 9
     name = "Admin"
     url = "/admin"
-    pre = "<i class='fa fa-2x fa-pencil-square-o' aria-hidden='true'></i>"
+    pre = "<i class='fa fa-2x fa-cogs' aria-hidden='true'></i>"
     
 [params]
     viewMorePostLink = "/blog/"
