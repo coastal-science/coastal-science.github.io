@@ -10,7 +10,7 @@ backend:
   repo: coastal-science/coastal-science.github.io
   # base_url: https://orca.research.sfu.ca
   base_url: https://orca-prod.ruthjoy.cedar.researchcomputinggroup.ca
-  base_url: https://orca-prod.ruthjoy.researchcomputinggroup.ca
+  # base_url: https://orca-prod.ruthjoy.researchcomputinggroup.ca
   # base_url: https://orca-dev.ruthjoy.researchcomputinggroup.ca
   commit_messages:
     create: "Create {{collection}} “{{slug}}”"
