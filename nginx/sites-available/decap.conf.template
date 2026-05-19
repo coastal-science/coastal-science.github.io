@@ -47,7 +47,7 @@ server {
     # }
 
     location /catalogue {
-	# alias     /var/www/html/call-catalog-viewer/;
+	
 	rewrite ^([^.]*[^/])$ $1/ permanent;
 
     # Disable gzip for this location to ensure sub_filter works
@@ -57,7 +57,6 @@ server {
     proxy_set_header Accept-Encoding "";
 
 	default_type text/html;
-	#alias /var/www/html;
 	alias /usr/share/nginx/html;
 	index redirect.html; # templatized generic redirect warning page
 
