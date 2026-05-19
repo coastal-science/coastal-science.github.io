@@ -292,7 +292,7 @@ jobs:
           hugo \
             --gc \
             --minify \
-            --baseURL "${{ vars.HUGO_BASEURL }}/"
+            --baseURL "${{ vars.HUGO_BASEURL }}"
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
