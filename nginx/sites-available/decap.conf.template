@@ -3,6 +3,8 @@ server {
     listen       [::]:80;
     server_name  _;
 
+    absolute_redirect off;
+
     #index       index.html index.htm;
     #try_files $uri $uri/ /index.html;
 
