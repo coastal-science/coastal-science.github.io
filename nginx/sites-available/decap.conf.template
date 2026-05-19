@@ -45,4 +45,44 @@ server {
     #     proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
     #     #proxy_set_header Early-Data $ssl_early_data;
     # }
+
+    location /catalogue {
+	# alias     /var/www/html/call-catalog-viewer/;
+	rewrite ^([^.]*[^/])$ $1/ permanent;
+
+	default_type text/html;
+	#alias /var/www/html;
+	index /redirect.html; # templatized generic redirect warning page
+
+	sub_filter "<title>Old Page</title>" "<title>Redirect Page</title>";
+	sub_filter "<h1>Old Page</h1>" "<h1>Redirect Page</h1>";
+	sub_filter "https://www.my_new_website.com/" "https://orca.research.sfu.ca/call-library/";
+	sub_filter "go to the new homepage." "go to the new catalogue page.";
+	sub_filter ">here</a>" ">https://orca.research.sfu.ca/call-library</a>";
+	
+	sub_filter "x_y_z; URL=" "7; URL="; # x_y_z means delay in seconds, must be an int
+	sub_filter "within x_y_z seconds" "within 7 seconds";
+
+	sub_filter_once off; # Don't stop at the first match, replace all of them
+	sub_filter_types "text/html" "text/javascript" "application/json"; # Apply to these mime types in addition to text/html
+
+    }
+
+    location /call-library/ {
+        #alias     /var/www/html/call-catalog-viewer/;
+        #access_log /var/log/nginx/orca.research.sfu.ca-call-library.access.log;
+        #error_log  /var/log/nginx/orca.research.sfu.ca-call-library.error.log;
+        #rewrite ^([^.]*[^/])$ $1/ permanent;
+        
+        #proxy_pass https://johnford_upstream/;
+        proxy_pass https://srkw-latest.ruthjoy.researchcomputinggroup.ca/;
+        proxy_pass_request_headers on;
+        #proxy_set_header   Host                 $http_host;
+        #proxy_set_header   Host                 $upstream_http_host;
+        proxy_set_header   Host                 srkw-latest.ruthjoy.researchcomputinggroup.ca;
+        #proxy_set_header   Host                 johnford_upstream.$request_uri;
+        proxy_set_header   X-Real-IP            $remote_addr;
+        proxy_set_header   X-Forwarded-For      $proxy_add_x_forwarded_for;
+    }
+
 }
