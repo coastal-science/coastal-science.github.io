@@ -138,10 +138,16 @@ enableGitInfo = true
     pre = "<i class='fa fa-2x fa-envelope' aria-hidden='true'></i>"
 
 [[menu.topbar]]
-    weight = 5
+    weight = 7
     name = "YouTube"
     url = "https://www.youtube.com/@coastal-science/featured"
     pre = "<i class='fa fa-2x fa-youtube' aria-hidden='true'></i>"
+
+[[menu.topbar]]
+    weight = 9
+    name = "Admin"
+    url = "/admin"
+    pre = "<i class='fa fa-2x fa-pencil-square-o' aria-hidden='true'></i>"
     
 [params]
     viewMorePostLink = "/blog/"
