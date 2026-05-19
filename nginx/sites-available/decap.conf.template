@@ -58,7 +58,8 @@ server {
 
 	default_type text/html;
 	#alias /var/www/html;
-	index /redirect.html; # templatized generic redirect warning page
+	alias /usr/share/nginx/html;
+	index redirect.html; # templatized generic redirect warning page
 
 	sub_filter "<title>Old Page</title>" "<title>Redirect Page</title>";
 	sub_filter "<h1>Old Page</h1>" "<h1>Redirect Page</h1>";
