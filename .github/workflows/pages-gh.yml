@@ -332,8 +332,6 @@ jobs:
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v7
-        env:
-          HUGO_BASEURL: "${{ vars.HUGO_BASEURL }}"
         with:
           context: .
           file: Dockerfile.prod
