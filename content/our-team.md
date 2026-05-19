@@ -71,7 +71,7 @@ Saturna Island Marine Research and Education Society (SIMRES)
 
 Digital Research Alliance of Canada (SFU's Research Computing Group)
 
-* Jillian Anderson, Andrei Vassilenko, Ishan Sahay, Dr. Alireza Ensan
+* Jillian Anderson, Andrei Vassilenko, Ishan Sahay, Dr. Alireza Ensan, Chloe Zhu
 
 ### Previous Researchers
 
