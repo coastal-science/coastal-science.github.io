@@ -9,6 +9,7 @@ backend:
   branch: main
   repo: coastal-science/coastal-science.github.io
   # base_url: https://orca.research.sfu.ca
+  base_url: https://orca-prod.ruthjoy.cedar.researchcomputinggroup.ca
   base_url: https://orca-prod.ruthjoy.researchcomputinggroup.ca
   # base_url: https://orca-dev.ruthjoy.researchcomputinggroup.ca
   commit_messages:
@@ -24,10 +25,12 @@ publish_mode: editorial_workflow
 # display_url: https://orca.research.sfu.ca
 # display_url: https://orca-dev.ruthjoy.researchcomputinggroup.ca
 display_url: https://orca-prod.ruthjoy.researchcomputinggroup.ca
+display_url: https://orca-prod.ruthjoy.cedar.researchcomputinggroup.ca
 
 # logo_url: https://orca.research.sfu.ca/img/logo.png
 # logo_url: https://orca-dev.ruthjoy.researchcomputinggroup.ca/img/logo.png
 logo_url: https://orca-prod.ruthjoy.researchcomputinggroup.ca/img/logo.png
+logo_url: https://orca-prod.ruthjoy.cedar.researchcomputinggroup.ca/img/logo.png
 
 media_folder: "static/img"
 public_folder: "/img"
