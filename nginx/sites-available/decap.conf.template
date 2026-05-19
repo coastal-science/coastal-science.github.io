@@ -50,6 +50,12 @@ server {
 	# alias     /var/www/html/call-catalog-viewer/;
 	rewrite ^([^.]*[^/])$ $1/ permanent;
 
+    # Disable gzip for this location to ensure sub_filter works
+    gzip off;
+    
+    # Ensure response is readable for sub_filter
+    proxy_set_header Accept-Encoding "";
+
 	default_type text/html;
 	#alias /var/www/html;
 	index /redirect.html; # templatized generic redirect warning page
