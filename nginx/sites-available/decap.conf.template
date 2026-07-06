@@ -108,11 +108,11 @@ server {
         #rewrite ^([^.]*[^/])$ $1/ permanent;
         
         #proxy_pass https://johnford_upstream/;
-        proxy_pass https://srkw-latest.ruthjoy.researchcomputinggroup.ca/;
+        proxy_pass https://srkw-latest.ruthjoy.cedar.researchcomputinggroup.ca/;
         proxy_pass_request_headers on;
         #proxy_set_header   Host                 $http_host;
         #proxy_set_header   Host                 $upstream_http_host;
-        proxy_set_header   Host                 srkw-latest.ruthjoy.researchcomputinggroup.ca;
+        proxy_set_header   Host                 srkw-latest.ruthjoy.cedar.researchcomputinggroup.ca;
         #proxy_set_header   Host                 johnford_upstream.$request_uri;
         proxy_set_header   X-Real-IP            $remote_addr;
         proxy_set_header   X-Forwarded-For      $proxy_add_x_forwarded_for;
