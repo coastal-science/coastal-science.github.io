@@ -12,7 +12,6 @@ categories:
   - southern resident killer whale
 banner: /img/houweling_april2.jpg
 authors:
-  - April Houweling
   - Ruth Joy
 summary: ""
 ---
