@@ -6,9 +6,7 @@ tags:
   - news
   - research
   - graduate student
-  - award
 categories:
-  - Transport Canada
   - whale acoustics
   - vessel noise impact
   - southern resident killer whale
