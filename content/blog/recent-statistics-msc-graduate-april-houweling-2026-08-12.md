@@ -16,8 +16,6 @@ banner: /img/houweling_april2.jpg
 authors:
   - April Houweling
   - Ruth Joy
-summary: Master's student April Houweling, has recently graduated from the
-  Department of Statistics and Actuarial Science at Simon Fraser University.
-  Congratulations Janine!
+summary: ""
 ---
 Master's student April Houweling, has recently graduated from the Department of Statistics and Actuarial Science at Simon Fraser University. Congratulations April!
