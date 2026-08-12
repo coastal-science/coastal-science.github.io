@@ -177,7 +177,7 @@ collections:
   label: "Latest News/Blog/Post"
   folder: "content/blog"
   create: true
-  slug: "{{slug}}-{{year}}-{{month}}-{{day}}"
+  slug: "{{year}}/{{month}}/{{day}}/{{slug}}-{{year}}-{{month}}-{{day}}"
   editor:
     preview: false
   preview_path: "blog/{{slug}}"
