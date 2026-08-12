@@ -1,10 +1,11 @@
 ---
-title: Ishan
+title: Publication Title
 date: 2026-08-12T12:29:00.000-07:00
 authors:
-  - Ishan
-journal: SFU
-image: https://www.sfu.ca/content/sfu/communicators-toolkit/brand/guidelines/logos/logo-types/jcr:content/main_content/image.img.2000.high.png/1729103693134.png
-publicationurl: www.sfu.ca
+  - Ishan Sahay
+journal: UBC
+image: https://brand.ubc.ca/files/2018/09/Logos_1_2CrestDownload_768px.jpg
+doi: abc123
+publicationurl: www.ubc.ca
 ---
 Test 1
