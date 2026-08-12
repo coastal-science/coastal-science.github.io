@@ -1,5 +1,5 @@
 ---
-title: New Measures for 2024 to Protect Southern Resident Killer Whales
+title: Recent MSC Graduate
 date: 2026-08-12T14:09:00.000-07:00
 tags:
   - news
