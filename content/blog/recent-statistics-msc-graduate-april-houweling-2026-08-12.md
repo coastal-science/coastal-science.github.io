@@ -16,4 +16,6 @@ authors:
   - Ruth Joy
 summary: ""
 ---
-Master's student April Houweling, has recently graduated from the Department of Statistics and Actuarial Science at Simon Fraser University. Congratulations April!
+Master's student April Houweling, has recently graduated from the Department of Statistics and Actuarial Science at Simon Fraser University. See her full thesis here: https://www.sfu.ca/~rjoy/Thesis_AprilHouweling%20_01Aug2025.pdf
+
+Congratulations April!
