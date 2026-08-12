@@ -1,5 +1,5 @@
 ---
-title: Publication Title
+title: Me Manifesto
 date: 2026-08-12T12:29:00.000-07:00
 authors:
   - Ishan Sahay
