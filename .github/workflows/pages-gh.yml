@@ -78,31 +78,16 @@ jobs:
 ## Build and publish a staging site to GitHub Pages ##
 ######################################################
 
-  configure-pages:
-    # Skip Pages if PR is closed so a discarded draft is not published to github.io
-    if: github.event_name != 'pull_request' || github.event.action != 'closed'
-    runs-on: ubuntu-latest
-    permissions: # read-all
-      contents: read
-      pages: read
-
-    steps:
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v6
-    outputs:
-      base_url: ${{ steps.pages.outputs.base_url }}
-      
   # Build job
   build-website:
     # Skip Pages if PR is closed so a discarded draft is not published to github.io
     if: github.event_name != 'pull_request' || github.event.action != 'closed'
     needs:
       - generate-timestamp
-      - configure-pages
     
     runs-on: ubuntu-latest
     container:
+      #  If Setup Pages ever fails for lack of Node, the fix is to drop the job-level container and keep only the Hugo action.
       image: peaceiris/hugo
 
     env:
@@ -114,8 +99,13 @@ jobs:
     # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
     permissions:
       contents: read
+      pages: read
     
     steps:
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v6
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
@@ -126,7 +116,7 @@ jobs:
         run: |
           ls -lah
           echo "${{ needs.generate-timestamp.outputs.TIMESTAMP }}" from env
-          echo "${{ needs.configure-pages.outputs.base_url }}/" from env
+          echo "${{ steps.pages.outputs.base_url }}/" from env
 
       - name: Checkout
         uses: actions/checkout@v5
@@ -150,7 +140,7 @@ jobs:
             --gc \
             --buildDrafts \
             --minify \
-            --baseURL "${{ needs.configure-pages.outputs.base_url }}/"
+            --baseURL "${{ steps.pages.outputs.base_url }}/"
             
       - name: Post-Build ls
         run: ls -lah public/
