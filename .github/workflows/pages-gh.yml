@@ -363,9 +363,10 @@ jobs:
       - name: Clean Up Docker Images
         if: always()
         run: docker rmi -f $(docker images '${{ steps.meta.outputs.tags }}' -a -q) || echo "No docker images found to remove...skipping removal."
-      - name: Clean Up Workspace
-        if: always()
-        run: rm -rf ${GITHUB_WORKSPACE}
+      # Conflicts with the automatic Post Checkout step
+      # - name: Clean Up Workspace
+      #   if: always()
+      #   run: rm -rf ${GITHUB_WORKSPACE}
 
   # Deploy docker image to orchestrator (handles both production and preview)
   deploy-service:
