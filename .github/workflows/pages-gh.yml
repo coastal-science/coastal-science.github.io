@@ -50,9 +50,6 @@ on:
     # secrets:
     #   token:
     #     required: false
-        
-# env:
-#   CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.repository` by removing `github.owner`
 
 # Allow one concurrent deployment
 concurrency:
@@ -81,27 +78,16 @@ jobs:
 ## Build and publish a staging site to GitHub Pages ##
 ######################################################
 
-  configure-pages:
-    runs-on: ubuntu-latest
-    permissions: # read-all
-      contents: read
-      pages: read
-
-    steps:
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v6
-    outputs:
-      base_url: ${{ steps.pages.outputs.base_url }}
-      
   # Build job
   build-website:
+    # Skip Pages if PR is closed so a discarded draft is not published to github.io
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     needs:
       - generate-timestamp
-      - configure-pages
     
     runs-on: ubuntu-latest
     container:
+      #  If Setup Pages ever fails for lack of Node, the fix is to drop the job-level container and keep only the Hugo action.
       image: peaceiris/hugo
 
     env:
@@ -113,8 +99,13 @@ jobs:
     # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
     permissions:
       contents: read
+      pages: read
     
     steps:
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v6
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
@@ -125,7 +116,7 @@ jobs:
         run: |
           ls -lah
           echo "${{ needs.generate-timestamp.outputs.TIMESTAMP }}" from env
-          echo "${{ needs.configure-pages.outputs.base_url }}/" from env
+          echo "${{ steps.pages.outputs.base_url }}/" from env
 
       - name: Checkout
         uses: actions/checkout@v5
@@ -149,7 +140,7 @@ jobs:
             --gc \
             --buildDrafts \
             --minify \
-            --baseURL "${{ needs.configure-pages.outputs.base_url }}/"
+            --baseURL "${{ steps.pages.outputs.base_url }}/"
             
       - name: Post-Build ls
         run: ls -lah public/
@@ -161,6 +152,8 @@ jobs:
 
   # Deployment job
   deploy-gh-pages:
+    # Skip Pages if PR is closed so a discarded draft is not published to github.io
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -182,7 +175,6 @@ jobs:
 ############################################
   build-website-and-container-build:
     environment: docker-image
-    # if: github.ref == 'refs/heads/main'
     # Skip build if PR is closed (cleanup job handles that)
     if: github.event_name != 'pull_request' || github.event.action != 'closed'
     needs:
@@ -364,13 +356,22 @@ jobs:
       #     docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           
       #     docker push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-  
+
+      - name: Current workspace
+        if: always()
+        run: du -shc ${GITHUB_WORKSPACE}
+      - name: Clean Up Docker Images
+        if: always()
+        run: docker rmi -f $(docker images '${{ steps.meta.outputs.tags }}' -a -q) || echo "No docker images found to remove...skipping removal."
+      # Conflicts with the automatic Post Checkout step
+      # - name: Clean Up Workspace
+      #   if: always()
+      #   run: rm -rf ${GITHUB_WORKSPACE}
+
   # Deploy docker image to orchestrator (handles both production and preview)
   deploy-service:
     # Skip deployment if PR is closed (cleanup job handles that)
     if: github.event_name != 'pull_request' || github.event.action != 'closed'
-    # if: false
-    # if: github.ref == 'refs/heads/main'
     needs:
       - generate-timestamp
       - build-website-and-container-build
@@ -380,9 +381,7 @@ jobs:
       statuses: write
     environment: 
       name: docker-image
-      # url: https://${{ vars.HUGO_BASEURL }}
       url: ${{ steps.set-env.outputs.nomad_url }}
-      # url: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
     runs-on: ubuntu-latest
     # runs-on: [ self-hosted, rcg ]
     # container:
@@ -548,7 +547,6 @@ jobs:
         run: |
           # Use ENVIRONMENT_SUFFIX consistently for both PRs and branches
           JOB_NAME="${{ env.SERVICE }}-${ENVIRONMENT_SUFFIX}"
-          # NOMAD_JOB_TEMPLATE="nomad/template.nomad"
           NOMAD_JOB_TEMPLATE="${NOMAD_JOB_TEMPLATE}"
           NOMAD_OUTPUT_FILE="${NOMAD_FILE}"
 
@@ -648,14 +646,17 @@ jobs:
         run: |
           nomad version
           echo "Submitting job from: ${NOMAD_FILE}"
+          set +e
           NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} \
             nomad job run -verbose "${NOMAD_FILE}"
           DEPLOY_RESULT=$?
+          set -e
           echo "Nomad job deploy result=${DEPLOY_RESULT}"
-          echo "deploy_success=$([ ${DEPLOY_RESULT} -eq 0 ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+          echo "deploy_success=$([ ${DEPLOY_RESULT} -eq 0 ] && echo 'true' || echo 'false')" >> "$GITHUB_OUTPUT"
+          exit "${DEPLOY_RESULT}"
 
       - name: Create GitHub commit status for deployment
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && (success() || failure())
         env:
           PR_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           GH_TOKEN: ${{ github.token }}
@@ -712,45 +713,19 @@ jobs:
     steps:
       - name: Checkout repository (required for local action)
         uses: actions/checkout@v5
-      
-      - name: Setup `nomad` CLI
-        uses: hashicorp/setup-nomad@main
-        with:
-          version: ${{ env.NOMAD_VERSION }}
 
       # --- synchronize: stop previous PR job(s) for this PR (keep current) ---
       - name: 1. Stop and purge previous PR job(s) for this PR
         if: github.event_name == 'pull_request' && github.event.action == 'synchronize'
-        env:
-          NOMAD_TOKEN: ${{ secrets.NOMAD_SERVER_TOKEN }}
-          NOMAD_ADDR: ${{ secrets.NOMAD_SERVER_ADDRESS }}
-          CURRENT_JOB: ${{ needs.deploy-service.outputs.job_name }}
-          PREFIX: ${{ env.SERVICE }}-pr-${{ github.event.pull_request.number }}-
-        run: |
-          echo "Current job (keep): ${CURRENT_JOB}"
-          echo "Looking for other jobs with prefix: ${PREFIX} (namespace: ${NOMAD_NAMESPACE})"
-          # List all jobs and filter by prefix in the first column; skip header row.
-          JOBS=$(nomad job status 2>/dev/null \
-            | awk -v p="${PREFIX}" 'NR>1 && index($1, p) == 1 {print $1}' || true)
-          
-          # Each job ID is on its own line; count non-empty lines for total.
-          TOTAL=$(printf '%s\n' "${JOBS}" | sed '/^$/d' | wc -l | tr -d ' ')
-          echo "Found ${TOTAL} matching job(s):"
-          echo "${JOBS}"
-          CLEANED=0
-          for job in ${JOBS}; do
-            [ -z "${job}" ] && continue
-            if [ "${job}" != "${CURRENT_JOB}" ]; then
-              echo "Stopping and purging previous PR job: ${job}"
-              nomad job stop -purge -verbose "${job}" || true
-              CLEANED=$((CLEANED + 1))
-            fi
-          done
-          if [ "${CLEANED}" -eq 0 ]; then
-            echo "No previous PR jobs to clean up."
-          else
-            echo "Cleaned up ${CLEANED} previous PR job(s)."
-          fi
+        uses: ./.github/actions/cleanup-pr-nomad-job
+        with:
+          job_name: ${{ env.SERVICE }}-pr-${{ github.event.pull_request.number }}-
+          keep_job_name: ${{ needs.deploy-service.outputs.job_name }}
+          allow_missing: 'true'
+          nomad_version: ${{ env.NOMAD_VERSION }}
+          nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
+          nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
+          nomad_namespace: ${{ env.NOMAD_NAMESPACE }}
 
       # --- push main: stop merged PR's job (from GitHub API by commit SHA, not message) ---
       - name: Get merged PR number from commit (GitHub API)
@@ -764,40 +739,42 @@ jobs:
           # Works for merge commits and custom merge messages; does not depend on message template.
           PAYLOAD=$(gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" --jq '.[0] // empty' 2>/dev/null || true)
           PR_NUM=$(echo "$PAYLOAD" | jq -r '.number // empty' 2>/dev/null)
-          HEAD_SHA=$(echo "$PAYLOAD" | jq -r '.head.sha // empty' 2>/dev/null)
+          # HEAD_SHA=$(echo "$PAYLOAD" | jq -r '.head.sha // empty' 2>/dev/null)
           if [ -n "${PR_NUM}" ]; then
             echo "pr_number=${PR_NUM}" >> $GITHUB_OUTPUT
-            echo "head_sha=${HEAD_SHA}" >> $GITHUB_OUTPUT
-            echo "Found merged PR #${PR_NUM} head_sha=${HEAD_SHA} (from API)"
+            # echo "head_sha=${HEAD_SHA}" >> $GITHUB_OUTPUT
+            echo "Found merged PR #${PR_NUM} (from API)"
           else
             echo "pr_number=" >> $GITHUB_OUTPUT
-            echo "head_sha=" >> $GITHUB_OUTPUT
+            # echo "head_sha=" >> $GITHUB_OUTPUT
             echo "No PR associated with commit ${{ github.sha }} (e.g. direct push to main)"
           fi
-      - name: Determine Nomad job name (SERVICE-pr-N-SHORT_SHA)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.pr.outputs.pr_number != ''
-        id: job-name-merged
-        run: |
-          PR_NUM="${{ steps.pr.outputs.pr_number }}"
-          SHORT_SHA=$(echo "${{ steps.pr.outputs.head_sha }}" | cut -c1-7)
-          echo "job_name=${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}" >> $GITHUB_OUTPUT
-          echo "Nomad job name: ${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}"
+      # SHA-exact job ID (SERVICE-pr-N-SHORT_SHA). Cleanup now uses the PR prefix
+      # so leftover SHA jobs for this PR are stopped too.
+      # - name: Determine Nomad job name (SERVICE-pr-N-SHORT_SHA)
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.pr.outputs.pr_number != ''
+      #   id: job-name-merged
+      #   run: |
+      #     PR_NUM="${{ steps.pr.outputs.pr_number }}"
+      #     SHORT_SHA=$(echo "${{ steps.pr.outputs.head_sha }}" | cut -c1-7)
+      #     echo "job_name=${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}" >> $GITHUB_OUTPUT
+      #     echo "Nomad job name: ${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}"
       - name: 2. Cleanup merged PR Nomad job when push to main
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.pr.outputs.pr_number != ''
         uses: ./.github/actions/cleanup-pr-nomad-job
         with:
-          job_name: ${{ steps.job-name-merged.outputs.job_name }}
+          job_name: ${{ env.SERVICE }}-pr-${{ steps.pr.outputs.pr_number }}-
           nomad_version: ${{ env.NOMAD_VERSION }}
           nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
           nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
           nomad_namespace: ${{ env.NOMAD_NAMESPACE }}
 
-  # Cleanup Nomad deployment when PR is closed. Stops every leftover preview
-  # job for this PR (SERVICE-pr-N-*). If GitHub skips this run (Decap deletes
-  # the head branch immediately after close), cleanup-pr-nomad-on-delete.yml
-  # still runs from the default branch on the delete event.
+  # Cleanup Nomad deployment when PR is closed without merge (discard).
+  # Merged PRs are cleaned by cleanup-pr-after-deploy after main deploy.
+  # If GitHub skips this run (Decap deletes the head branch immediately after
+  # close), cleanup-pr-nomad-on-delete.yml still runs from the default branch.
   cleanup-pr-deployment:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == false
     permissions:
       contents: read
       packages: read
@@ -819,21 +796,4 @@ jobs:
           nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
           nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
           nomad_namespace: ${{ env.NOMAD_NAMESPACE }}
-          
-  # Cleanup workspace on the runner
-  cleanup-runner-workspace:
-    if: ${{ always() }}
-    permissions: {}
-    needs: 
-      - build-website-and-container-build
-      - deploy-service
-    runs-on: ubuntu-latest
-    # runs-on: [ self-hosted, rcg ]
-    steps:
-      - name: Current workspace
-        run: du -shc ${GITHUB_WORKSPACE}
-      - name: Clean Up Docker Images
-        if: needs.build-website-and-container-build.result != 'skipped'
-        run: docker rmi -f $(docker images '${{ needs.build-website-and-container-build.outputs.tags }}' -a -q) || echo "No docker images found to remove...skipping removal."
-      - name: Clean Up Workspace
-        run: rm -rf ${GITHUB_WORKSPACE}
+

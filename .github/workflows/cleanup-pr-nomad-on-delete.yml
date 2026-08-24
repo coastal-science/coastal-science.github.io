@@ -31,22 +31,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           DELETED_REF: ${{ github.event.ref }}
-        run: |
-          # delete payload `ref` is the branch name (e.g. cms/collection/slug), not refs/heads/...
-          PAYLOAD=$(gh api \
-            "repos/${{ github.repository }}/pulls" \
-            -f head="${{ github.repository_owner }}:${DELETED_REF}" \
-            -f state=closed \
-            -F per_page=1 \
-            --jq '.[0] // empty' 2>/dev/null || true)
-          PR_NUM=$(echo "$PAYLOAD" | jq -r '.number // empty' 2>/dev/null)
-          if [ -n "${PR_NUM}" ]; then
-            echo "pr_number=${PR_NUM}" >> "$GITHUB_OUTPUT"
-            echo "Found closed PR #${PR_NUM} for deleted branch ${DELETED_REF}"
-          else
-            echo "pr_number=" >> "$GITHUB_OUTPUT"
-            echo "No closed PR for deleted branch ${DELETED_REF}; skipping Nomad cleanup."
-          fi
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+        run: bash "${GITHUB_WORKSPACE}/.github/actions/cleanup-pr-nomad-job/find-closed-pr.sh"
 
       - name: Cleanup Nomad jobs for deleted PR branch
         if: steps.pr.outputs.pr_number != ''
