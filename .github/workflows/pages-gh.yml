@@ -79,7 +79,7 @@ jobs:
 ######################################################
 
   # Build job
-  build-website:
+  build-github-pages:
     # Skip Pages if PR is closed so a discarded draft is not published to github.io
     if: github.event_name != 'pull_request' || github.event.action != 'closed'
     needs:
@@ -151,7 +151,7 @@ jobs:
           path: ./public
 
   # Deployment job
-  deploy-gh-pages:
+  deploy-github-pages:
     # Skip Pages if PR is closed so a discarded draft is not published to github.io
     if: github.event_name != 'pull_request' || github.event.action != 'closed'
     environment:
@@ -163,7 +163,7 @@ jobs:
       id-token: write
       pages: write
     runs-on: ubuntu-latest
-    needs: build-website
+    needs: build-github-pages
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
@@ -173,7 +173,7 @@ jobs:
 ## Create and publish docker image        ##
 ## (handles both production and preview)  ##
 ############################################
-  build-website-and-container-build:
+  build-docker-image:
     environment: docker-image
     # Skip build if PR is closed (cleanup job handles that)
     if: github.event_name != 'pull_request' || github.event.action != 'closed'
@@ -369,12 +369,12 @@ jobs:
       #   run: rm -rf ${GITHUB_WORKSPACE}
 
   # Deploy docker image to orchestrator (handles both production and preview)
-  deploy-service:
+  deploy-nomad:
     # Skip deployment if PR is closed (cleanup job handles that)
     if: github.event_name != 'pull_request' || github.event.action != 'closed'
     needs:
       - generate-timestamp
-      - build-website-and-container-build
+      - build-docker-image
     permissions:
       contents: read
       packages: read
@@ -695,11 +695,11 @@ jobs:
             echo "${{ steps.set-env.outputs.nomad_url }}" >> "$GITHUB_STEP_SUMMARY"
           fi
 
-  # Cleanup PR Nomad jobs after deploy: (1) synchronize → stop previous PR job(s) for this PR; (2) push main → stop merged PR's job. Both need deploy-service. Conditionals on steps.
+  # Cleanup PR Nomad jobs after deploy: (1) synchronize → stop previous PR job(s) for this PR; (2) push main → stop merged PR's job. Both need deploy-nomad. Conditionals on steps.
   cleanup-preview-after-deploy:
     if: (github.event_name == 'pull_request' && github.event.action == 'synchronize') || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     needs:
-      - deploy-service
+      - deploy-nomad
     permissions:
       contents: read
       packages: read
@@ -720,7 +720,7 @@ jobs:
         uses: ./.github/actions/cleanup-pr-nomad-job
         with:
           job_name: ${{ env.SERVICE }}-pr-${{ github.event.pull_request.number }}-
-          keep_job_name: ${{ needs.deploy-service.outputs.job_name }}
+          keep_job_name: ${{ needs.deploy-nomad.outputs.job_name }}
           allow_missing: 'true'
           nomad_version: ${{ env.NOMAD_VERSION }}
           nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
