@@ -696,7 +696,7 @@ jobs:
           fi
 
   # Cleanup PR Nomad jobs after deploy: (1) synchronize → stop previous PR job(s) for this PR; (2) push main → stop merged PR's job. Both need deploy-service. Conditionals on steps.
-  cleanup-pr-after-deploy:
+  cleanup-preview-after-deploy:
     if: (github.event_name == 'pull_request' && github.event.action == 'synchronize') || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     needs:
       - deploy-service
@@ -770,10 +770,10 @@ jobs:
           nomad_namespace: ${{ env.NOMAD_NAMESPACE }}
 
   # Cleanup Nomad deployment when PR is closed without merge (discard).
-  # Merged PRs are cleaned by cleanup-pr-after-deploy after main deploy.
+  # Merged PRs are cleaned by cleanup-preview-after-deploy after main deploy.
   # If GitHub skips this run (Decap deletes the head branch immediately after
   # close), cleanup-pr-nomad-on-delete.yml still runs from the default branch.
-  cleanup-pr-deployment:
+  cleanup-preview-on-discard:
     if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == false
     permissions:
       contents: read
