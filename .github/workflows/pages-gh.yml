@@ -356,7 +356,17 @@ jobs:
       #     docker tag website ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           
       #     docker push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-  
+
+      - name: Current workspace
+        if: always()
+        run: du -shc ${GITHUB_WORKSPACE}
+      - name: Clean Up Docker Images
+        if: always()
+        run: docker rmi -f $(docker images '${{ steps.meta.outputs.tags }}' -a -q) || echo "No docker images found to remove...skipping removal."
+      - name: Clean Up Workspace
+        if: always()
+        run: rm -rf ${GITHUB_WORKSPACE}
+
   # Deploy docker image to orchestrator (handles both production and preview)
   deploy-service:
     # Skip deployment if PR is closed (cleanup job handles that)
@@ -780,21 +790,4 @@ jobs:
           nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
           nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
           nomad_namespace: ${{ env.NOMAD_NAMESPACE }}
-          
-  # Cleanup workspace on the runner
-  cleanup-runner-workspace:
-    if: ${{ always() }}
-    permissions: {}
-    needs: 
-      - build-website-and-container-build
-      - deploy-service
-    runs-on: ubuntu-latest
-    # runs-on: [ self-hosted, rcg ]
-    steps:
-      - name: Current workspace
-        run: du -shc ${GITHUB_WORKSPACE}
-      - name: Clean Up Docker Images
-        if: needs.build-website-and-container-build.result != 'skipped'
-        run: docker rmi -f $(docker images '${{ needs.build-website-and-container-build.outputs.tags }}' -a -q) || echo "No docker images found to remove...skipping removal."
-      - name: Clean Up Workspace
-        run: rm -rf ${GITHUB_WORKSPACE}
+
