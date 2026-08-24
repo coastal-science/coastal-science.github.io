@@ -25,6 +25,10 @@ inputs:
     description: Seconds to wait after stop/purge before verifying job is gone.
     required: false
     default: '5'
+  allow_missing:
+    description: If true, no matching jobs is success (already gone). Default false. Use when a later trigger (branch delete) may run after close cleanup already succeeded.
+    required: false
+    default: 'false'
 
 outputs:
   cleanup_success:
@@ -50,6 +54,7 @@ runs:
         NOMAD_NAMESPACE: ${{ inputs.nomad_namespace }}
         JOB_NAME: ${{ inputs.job_name }}
         SLEEP_SECONDS: ${{ inputs.sleep_seconds }}
+        ALLOW_MISSING: ${{ inputs.allow_missing }}
       shell: bash
       run: |
         stop_one() {
@@ -90,6 +95,11 @@ runs:
         echo "${JOBS}"
 
         if [ "${TOTAL}" -eq 0 ]; then
+          if [ "${ALLOW_MISSING}" = "true" ]; then
+            echo "cleanup_success=true" >> "$GITHUB_OUTPUT"
+            echo "No Nomad jobs with prefix ${JOB_NAME} in namespace ${NOMAD_NAMESPACE} (already gone)."
+            exit 0
+          fi
           echo "cleanup_success=false" >> "$GITHUB_OUTPUT"
           echo "::error::No Nomad jobs with prefix ${JOB_NAME} in namespace ${NOMAD_NAMESPACE}."
           exit 1

@@ -793,7 +793,9 @@ jobs:
           nomad_namespace: ${{ env.NOMAD_NAMESPACE }}
 
   # Cleanup Nomad deployment when PR is closed. Stops every leftover preview
-  # job for this PR (SERVICE-pr-N-*), not only the job named after the current head SHA.
+  # job for this PR (SERVICE-pr-N-*). If GitHub skips this run (Decap deletes
+  # the head branch immediately after close), cleanup-pr-nomad-on-delete.yml
+  # still runs from the default branch on the delete event.
   cleanup-pr-deployment:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     permissions:
