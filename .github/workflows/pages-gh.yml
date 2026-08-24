@@ -812,7 +812,7 @@ jobs:
       - name: 3. Cleanup all PR Nomad jobs when PR is closed
         uses: ./.github/actions/cleanup-pr-nomad-job
         with:
-          job_prefix: ${{ env.SERVICE }}-pr-${{ github.event.pull_request.number }}-
+          job_name: ${{ env.SERVICE }}-pr-${{ github.event.pull_request.number }}-
           nomad_version: ${{ env.NOMAD_VERSION }}
           nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
           nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}

@@ -1,18 +1,13 @@
-# Composite action: stop and purge Nomad job(s) by exact name or ID prefix.
-# Existing callers pass job_name (single job). Optional job_prefix stops every
-# matching job in the namespace (e.g. SERVICE-pr-N-).
+# Composite action: stop and purge Nomad jobs whose IDs start with job_name.
+# job_name may be a full ID (SERVICE-pr-N-SHA) or a prefix (SERVICE-pr-N-).
+# An exact ID is a prefix of itself, so existing single-job callers are unchanged.
 name: Cleanup PR Nomad job
-description: Stop and purge a Nomad job by name, or all jobs matching a prefix.
+description: Stop and purge Nomad jobs matching a job ID or ID prefix.
 
 inputs:
   job_name:
-    description: Full Nomad job name to stop and purge (e.g. SERVICE-pr-NUMBER-SHA). Required unless job_prefix is set.
-    required: false
-    default: ''
-  job_prefix:
-    description: If set, list and stop every job whose ID starts with this prefix (e.g. SERVICE-pr-NUMBER-). Overrides job_name.
-    required: false
-    default: ''
+    description: Job ID or ID prefix to stop and purge (e.g. SERVICE-pr-NUMBER-SHA or SERVICE-pr-NUMBER-). All jobs in the namespace whose IDs start with this value are stopped.
+    required: true
   nomad_version:
     description: Nomad CLI version to install.
     required: false
@@ -36,7 +31,7 @@ outputs:
     description: "true if job was removed, false otherwise"
     value: ${{ steps.cleanup.outputs.cleanup_success }}
   job_name:
-    description: Nomad job name that was cleaned up (empty when using job_prefix)
+    description: Job ID or prefix that was cleaned up
     value: ${{ inputs.job_name }}
 
 runs:
@@ -54,7 +49,6 @@ runs:
         NOMAD_ADDR: ${{ inputs.nomad_addr }}
         NOMAD_NAMESPACE: ${{ inputs.nomad_namespace }}
         JOB_NAME: ${{ inputs.job_name }}
-        JOB_PREFIX: ${{ inputs.job_prefix }}
         SLEEP_SECONDS: ${{ inputs.sleep_seconds }}
       shell: bash
       run: |
@@ -87,62 +81,44 @@ runs:
           return 0
         }
 
-        if [ -n "${JOB_PREFIX}" ]; then
-          echo "Looking for jobs with prefix: ${JOB_PREFIX} (namespace: ${NOMAD_NAMESPACE})"
-          JOBS=$(nomad job status 2>/dev/null \
-            | awk -v p="${JOB_PREFIX}" 'NR>1 && index($1, p) == 1 {print $1}' || true)
+        echo "Looking for jobs with prefix: ${JOB_NAME} (namespace: ${NOMAD_NAMESPACE})"
+        JOBS=$(nomad job status 2>/dev/null \
+          | awk -v p="${JOB_NAME}" 'NR>1 && index($1, p) == 1 {print $1}' || true)
 
-          TOTAL=$(printf '%s\n' "${JOBS}" | sed '/^$/d' | wc -l | tr -d ' ')
-          echo "Found ${TOTAL} matching job(s):"
-          echo "${JOBS}"
+        TOTAL=$(printf '%s\n' "${JOBS}" | sed '/^$/d' | wc -l | tr -d ' ')
+        echo "Found ${TOTAL} matching job(s):"
+        echo "${JOBS}"
 
-          if [ "${TOTAL}" -eq 0 ]; then
-            echo "cleanup_success=false" >> "$GITHUB_OUTPUT"
-            echo "::error::No Nomad jobs with prefix ${JOB_PREFIX} in namespace ${NOMAD_NAMESPACE}."
-            exit 1
-          fi
-
-          FAILED=0
-          for job in ${JOBS}; do
-            [ -z "${job}" ] && continue
-            if ! stop_one "${job}"; then
-              FAILED=$((FAILED + 1))
-            fi
-          done
-
-          if [ "${FAILED}" -ne 0 ]; then
-            echo "cleanup_success=false" >> "$GITHUB_OUTPUT"
-            echo "::error::Failed to clean up ${FAILED} Nomad job(s) for prefix ${JOB_PREFIX}."
-            exit 1
-          fi
-          echo "cleanup_success=true" >> "$GITHUB_OUTPUT"
-          echo "Cleaned up ${TOTAL} Nomad job(s) with prefix ${JOB_PREFIX}."
-        elif [ -n "${JOB_NAME}" ]; then
-          if ! stop_one "${JOB_NAME}"; then
-            echo "cleanup_success=false" >> "$GITHUB_OUTPUT"
-            exit 1
-          fi
-          echo "cleanup_success=true" >> "$GITHUB_OUTPUT"
-        else
+        if [ "${TOTAL}" -eq 0 ]; then
           echo "cleanup_success=false" >> "$GITHUB_OUTPUT"
-          echo "::error::Provide job_name (single job) or job_prefix (all matching jobs)."
+          echo "::error::No Nomad jobs with prefix ${JOB_NAME} in namespace ${NOMAD_NAMESPACE}."
           exit 1
         fi
+
+        FAILED=0
+        for job in ${JOBS}; do
+          [ -z "${job}" ] && continue
+          if ! stop_one "${job}"; then
+            FAILED=$((FAILED + 1))
+          fi
+        done
+
+        if [ "${FAILED}" -ne 0 ]; then
+          echo "cleanup_success=false" >> "$GITHUB_OUTPUT"
+          echo "::error::Failed to clean up ${FAILED} Nomad job(s) for prefix ${JOB_NAME}."
+          exit 1
+        fi
+        echo "cleanup_success=true" >> "$GITHUB_OUTPUT"
+        echo "Cleaned up ${TOTAL} Nomad job(s) with prefix ${JOB_NAME}."
 
     - name: Summary
       if: always()
       shell: bash
-      env:
-        CLEANUP_SUCCESS: ${{ steps.cleanup.outputs.cleanup_success }}
-        JOB_NAME: ${{ inputs.job_name }}
-        JOB_PREFIX: ${{ inputs.job_prefix }}
-        NOMAD_NAMESPACE: ${{ inputs.nomad_namespace }}
       run: |
-        TARGET="${JOB_NAME:-${JOB_PREFIX}}"
-        if [ "${CLEANUP_SUCCESS}" = "true" ]; then
+        if [ "${{ steps.cleanup.outputs.cleanup_success }}" = "true" ]; then
           echo "✓ PR deployment cleanup completed successfully" >> "$GITHUB_STEP_SUMMARY"
-          echo "Cleaned up Nomad job: ${TARGET}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Cleaned up Nomad job: ${{ inputs.job_name }}" >> "$GITHUB_STEP_SUMMARY"
         else
           echo "✗ PR deployment cleanup failed" >> "$GITHUB_STEP_SUMMARY"
-          echo "Job: ${TARGET} (namespace: ${NOMAD_NAMESPACE})" >> "$GITHUB_STEP_SUMMARY"
+          echo "Job: ${{ inputs.job_name }} (namespace: ${{ inputs.nomad_namespace }})" >> "$GITHUB_STEP_SUMMARY"
         fi
