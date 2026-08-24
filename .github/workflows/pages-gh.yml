@@ -792,7 +792,8 @@ jobs:
           nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
           nomad_namespace: ${{ env.NOMAD_NAMESPACE }}
 
-  # Cleanup Nomad deployment when PR is closed. Handles both merged and non-merged PRs.
+  # Cleanup Nomad deployment when PR is closed. Stops every leftover preview
+  # job for this PR (SERVICE-pr-N-*), not only the job named after the current head SHA.
   cleanup-pr-deployment:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     permissions:
@@ -808,19 +809,10 @@ jobs:
     steps:
       - name: Checkout repository (required for local action)
         uses: actions/checkout@v5
-      - name: Determine Nomad job name (SERVICE-pr-N-SHORT_SHA)
-        id: job-name
-        run: |
-          PR_NUM="${{ github.event.pull_request.number }}"
-          # Get the head commit SHA from the PR event (feature branch commit)
-          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-          SHORT_SHA=$(echo "${HEAD_SHA}" | cut -c1-7)
-          echo "job_name=${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}" >> $GITHUB_OUTPUT
-          echo "Nomad job name: ${{ env.SERVICE }}-pr-${PR_NUM}-${SHORT_SHA}"
-      - name: 3. Cleanup PR Nomad job when PR is closed (without merge)
+      - name: 3. Cleanup all PR Nomad jobs when PR is closed
         uses: ./.github/actions/cleanup-pr-nomad-job
         with:
-          job_name: ${{ steps.job-name.outputs.job_name }}
+          job_prefix: ${{ env.SERVICE }}-pr-${{ github.event.pull_request.number }}-
           nomad_version: ${{ env.NOMAD_VERSION }}
           nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
           nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
