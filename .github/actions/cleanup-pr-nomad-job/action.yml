@@ -1,6 +1,7 @@
 # Composite action: stop and purge Nomad jobs whose IDs start with job_name.
 # job_name may be a full ID (SERVICE-pr-N-SHA) or a prefix (SERVICE-pr-N-).
 # An exact ID is a prefix of itself, so existing single-job callers are unchanged.
+# Optional keep_job_name skips that exact ID (synchronize: stop older previews).
 name: Cleanup PR Nomad job
 description: Stop and purge Nomad jobs matching a job ID or ID prefix.
 
@@ -29,6 +30,10 @@ inputs:
     description: If true, no matching jobs is success (already gone). Default false. Use when a later trigger (branch delete) may run after close cleanup already succeeded.
     required: false
     default: 'false'
+  keep_job_name:
+    description: Exact job ID to skip (e.g. the preview just deployed). Other matches for job_name are still stopped.
+    required: false
+    default: ''
 
 outputs:
   cleanup_success:
@@ -55,6 +60,7 @@ runs:
         JOB_NAME: ${{ inputs.job_name }}
         SLEEP_SECONDS: ${{ inputs.sleep_seconds }}
         ALLOW_MISSING: ${{ inputs.allow_missing }}
+        KEEP_JOB_NAME: ${{ inputs.keep_job_name }}
       shell: bash
       run: bash "${{ github.action_path }}/cleanup.sh"
 

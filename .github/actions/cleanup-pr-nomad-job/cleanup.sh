@@ -3,12 +3,14 @@
 # Invoked by action.yml. Runnable locally with a stub nomad on PATH.
 #
 # Required env: JOB_NAME, NOMAD_NAMESPACE, GITHUB_OUTPUT
-# Optional env: SLEEP_SECONDS (default 5), ALLOW_MISSING (default false)
+# Optional env: SLEEP_SECONDS (default 5), ALLOW_MISSING (default false),
+# KEEP_JOB_NAME (exact ID to skip, e.g. the preview just deployed).
 # Nomad CLI uses: NOMAD_TOKEN, NOMAD_ADDR, NOMAD_NAMESPACE
 set -euo pipefail
 
 SLEEP_SECONDS="${SLEEP_SECONDS:-5}"
 ALLOW_MISSING="${ALLOW_MISSING:-false}"
+KEEP_JOB_NAME="${KEEP_JOB_NAME:-}"
 
 if [ -z "${JOB_NAME:-}" ]; then
   echo "::error::JOB_NAME is required."
@@ -53,6 +55,9 @@ stop_one() {
 }
 
 echo "Looking for jobs with prefix: ${JOB_NAME} (namespace: ${NOMAD_NAMESPACE})"
+if [ -n "${KEEP_JOB_NAME}" ]; then
+  echo "Keeping job: ${KEEP_JOB_NAME}"
+fi
 JOBS=$(nomad job status 2>/dev/null \
   | awk -v p="${JOB_NAME}" 'NR>1 && index($1, p) == 1 {print $1}' || true)
 
@@ -71,11 +76,32 @@ if [ "${TOTAL}" -eq 0 ]; then
   exit 1
 fi
 
-FAILED=0
+TO_STOP=""
+KEEP_COUNT=0
 for job in ${JOBS}; do
+  [ -z "${job}" ] && continue
+  if [ -n "${KEEP_JOB_NAME}" ] && [ "${job}" = "${KEEP_JOB_NAME}" ]; then
+    KEEP_COUNT=$((KEEP_COUNT + 1))
+    continue
+  fi
+  TO_STOP="${TO_STOP} ${job}"
+done
+
+STOP_TOTAL=$(printf '%s\n' ${TO_STOP} | sed '/^$/d' | wc -l | tr -d ' ')
+if [ "${STOP_TOTAL}" -eq 0 ]; then
+  echo "cleanup_success=true" >> "$GITHUB_OUTPUT"
+  echo "No jobs to stop (kept ${KEEP_COUNT} matching job(s))."
+  exit 0
+fi
+
+FAILED=0
+STOPPED=0
+for job in ${TO_STOP}; do
   [ -z "${job}" ] && continue
   if ! stop_one "${job}"; then
     FAILED=$((FAILED + 1))
+  else
+    STOPPED=$((STOPPED + 1))
   fi
 done
 
@@ -85,4 +111,4 @@ if [ "${FAILED}" -ne 0 ]; then
   exit 1
 fi
 echo "cleanup_success=true" >> "$GITHUB_OUTPUT"
-echo "Cleaned up ${TOTAL} Nomad job(s) with prefix ${JOB_NAME}."
+echo "Cleaned up ${STOPPED} Nomad job(s) with prefix ${JOB_NAME}."
