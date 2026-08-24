@@ -50,9 +50,6 @@ on:
     # secrets:
     #   token:
     #     required: false
-        
-# env:
-#   CONTAINER_PROJECT: "coastal-science.github.io" # "rcg-containers" # repo name dynamically extracted from `github.repository` by removing `github.owner`
 
 # Allow one concurrent deployment
 concurrency:
@@ -82,6 +79,8 @@ jobs:
 ######################################################
 
   configure-pages:
+    # Skip Pages if PR is closed so a discarded draft is not published to github.io
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     runs-on: ubuntu-latest
     permissions: # read-all
       contents: read
@@ -96,6 +95,8 @@ jobs:
       
   # Build job
   build-website:
+    # Skip Pages if PR is closed so a discarded draft is not published to github.io
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     needs:
       - generate-timestamp
       - configure-pages
@@ -161,6 +162,8 @@ jobs:
 
   # Deployment job
   deploy-gh-pages:
+    # Skip Pages if PR is closed so a discarded draft is not published to github.io
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -182,7 +185,6 @@ jobs:
 ############################################
   build-website-and-container-build:
     environment: docker-image
-    # if: github.ref == 'refs/heads/main'
     # Skip build if PR is closed (cleanup job handles that)
     if: github.event_name != 'pull_request' || github.event.action != 'closed'
     needs:
@@ -369,8 +371,6 @@ jobs:
   deploy-service:
     # Skip deployment if PR is closed (cleanup job handles that)
     if: github.event_name != 'pull_request' || github.event.action != 'closed'
-    # if: false
-    # if: github.ref == 'refs/heads/main'
     needs:
       - generate-timestamp
       - build-website-and-container-build
@@ -380,9 +380,7 @@ jobs:
       statuses: write
     environment: 
       name: docker-image
-      # url: https://${{ vars.HUGO_BASEURL }}
       url: ${{ steps.set-env.outputs.nomad_url }}
-      # url: https://${{ vars.__SERVICE__ }}-${{ env.ENVIRONMENT == 'production' && 'latest' || 'dev' }}.ruthjoy.researchcomputinggroup.ca
     runs-on: ubuntu-latest
     # runs-on: [ self-hosted, rcg ]
     # container:
@@ -548,7 +546,6 @@ jobs:
         run: |
           # Use ENVIRONMENT_SUFFIX consistently for both PRs and branches
           JOB_NAME="${{ env.SERVICE }}-${ENVIRONMENT_SUFFIX}"
-          # NOMAD_JOB_TEMPLATE="nomad/template.nomad"
           NOMAD_JOB_TEMPLATE="${NOMAD_JOB_TEMPLATE}"
           NOMAD_OUTPUT_FILE="${NOMAD_FILE}"
 
