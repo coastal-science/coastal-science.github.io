@@ -1,5 +1,5 @@
 # Composite action: stop and purge a Nomad job by name.
-# Caller must pass the full job name (e.g. SERVICE-pr-NUMBER) and nomad_token/nomad_addr (e.g. from secrets).
+# Caller must pass the full job name (e.g. SERVICE-pr-NUMBER) and nomad_token/nomad_addr/nomad_namespace.
 name: Cleanup PR Nomad job
 description: Stop and purge a Nomad job by name. Caller constructs job_name (e.g. from service and pr_number).
 
@@ -16,6 +16,9 @@ inputs:
     required: true
   nomad_addr:
     description: Nomad server address (pass from secrets; e.g. secrets.NOMAD_SERVER_ADDRESS).
+    required: true
+  nomad_namespace:
+    description: Nomad namespace the job was submitted to (pass from vars; e.g. vars.__NAMESPACE__). Required so stop/status look in the same namespace as deploy.
     required: true
   sleep_seconds:
     description: Seconds to wait after stop/purge before verifying job is gone.
@@ -43,12 +46,13 @@ runs:
       env:
         NOMAD_TOKEN: ${{ inputs.nomad_token }}
         NOMAD_ADDR: ${{ inputs.nomad_addr }}
+        NOMAD_NAMESPACE: ${{ inputs.nomad_namespace }}
         JOB_NAME: ${{ inputs.job_name }}
         SLEEP_SECONDS: ${{ inputs.sleep_seconds }}
       shell: bash
       run: |
-        echo "Stopping Nomad job: ${JOB_NAME}"
-        NOMAD_TOKEN="${NOMAD_TOKEN}" NOMAD_ADDR="${NOMAD_ADDR}" nomad job stop -purge -verbose "${JOB_NAME}" || true
+        echo "Stopping Nomad job: ${JOB_NAME} (namespace: ${NOMAD_NAMESPACE})"
+        nomad job stop -purge -verbose "${JOB_NAME}" || true
         sleep "${SLEEP_SECONDS}"
         if nomad job status "${JOB_NAME}" 2>/dev/null; then
           echo "cleanup_success=false" >> "$GITHUB_OUTPUT"

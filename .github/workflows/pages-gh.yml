@@ -708,6 +708,7 @@ jobs:
     env:
       NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       SERVICE: "${{ vars.__SERVICE__ }}"
+      NOMAD_NAMESPACE: "${{ vars.__NAMESPACE__ }}"
     steps:
       - name: Checkout repository (required for local action)
         uses: actions/checkout@v5
@@ -727,9 +728,9 @@ jobs:
           PREFIX: ${{ env.SERVICE }}-pr-${{ github.event.pull_request.number }}-
         run: |
           echo "Current job (keep): ${CURRENT_JOB}"
-          echo "Looking for other jobs with prefix: ${PREFIX}"
+          echo "Looking for other jobs with prefix: ${PREFIX} (namespace: ${NOMAD_NAMESPACE})"
           # List all jobs and filter by prefix in the first column; skip header row.
-          JOBS=$(NOMAD_TOKEN="${NOMAD_TOKEN}" NOMAD_ADDR="${NOMAD_ADDR}" nomad job status 2>/dev/null \
+          JOBS=$(nomad job status 2>/dev/null \
             | awk -v p="${PREFIX}" 'NR>1 && index($1, p) == 1 {print $1}' || true)
           
           # Each job ID is on its own line; count non-empty lines for total.
@@ -741,7 +742,7 @@ jobs:
             [ -z "${job}" ] && continue
             if [ "${job}" != "${CURRENT_JOB}" ]; then
               echo "Stopping and purging previous PR job: ${job}"
-              NOMAD_TOKEN="${NOMAD_TOKEN}" NOMAD_ADDR="${NOMAD_ADDR}" nomad job stop -purge -verbose "${job}" || true
+              nomad job stop -purge -verbose "${job}" || true
               CLEANED=$((CLEANED + 1))
             fi
           done
@@ -789,6 +790,7 @@ jobs:
           nomad_version: ${{ env.NOMAD_VERSION }}
           nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
           nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
+          nomad_namespace: ${{ env.NOMAD_NAMESPACE }}
 
   # Cleanup Nomad deployment when PR is closed. Handles both merged and non-merged PRs.
   cleanup-pr-deployment:
@@ -802,6 +804,7 @@ jobs:
     env:
       NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       SERVICE: "${{ vars.__SERVICE__ }}"
+      NOMAD_NAMESPACE: "${{ vars.__NAMESPACE__ }}"
     steps:
       - name: Checkout repository (required for local action)
         uses: actions/checkout@v5
@@ -821,6 +824,7 @@ jobs:
           nomad_version: ${{ env.NOMAD_VERSION }}
           nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
           nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
+          nomad_namespace: ${{ env.NOMAD_NAMESPACE }}
           
   # Cleanup workspace on the runner
   cleanup-runner-workspace:
