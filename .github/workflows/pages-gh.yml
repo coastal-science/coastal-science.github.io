@@ -699,45 +699,19 @@ jobs:
     steps:
       - name: Checkout repository (required for local action)
         uses: actions/checkout@v5
-      
-      - name: Setup `nomad` CLI
-        uses: hashicorp/setup-nomad@main
-        with:
-          version: ${{ env.NOMAD_VERSION }}
 
       # --- synchronize: stop previous PR job(s) for this PR (keep current) ---
       - name: 1. Stop and purge previous PR job(s) for this PR
         if: github.event_name == 'pull_request' && github.event.action == 'synchronize'
-        env:
-          NOMAD_TOKEN: ${{ secrets.NOMAD_SERVER_TOKEN }}
-          NOMAD_ADDR: ${{ secrets.NOMAD_SERVER_ADDRESS }}
-          CURRENT_JOB: ${{ needs.deploy-service.outputs.job_name }}
-          PREFIX: ${{ env.SERVICE }}-pr-${{ github.event.pull_request.number }}-
-        run: |
-          echo "Current job (keep): ${CURRENT_JOB}"
-          echo "Looking for other jobs with prefix: ${PREFIX} (namespace: ${NOMAD_NAMESPACE})"
-          # List all jobs and filter by prefix in the first column; skip header row.
-          JOBS=$(nomad job status 2>/dev/null \
-            | awk -v p="${PREFIX}" 'NR>1 && index($1, p) == 1 {print $1}' || true)
-          
-          # Each job ID is on its own line; count non-empty lines for total.
-          TOTAL=$(printf '%s\n' "${JOBS}" | sed '/^$/d' | wc -l | tr -d ' ')
-          echo "Found ${TOTAL} matching job(s):"
-          echo "${JOBS}"
-          CLEANED=0
-          for job in ${JOBS}; do
-            [ -z "${job}" ] && continue
-            if [ "${job}" != "${CURRENT_JOB}" ]; then
-              echo "Stopping and purging previous PR job: ${job}"
-              nomad job stop -purge -verbose "${job}" || true
-              CLEANED=$((CLEANED + 1))
-            fi
-          done
-          if [ "${CLEANED}" -eq 0 ]; then
-            echo "No previous PR jobs to clean up."
-          else
-            echo "Cleaned up ${CLEANED} previous PR job(s)."
-          fi
+        uses: ./.github/actions/cleanup-pr-nomad-job
+        with:
+          job_name: ${{ env.SERVICE }}-pr-${{ github.event.pull_request.number }}-
+          keep_job_name: ${{ needs.deploy-service.outputs.job_name }}
+          allow_missing: 'true'
+          nomad_version: ${{ env.NOMAD_VERSION }}
+          nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
+          nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
+          nomad_namespace: ${{ env.NOMAD_NAMESPACE }}
 
       # --- push main: stop merged PR's job (from GitHub API by commit SHA, not message) ---
       - name: Get merged PR number from commit (GitHub API)
