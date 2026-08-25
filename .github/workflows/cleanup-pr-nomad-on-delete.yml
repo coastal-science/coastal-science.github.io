@@ -9,7 +9,7 @@ on:
 
 jobs:
   cleanup-pr-nomad:
-    if: github.event.ref_type == 'branch'
+    if: github.event.ref_type == 'branch' && vars.ENABLE_NOMAD == 'true'
     permissions:
       contents: read
       pull-requests: read
