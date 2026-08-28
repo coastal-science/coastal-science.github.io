@@ -65,7 +65,7 @@ JASCO Applied Sciences
 
 Ocean Networks Canada
 
-* Benoit Pirenne, Lanfranco Muzi, Lynn Rannankari,
+* Benoit Pirenne, Lanfranco Muzi, Lynn Rannankari
 
 Saturna Island Marine Research and Education Society (SIMRES)
 
