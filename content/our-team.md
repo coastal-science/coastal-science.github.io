@@ -47,38 +47,30 @@ Dr. Val Viers
 
 * OrcaSound Collective, Beam Reach Marine Science and Sustainability School
 
-Dr. Dave Campbell
-
-* School of Mathematics and Statistics, Carleton University
-
 ### Collaborators
+
+Fisheries and Oceans Canada
+
+* Dr. Harald Yurk
+* Dr. Sheila Thornton
+* Dr. John Ford
 
 SMRU Consulting
 
-* Jason Wood
+* Dr. Jason Wood
 
 JASCO Applied Sciences
 
-* Jennifer Wladichuk, April Houweling, David Hannay
+* Dr Jennifer Wladichuk, April Houweling, David Hannay
 
 Ocean Networks Canada
 
-* Jasper Kanes
+* Benoit Pirenne, Lanfranco Muzi, Lynn Rannankari,
 
 Saturna Island Marine Research and Education Society (SIMRES)
 
-* Dr. Martin Wale
+* Dr. Martin Wale, Maureen Welton, Susie Washington-Smyth
 
 Digital Research Alliance of Canada (SFU's Research Computing Group)
 
-* Jillian Anderson, Andrei Vassilenko, Ishan Sahay, Dr. Alireza Ensan, Chloe Zhu
-
-### Previous Researchers
-
-Dr. Paul Nguyen Hong Duc
-
-* School of Mathematics and Statistics, Carleton University
-
-[Dr. Steven Bergner](https://www.sfu.ca/computing/people/faculty/stevenbergner.html)
-
-* School of Computing Science, Simon Fraser University
+* Andrei Vassilenko, Dr. Alireza Ensan, Ishan Sahay, Chloe Zhu, Junbin Zhang, Jillian Anderson
