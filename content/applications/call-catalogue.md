@@ -4,7 +4,7 @@ date: 2025-02-07T14:58:00.000Z
 weight: 1
 thumbnail: img/S01-J,L-1.jpg
 photocredits: Write Credits here
-thumbnailurl: https://orca.research.sfu.ca/call-library
+thumbnailurl: https://orca.research.sfu.ca/applications/call-catalogue/
 description: Dr. John Ford's Southern Resident Killer Whale Call Catalogue
 ---
 {{< figure url="/img/S01-J,L-1.jpg" credit="_Ford, et. al. 2023_" >}}
