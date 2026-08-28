@@ -1,12 +1,11 @@
 ---
-title: 'Classification Models'
+title: Classification Models
 date: 2023-07-31T12:33:46-07:00
 weight: 3
-# icon: "fa fa-check"
 thumbnail: /img/short_detector_animation.gif
-# photocredits: "" # or leave blank
-thumbnailurl: "https://github.com/coastal-science/HALLO-models"
-description: "Models that identify the source of underwater sounds. Explore our diverse models designed to discern underwater sounds from marine mammals."
+thumbnailurl: https://orca.research.sfu.ca/applications/classification/
+description: Models that identify the source of underwater sounds. Explore our
+  diverse models designed to discern underwater sounds from marine mammals.
 ---
 
 ## Classifying Whale Sounds With Deep Learning
