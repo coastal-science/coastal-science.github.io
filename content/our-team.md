@@ -11,11 +11,11 @@ HALLO formed and began research efforts in 2019. Since then, we've been working 
 
 ### Researchers
 
-[Dr. Ruth Joy](https://www.sfu.ca/~rjoy), *Principal Investigator*
+[Dr Ruth Joy](https://www.sfu.ca/~rjoy), *Principal Investigator*
 
 * School of Environmental Science, Simon Fraser University
 
-Dr. Mike Dowd
+Dr Mike Dowd
 
 * Department of Mathematics and Statistics, Dalhousie University
 
@@ -23,41 +23,75 @@ Fabio Frazao
 
 * Department of Computer Science, Dalhousie University
 
-Dr. Bruno Padovese
+Dr Bruno Padovese
 
 * School of Environmental Science, Simon Fraser University
 
-Teng-Wei Lim
+Teng-Wei Lin
 
 * School of Environmental Science, Simon Fraser University
 
-Dr. Peter Thompson
+Dr Peter Thompson
 
 * School of Environmental Science, Simon Fraser University
 
-Dr. Oliver Kirsebom
+Dr Farid Jedari-Eyvazi
+
+* Dalhousie University
+
+Dr Oliver Kirsebom
 
 * Open Ocean Robotics
 
-Dr. Scott Viers
+Dr Kait Palmer
+
+* Ocean Associates with NOAA Fisheries
+
+Dr Bret Nestor
+
+* University of British Columbia
+
+Dr Nadege Fonvieille
+
+* School of Environmental Science, Simon Fraser University
+
+Dr Scott Viers
 
 * OrcaSound Collective, Beam Reach Marine Science and Sustainability School
 
-Dr. Val Viers
+Dr Val Viers
 
 * OrcaSound Collective, Beam Reach Marine Science and Sustainability School
+
+Dr Harald Yurk
+
+* Fisheries and Oceans Canada
 
 ### Collaborators
 
+OceanWise
+
+* Alex Mitchell
+
+Raincoast Conservation Foundation
+
+* Janine McNeilly, Valeria Vergara
+
+OrcaSound and Acartia
+
+* Dr Valentina Staneva, Dr Scott Veirs, Dr Val Veirs
+
+WSANEC / QENTOL,YEN Marine Guardians
+
+* Shelly Kemp, Rachel Fairfield Checko
+
 Fisheries and Oceans Canada
 
-* Dr. Harald Yurk
-* Dr. Sheila Thornton
-* Dr. John Ford
+* Dr Harald Yurk, Lucy Quayle, Dr Sheila Thornton, Dr John Ford
 
 SMRU Consulting
 
-* Dr. Jason Wood
+* Dr Jason Wood
 
 JASCO Applied Sciences
 
@@ -65,11 +99,16 @@ JASCO Applied Sciences
 
 Ocean Networks Canada
 
-* Benoit Pirenne, Lanfranco Muzi, Lynn Rannankari
+* Dr Benoit Pirenne, Dr Lanfranco Muzi, Lynn Rannankari
 
 Saturna Island Marine Research and Education Society (SIMRES)
 
 * Dr. Martin Wale, Maureen Welton, Susie Washington-Smyth
+
+Royal Canadian Navy
+
+* Dugald Thompson
+* Carolyn Binder
 
 Digital Research Alliance of Canada (SFU's Research Computing Group)
 
