@@ -1,28 +1,28 @@
-# local_backend: # true
-#   # when using a custom proxy server port
-#   url: http://localhost:8081/api/v1
-#   # when accessing the local site from a host other than 'localhost' or '127.0.0.1'
-#   allowed_hosts: ['localhost']
-
-# backend:
-#   name: "git-gateway"
-#   branch: "main" # Branch to update (optional; defaults to master)
+local_backend: # true
+  # when using a custom proxy server port
+  url: http://localhost:8081/api/v1
+  # when accessing the local site from a host other than 'localhost' or '127.0.0.1'
+  allowed_hosts: ['localhost']
 
 backend:
-  name: github
-  branch: main
-  repo: coastal-science/coastal-science.github.io
-  base_url: https://orca.research.sfu.ca
-  # base_url: https://orca-prod.ruthjoy.cedar.researchcomputinggroup.ca
-  # base_url: https://orca-prod.ruthjoy.researchcomputinggroup.ca
-  # base_url: https://orca-dev.ruthjoy.researchcomputinggroup.ca
-  commit_messages:
-    create: "Create {{collection}} “{{slug}}”"
-    update: "Update {{collection}} “{{slug}}”"
-    delete: "Delete {{collection}} “{{slug}}”"
-    uploadMedia: "Upload “{{path}}”"
-    deleteMedia: "Delete “{{path}}”"
-  squash_merges: true
+  name: "git-gateway"
+  branch: "main" # Branch to update (optional; defaults to master)
+
+# backend:
+#   name: github
+#   branch: main
+#   repo: coastal-science/coastal-science.github.io
+#   base_url: https://orca.research.sfu.ca
+#   # base_url: https://orca-prod.ruthjoy.cedar.researchcomputinggroup.ca
+#   # base_url: https://orca-prod.ruthjoy.researchcomputinggroup.ca
+#   # base_url: https://orca-dev.ruthjoy.researchcomputinggroup.ca
+#   commit_messages:
+#     create: "Create {{collection}} “{{slug}}”"
+#     update: "Update {{collection}} “{{slug}}”"
+#     delete: "Delete {{collection}} “{{slug}}”"
+#     uploadMedia: "Upload “{{path}}”"
+#     deleteMedia: "Delete “{{path}}”"
+#   squash_merges: true
 
 publish_mode: editorial_workflow
 
@@ -193,7 +193,7 @@ collections:
   editor:
     preview: false
   preview_path: "research/{{slug}}"
-  summary: "{{title | title}} [{{id}}] – {{description | truncate(40,'...')}} {{body | truncate(150, '...')}}"
+  summary: "{{title}}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
   - { label: 'Publish Date', name: 'date', widget: 'datetime' }
@@ -211,7 +211,7 @@ collections:
   editor:
     preview: false
   preview_path: "research/publications/{{slug}}"
-  summary: "{{title | title}} ({{date | date('YYYY')}}) {{journal}} - {{ authors }}"
+  summary: "{{date | date('YYYY')}} · {{title}}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
   - { label: 'Publish Date', name: 'date', widget: 'datetime' }
@@ -235,7 +235,7 @@ collections:
     preview: false
   preview_path: "blog/{{year}}/{{month}}/{{day}}/{{slug}}"
   preview_path_date_field: date
-  summary: "{{title | title}} - {{ authors }} {{date | date('YYYY-MM-DD')}} - {{body | truncate(20, '...')}}"
+  summary: "{{date | date('YYYY-MM-DD')}} · {{title}}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
   - { label: 'Publish Date', name: 'date', widget: 'datetime' }
