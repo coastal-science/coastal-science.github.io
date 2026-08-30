@@ -1,4 +1,8 @@
-# local_backend: true
+# local_backend: # true
+#   # when using a custom proxy server port
+#   url: http://localhost:8081/api/v1
+#   # when accessing the local site from a host other than 'localhost' or '127.0.0.1'
+#   allowed_hosts: ['localhost']
 
 # backend:
 #   name: "git-gateway"
@@ -127,11 +131,60 @@ collections:
 
   - { label: 'Thumbnail', name: 'thumbnail', widget: 'image', required: False }
   - { label: 'Photo Credits', name: 'photocredits', widget: 'string', required: False, hint: 'Provide image credits here or leave blank. The prefix "_Photo Credits:_" will be added.' }
-  - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', required: False, hint: 'Redirect url for the thumbnail image', pattern: [ '^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$', 'Must be an http(s) url.' ] }
+  - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', required: False, hint: 'Optional override for the Applications card. When set, both the title and thumbnail link here instead of this page. Leave blank to use the page permalink.', pattern: [ '^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$', 'Must be an http(s) url.' ] }
 
   - { label: 'Description', name: 'description', widget: 'string', required: False, hint: 'Used for the page listing multiple subpages. If blank, this is populated from the first 100 characters from the page entry.' }
 
   - { label: 'Body', name: 'body', widget: 'markdown' }
+
+- name: "workshops"
+  label: "Workshops"
+  label_singular: "Workshop"
+  folder: "content/applications/workshops"
+  create: true
+  editor:
+    preview: false
+  preview_path: "applications/workshops/{{slug}}"
+  summary: "{{title}}"
+  nested:
+    depth: 100
+    summary: "{{title}}"
+    subfolders: false
+  meta: { path: { widget: string, label: "Path", index_file: "_index", hint: "Path to the workshop page. Leave Path alone unless they are renaming or moving a workshop page." } }
+  fields:
+  - { label: 'Title', name: 'title', widget: 'string' }
+  - { label: 'Workshop data slug', name: 'workshop', widget: 'string', required: false, pattern: [ '^[a-z0-9-]+$', 'Use lowercase letters, numbers, and hyphens only. Must match Workshops · Data (folder under data/workshop/).' ], hint: 'Schedule pages only: same slug as Workshops · Data, e.g. sfu-hallo-2022-bioacoustics. Leave blank on the Workshops section (_index).' }
+  - { label: 'Publish Date', name: 'date', widget: 'datetime' }
+  - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: false, hint: 'Sort order on listing pages. Lower numbers appear first.' }
+  - { label: 'Thumbnail', name: 'thumbnail', widget: 'image', required: false, hint: 'Used for cards on /applications/ and /applications/workshops/' }
+  - { label: 'Photo Credits', name: 'photocredits', widget: 'string', required: false, hint: 'Provide image credits here or leave blank. The prefix "_Photo Credits:_" will be added.' }
+  - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', required: false, hint: 'Optional override for the card. When set, both the title and thumbnail link here instead of this page. Leave blank to use the page permalink.' }
+  - { label: 'Description', name: 'description', widget: 'string', required: false, hint: 'Card blurb on listing pages. If blank, taken from the body.' }
+  - { label: 'Body', name: 'body', widget: 'markdown', default: "# Workshop Schedule\n\n{{< workshop >}}", hint: 'Section (_index): intro text. Schedule pages: keep {{< workshop >}} to render talks from Workshops · Data.' }
+
+- name: "workshops_data"
+  label: "Workshops · Data"
+  folder: "data/workshop"
+  extension: "yaml"
+  path: "{{slug}}/info"
+  create: true
+  slug: "{{slug}}"
+  identifier_field: name
+  editor:
+    preview: false
+  summary: "{{name}}"
+  fields:
+  - { label: 'Workshop Name', name: 'name', widget: 'string', pattern: [ '^[a-z0-9-]+$', 'Use lowercase letters, numbers, and hyphens only. Must match the workshop data slug on the Workshop page.' ], hint: 'Slug matching the `workshop: field` (or data/workshop/<slug>/) on schedule pages, e.g. sfu-hallo-2022-bioacoustics' }
+  - label: 'Talks'
+    name: 'talks'
+    widget: 'list'
+    summary: '{{fields.title}} — {{fields.presenter}} ({{fields.time}})'
+    fields:
+    - { label: 'Title', name: 'title', widget: 'string' }
+    - { label: 'Presenter', name: 'presenter', widget: 'string', hint: 'One or more names, e.g. Lucy Quayle, Susie Washington-Smyth' }
+    - { label: 'Time', name: 'time', widget: 'string', hint: 'e.g. Early morning Aug 31' }
+    - { label: 'Video URL', name: 'video_url', widget: 'string', pattern: [ '^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$', 'Must be an http(s) url.' ] }
+    - { label: 'YouTube ID', name: 'youtube_id', widget: 'string', hint: 'ID from the YouTube URL, e.g. 3fao7Gtlckw from https://youtu.be/3fao7Gtlckw' }
 
 - name: "research"
   label: "Research"
@@ -140,7 +193,8 @@ collections:
   editor:
     preview: false
   preview_path: "research/{{slug}}"
-  summary: "{{title | title}} [{{id}}] – {{description | truncate(40,'...')}} {{body | truncate(150, '...')}}"
+  # summary: "{{title | title}} [{{id}}] – {{description | truncate(40,'...')}} {{body | truncate(150, '...')}}"
+  summary: "{{title}}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
   - { label: 'Publish Date', name: 'date', widget: 'datetime' }
@@ -158,7 +212,8 @@ collections:
   editor:
     preview: false
   preview_path: "research/publications/{{slug}}"
-  summary: "{{title | title}} ({{date | date('YYYY')}}) {{journal}} - {{ authors }}"
+  # summary: "{{title | title}} ({{date | date('YYYY')}}) {{journal}} - {{ authors }}"
+  summary: "{{date | date('YYYY')}} · {{title}}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
   - { label: 'Publish Date', name: 'date', widget: 'datetime' }
@@ -182,7 +237,8 @@ collections:
     preview: false
   preview_path: "blog/{{year}}/{{month}}/{{day}}/{{slug}}"
   preview_path_date_field: date
-  summary: "{{title | title}} - {{ authors }} {{date | date('YYYY-MM-DD')}} - {{body | truncate(20, '...')}}"
+  # summary: "{{title | title}} - {{ authors }} {{date | date('YYYY-MM-DD')}} - {{body | truncate(20, '...')}}"
+  summary: "{{date | date('YYYY-MM-DD')}} · {{title}}"
   fields:
   - { label: 'Title', name: 'title', widget: 'string' }
   - { label: 'Publish Date', name: 'date', widget: 'datetime' }

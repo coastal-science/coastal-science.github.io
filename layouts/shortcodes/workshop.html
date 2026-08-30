@@ -1,10 +1,36 @@
-<div class="{{ .Get "class" }}">
-    <h3>Researchers</h3>
-    {{ range .Site.Data.Workshop.bioacoustics2022.info.talks }}
-        | Workshop session | {{ .time }} |<br>
-        | Presenter | {{ .presenter }} |<br>
-        | {{ .title }} | < youtube {{ .youtube_id }} youtube > |<br>
-        | | |
-        <hr>
-    {{ end }}
+{{- /*
+  Render a workshop schedule from data/workshop/<slug>/info.yaml
+
+  Usage:
+    {{< workshop "bioacoustics2022" >}}
+    {{< workshop data="sfu-hallo-2024-bioacoustics" >}}
+    Front matter: workshop: bioacoustics2022  then {{< workshop >}}
+*/ -}}
+{{- $slug := .Get "data" | default (.Get 0) | default .Page.Params.workshop -}}
+{{- if not $slug -}}
+  {{- errorf "workshop shortcode: missing data slug (e.g. {{< workshop \"sfu-hallo-2022-bioacoustics\" >}} or front matter workshop:)" -}}
+{{- end -}}
+{{- $info := index site.Data.workshop $slug "info" -}}
+{{- if not $info -}}
+  {{- errorf "workshop shortcode: no data/workshop/%s/info.yaml" $slug -}}
+{{- end -}}
+{{- range $info.talks -}}
+{{- $talk := . -}}
+<hr>
+<div class="row">
+  <div class="col-md-4">
+    {{- with $talk.youtube_id -}}
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/{{ . }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="{{ $talk.title }}"></iframe>
+    </div>
+    {{- end -}}
+  </div>
+  <div class="col-md-8">
+    <h3>{{ $talk.title }}</h3>
+    <h4><em>{{ $talk.presenter }}</em></h4>
+    {{- with $talk.time -}}
+    <p>{{ . }}</p>
+    {{- end -}}
+  </div>
 </div>
+{{- end -}}
