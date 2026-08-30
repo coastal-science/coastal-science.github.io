@@ -12,5 +12,9 @@ date: 2023-07-31T00:00:00-07:00
 # (I know, it sounds counterintuitive given the `description` message below. )
 # The message below is used as a warning for the Content Management System
 
-description: "*** Do not modify this page. It's content is not displayed and is necessary for internal purposes."
+# description: ''
 ---
+
+# Main Title
+
+Body Text
