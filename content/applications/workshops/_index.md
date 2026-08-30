@@ -6,7 +6,6 @@ weight: 2
 thumbnail: /img/LucyShipBreach.png
 # thumbnail: img/S01-J,L-1.jpg
 photocredits: "" # or leave blank
-thumbnailurl: "/applications/workshops/hallo-bioacoustics-workshop-2022/"
 ---
 
 We hosted a _Bioacoustics Workshop_ in August of 2022 to facilitate engagement both within the HALLO group and the wider community. Topics discussed range from whale sightings and conservation to the application of using deep learning models to identify whale calls.
