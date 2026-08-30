@@ -18,8 +18,15 @@
 
         <div id="content">
             <div class="container pb-6 pt-6 pb-md-10 pt-md-10">
+                {{ if .Content }}
+                <div class="row">
+                  <div class="col-12 mb-4">
+                    {{ .Content }}
+                  </div>
+                </div>
+                {{ end }}
                 <div class="row display-flex">
-                  {{ range .Pages.ByWeight }}
+                  {{ range (.RegularPages | union .Sections).ByWeight }}
                   <div class="col-12 col-md-6 mb-2 ">{{ .Render "summary" }}</div>
                   {{ end }}
                 </div>
