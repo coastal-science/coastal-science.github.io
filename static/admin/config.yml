@@ -131,7 +131,7 @@ collections:
 
   - { label: 'Thumbnail', name: 'thumbnail', widget: 'image', required: False }
   - { label: 'Photo Credits', name: 'photocredits', widget: 'string', required: False, hint: 'Provide image credits here or leave blank. The prefix "_Photo Credits:_" will be added.' }
-  - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', required: False, hint: 'Redirect url for the thumbnail image', pattern: [ '^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$', 'Must be an http(s) url.' ] }
+  - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', required: False, hint: 'Optional override for the Applications card. When set, both the title and thumbnail link here instead of this page. Leave blank to use the page permalink.', pattern: [ '^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$', 'Must be an http(s) url.' ] }
 
   - { label: 'Description', name: 'description', widget: 'string', required: False, hint: 'Used for the page listing multiple subpages. If blank, this is populated from the first 100 characters from the page entry.' }
 
@@ -158,7 +158,7 @@ collections:
   - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: false, hint: 'Sort order on listing pages. Lower numbers appear first.' }
   - { label: 'Thumbnail', name: 'thumbnail', widget: 'image', required: false, hint: 'Used for cards on /applications/ and /applications/workshops/' }
   - { label: 'Photo Credits', name: 'photocredits', widget: 'string', required: false, hint: 'Provide image credits here or leave blank. The prefix "_Photo Credits:_" will be added.' }
-  - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', required: false, hint: 'Optional override for the card image link. Leave blank so the image goes to this page.' }
+  - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', required: false, hint: 'Optional override for the card. When set, both the title and thumbnail link here instead of this page. Leave blank to use the page permalink.' }
   - { label: 'Description', name: 'description', widget: 'string', required: false, hint: 'Card blurb on listing pages. If blank, taken from the body.' }
   - { label: 'Body', name: 'body', widget: 'markdown', default: "# Workshop Schedule\n\n{{< workshop >}}", hint: 'Section (_index): intro text. Schedule pages: keep {{< workshop >}} to render talks from Workshops · Data.' }
 
