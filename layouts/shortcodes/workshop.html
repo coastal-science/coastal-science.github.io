@@ -8,7 +8,7 @@
 */ -}}
 {{- $slug := .Get "data" | default (.Get 0) | default .Page.Params.workshop -}}
 {{- if not $slug -}}
-  {{- errorf "workshop shortcode: missing data slug (e.g. {{< workshop \"bioacoustics2022\" >}} or front matter workshop:)" -}}
+  {{- errorf "workshop shortcode: missing data slug (e.g. {{< workshop \"sfu-hallo-2022-bioacoustics\" >}} or front matter workshop:)" -}}
 {{- end -}}
 {{- $info := index site.Data.workshop $slug "info" -}}
 {{- if not $info -}}
