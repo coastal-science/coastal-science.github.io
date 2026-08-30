@@ -1,6 +1,5 @@
 ---
 title: "Workshops"
-cms_kind: index
 date: 2023-07-31T12:00:00-07:00
 weight: 2
 # icon: "fa fa-headphones"

@@ -137,31 +137,33 @@ collections:
 
   - { label: 'Body', name: 'body', widget: 'markdown' }
 
-- name: "applications_workshops"
+- name: "workshops"
   label: "Workshops"
+  label_singular: "Workshop"
   folder: "content/applications/workshops"
   create: true
-  filter:
-    field: cms_kind
-    value: index
   editor:
     preview: false
   preview_path: "applications/workshops/{{slug}}"
   summary: "{{title}}"
+  nested:
+    depth: 100
+    summary: "{{title}}"
+    subfolders: false
+  meta: { path: { widget: string, label: "Path", index_file: "_index", hint: "Path to the workshop page. Leave Path alone unless they are renaming or moving a workshop page." } }
   fields:
-  - { label: 'CMS kind', name: 'cms_kind', widget: 'hidden', default: 'index' }
   - { label: 'Title', name: 'title', widget: 'string' }
-  - { label: 'ID', name: 'id', widget: 'string', required: False, hint: 'Optional menu id, e.g. 2022-workshop' }
+  - { label: 'Workshop data slug', name: 'workshop', widget: 'string', required: false, pattern: [ '^[a-z0-9-]+$', 'Use lowercase letters, numbers, and hyphens only. Must match Workshops · Data (folder under data/workshop/).' ], hint: 'Schedule pages only: same slug as Workshops · Data, e.g. sfu-hallo-2022-bioacoustics. Leave blank on the Workshops section (_index).' }
   - { label: 'Publish Date', name: 'date', widget: 'datetime' }
-  - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False, hint: 'Controls sort order on listing pages. Lower numbers appear first.' }
-  - { label: 'Thumbnail', name: 'thumbnail', widget: 'image', required: False }
-  - { label: 'Photo Credits', name: 'photocredits', widget: 'string', required: False, hint: 'Provide image credits here or leave blank. The prefix "_Photo Credits:_" will be added.' }
-  - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', required: False, hint: 'Link target for the thumbnail, e.g. hallo-bioacoustics-workshop-2022' }
-  - { label: 'Description', name: 'description', widget: 'string', required: False, hint: 'Used on listing pages. If blank, taken from the first part of the body.' }
-  - { label: 'Body', name: 'body', widget: 'markdown' }
+  - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: false, hint: 'Sort order on listing pages. Lower numbers appear first.' }
+  - { label: 'Thumbnail', name: 'thumbnail', widget: 'image', required: false, hint: 'Used for cards on /applications/ and /applications/workshops/' }
+  - { label: 'Photo Credits', name: 'photocredits', widget: 'string', required: false, hint: 'Provide image credits here or leave blank. The prefix "_Photo Credits:_" will be added.' }
+  - { label: 'Thumbnail URL', name: 'thumbnailurl', widget: 'string', required: false, hint: 'Optional override for the card image link. Leave blank so the image goes to this page.' }
+  - { label: 'Description', name: 'description', widget: 'string', required: false, hint: 'Card blurb on listing pages. If blank, taken from the body.' }
+  - { label: 'Body', name: 'body', widget: 'markdown', default: "# Workshop Schedule\n\n{{< workshop >}}", hint: 'Section (_index): intro text. Schedule pages: keep {{< workshop >}} to render talks from Workshops · Data.' }
 
-- name: "applications_workshops_data"
-  label: "Workshop Data"
+- name: "workshops_data"
+  label: "Workshops · Data"
   folder: "data/workshop"
   extension: "yaml"
   path: "{{slug}}/info"
@@ -172,7 +174,7 @@ collections:
     preview: false
   summary: "{{name}}"
   fields:
-  - { label: 'Workshop Name', name: 'name', widget: 'string', pattern: [ '^[a-z0-9-]+$', 'Use lowercase letters, numbers, and hyphens only. Must match a folder in data/workshop/ (Workshop Data collection).' ], hint: 'Same slug as Workshop Data, e.g. bioacoustics2022 or my-workshop-2025' }
+  - { label: 'Workshop Name', name: 'name', widget: 'string', pattern: [ '^[a-z0-9-]+$', 'Use lowercase letters, numbers, and hyphens only. Must match the workshop data slug on the Workshop page.' ], hint: 'Slug matching data/workshop/<slug>/ and the workshop: field on schedule pages, e.g. sfu-hallo-2022-bioacoustics' }
   - label: 'Talks'
     name: 'talks'
     widget: 'list'
@@ -183,26 +185,6 @@ collections:
     - { label: 'Time', name: 'time', widget: 'string', hint: 'e.g. Early morning Aug 31' }
     - { label: 'Video URL', name: 'video_url', widget: 'string', pattern: [ '^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$', 'Must be an http(s) url.' ] }
     - { label: 'YouTube ID', name: 'youtube_id', widget: 'string', hint: 'ID from the YouTube URL, e.g. 3fao7Gtlckw from https://youtu.be/3fao7Gtlckw' }
-
-- name: "workshop_pages"
-  label: "Workshop Pages"
-  folder: "content/applications/workshops"
-  create: true
-  filter:
-    field: cms_kind
-    value: workshop
-  editor:
-    preview: false
-  preview_path: "applications/workshops/{{slug}}"
-  summary: "workshop-data/{{workshop}} → {{title}}"
-  fields:
-  - { label: 'CMS kind', name: 'cms_kind', widget: 'hidden', default: 'workshop' }
-  - { label: 'Title', name: 'title', widget: 'string' }
-  - { label: 'Workshop data slug', name: 'workshop', widget: 'string', pattern: [ '^[a-z0-9-]+$', 'Use lowercase letters, numbers, and hyphens only. Must match a folder in data/workshop/ (Workshop Data collection).' ], hint: 'Same slug as Workshop Data, e.g. bioacoustics2022 or my-workshop-2025' }
-  - { label: 'ID', name: 'id', widget: 'string', required: False, hint: 'Optional menu id' }
-  - { label: 'Publish Date', name: 'date', widget: 'datetime' }
-  - { label: 'Weight', name: 'weight', widget: 'number', value_type: 'int', required: False }
-  - { label: 'Body', name: 'body', widget: 'markdown', default: "# Workshop Schedule\n\n{{< workshop >}}", hint: 'Intro text optional. Keep {{< workshop >}} to render talks from data/workshop/<workshop>/info.yaml.' }
 
 - name: "research"
   label: "Research"
