@@ -174,7 +174,7 @@ collections:
     preview: false
   summary: "{{name}}"
   fields:
-  - { label: 'Workshop Name', name: 'name', widget: 'string', pattern: [ '^[a-z0-9-]+$', 'Use lowercase letters, numbers, and hyphens only. Must match the workshop data slug on the Workshop page.' ], hint: 'Slug matching data/workshop/<slug>/ and the workshop: field on schedule pages, e.g. sfu-hallo-2022-bioacoustics' }
+  - { label: 'Workshop Name', name: 'name', widget: 'string', pattern: [ '^[a-z0-9-]+$', 'Use lowercase letters, numbers, and hyphens only. Must match the workshop data slug on the Workshop page.' ], hint: 'Slug matching the `workshop: field` (or data/workshop/<slug>/) on schedule pages, e.g. sfu-hallo-2022-bioacoustics' }
   - label: 'Talks'
     name: 'talks'
     widget: 'list'
