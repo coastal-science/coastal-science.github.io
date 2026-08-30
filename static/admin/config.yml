@@ -181,7 +181,7 @@ collections:
     summary: '{{fields.title}} — {{fields.presenter}} ({{fields.time}})'
     fields:
     - { label: 'Title', name: 'title', widget: 'string' }
-    - { label: 'Presenter', name: 'presenter', widget: 'string', hint: 'One or more names, e.g. Lucy Quayle/Susie Washington-Smyth' }
+    - { label: 'Presenter', name: 'presenter', widget: 'string', hint: 'One or more names, e.g. Lucy Quayle, Susie Washington-Smyth' }
     - { label: 'Time', name: 'time', widget: 'string', hint: 'e.g. Early morning Aug 31' }
     - { label: 'Video URL', name: 'video_url', widget: 'string', pattern: [ '^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$', 'Must be an http(s) url.' ] }
     - { label: 'YouTube ID', name: 'youtube_id', widget: 'string', hint: 'ID from the YouTube URL, e.g. 3fao7Gtlckw from https://youtu.be/3fao7Gtlckw' }
