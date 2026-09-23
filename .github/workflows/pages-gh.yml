@@ -402,7 +402,7 @@ jobs:
       __REGISTRY_USERNAME__: "${{ github.actor }}"
       __REGISTRY_PASSWORD__: "${{ secrets.GITHUB_TOKEN }}"
       __RESEARCHER__:  "${{ secrets.__RESEARCHER__ }}"
-      __DATACENTER_CLOUD__: "{{ vars.__DATACENTER_CLOUD__}}"
+      __DATACENTER_CLOUD__: "${{ vars.__DATACENTER_CLOUD__}}"
 
       PR_NUMBER: ${{ github.event.pull_request.number || '' }}
       #PR_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -560,7 +560,7 @@ jobs:
           export __DATACENTERS__="${{ env.NOMAD_SERVER_DATACENTERS }}"
           export __NAMESPACE__="${{ env.NOMAD_SERVER_NAMESPACE }}"
           export __RESEARCHER__="${{ env.__RESEARCHER__ }}"
-          export __DATACENTER_CLOUD__="{{ vars.__DATACENTER_CLOUD__}}"
+          export __DATACENTER_CLOUD__="${{ vars.__DATACENTER_CLOUD__}}"
           export __REGISTRY_USERNAME__="${{ env.__REGISTRY_USERNAME__ }}"
           export __REGISTRY_PASSWORD__="${{ env.__REGISTRY_PASSWORD__ }}"
 
