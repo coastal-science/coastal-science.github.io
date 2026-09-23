@@ -9,17 +9,10 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
   type        = "service"
   datacenters = ${__DATACENTERS__}
   namespace   = "${__NAMESPACE__}"
-
+  
   constraint {
-    attribute = "${meta.role}"
-    operator  = "set_contains"
-    value     = "non-data-portal"
-  }
-
-  constraint {
-    attribute = "${meta.role}"
-    operator  = "!="
-    value     = "rcg-ingress"
+    attribute = "${meta.node_class}"
+    value     = "prod"
   }
 
   constraint {
