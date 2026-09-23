@@ -6,10 +6,10 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
     run_uuid = "${uuidv4()}"
   }
 
-  type        = "service"
   datacenters = ${__DATACENTERS__}
   namespace   = "${__NAMESPACE__}"
-  
+  type        = "service"
+
   constraint {
     attribute = "${meta.node_class}"
     value     = "prod"
