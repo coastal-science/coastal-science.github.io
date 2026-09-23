@@ -402,6 +402,7 @@ jobs:
       __REGISTRY_USERNAME__: "${{ github.actor }}"
       __REGISTRY_PASSWORD__: "${{ secrets.GITHUB_TOKEN }}"
       __RESEARCHER__:  "${{ secrets.__RESEARCHER__ }}"
+      __DATACENTER_CLOUD__: "{{ vars.__DATACENTER_CLOUD__}}"
 
       PR_NUMBER: ${{ github.event.pull_request.number || '' }}
       #PR_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -493,10 +494,10 @@ jobs:
           NOMAD_JOB_TEMPLATE=${NOMAD_JOB_TEMPLATE}, \ 
           NOMAD_FILE=${NOMAD_FILE}
           
-          # Construct URL from Nomad template pattern: ${__SERVICE__}-${__ENVIRONMENT__}.${__RESEARCHER__}.researchcomputinggroup.ca
-          NOMAD_URL="https://${{ vars.__SERVICE__ }}-${ENVIRONMENT_SUFFIX}.${{ secrets.__RESEARCHER__ }}.researchcomputinggroup.ca"
+          # Construct URL from Nomad template pattern: ${__SERVICE__}-${__ENVIRONMENT__}.${__RESEARCHER__}.${__DATACENTER_CLOUD__}.researchcomputinggroup.ca
+          NOMAD_URL="https://${{ vars.__SERVICE__ }}-${ENVIRONMENT_SUFFIX}.${{ secrets.__RESEARCHER__ }}.${{ env.__DATACENTER_CLOUD__ }}.researchcomputinggroup.ca"
           
-          WEB_URL="sinkhole.${__RESEARCHER__}.researchcomputinggroup.ca"
+          WEB_URL="sinkhole.${__RESEARCHER__}.${{ env.__DATACENTER_CLOUD__ }}.researchcomputinggroup.ca"
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             # For production main branch
             WEB_URL="${{ secrets.__DOMAIN_NAME__ }}"
@@ -559,6 +560,7 @@ jobs:
           export __DATACENTERS__="${{ env.NOMAD_SERVER_DATACENTERS }}"
           export __NAMESPACE__="${{ env.NOMAD_SERVER_NAMESPACE }}"
           export __RESEARCHER__="${{ env.__RESEARCHER__ }}"
+          export __DATACENTER_CLOUD__="{{ vars.__DATACENTER_CLOUD__}}"
           export __REGISTRY_USERNAME__="${{ env.__REGISTRY_USERNAME__ }}"
           export __REGISTRY_PASSWORD__="${{ env.__REGISTRY_PASSWORD__ }}"
 
