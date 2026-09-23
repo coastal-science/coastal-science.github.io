@@ -530,7 +530,7 @@ jobs:
           git config --global --add safe.directory /__w/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}
       
       - name: Test Nomad
-        run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} NOMAD_SERVER_NAMESPACE=${{ env.NOMAD_SERVER_NAMESPACE }} nomad status
+        run: NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} NOMAD_NAMESPACE=${{ env.NOMAD_SERVER_NAMESPACE }} nomad status
 
       - name: Setup Nomad Job
         id: setup-nomad
@@ -625,7 +625,7 @@ jobs:
             echo "All __*__ variables were successfully substituted in $NOMAD_OUTPUT_FILE."
           fi
           
-          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} NOMAD_SERVER_NAMESPACE=${{ env.NOMAD_SERVER_NAMESPACE }} \
+          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} NOMAD_NAMESPACE=${{ env.NOMAD_SERVER_NAMESPACE }} \
           nomad job validate "$NOMAD_OUTPUT_FILE" || {
             echo "===== Nomad job file ====="
             cat "$NOMAD_OUTPUT_FILE"
@@ -645,7 +645,7 @@ jobs:
           nomad version
           echo "Submitting job from: ${NOMAD_FILE}"
           set +e
-          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} NOMAD_SERVER_NAMESPACE=${{ env.NOMAD_SERVER_NAMESPACE }} \
+          NOMAD_TOKEN=${{ secrets.NOMAD_SERVER_TOKEN }} NOMAD_ADDR=${{ secrets.NOMAD_SERVER_ADDRESS }} NOMAD_NAMESPACE=${{ env.NOMAD_SERVER_NAMESPACE }} \
             nomad job run -verbose "${NOMAD_FILE}"
           DEPLOY_RESULT=$?
           set -e
