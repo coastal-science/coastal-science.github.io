@@ -33,12 +33,12 @@ on:
         default: auto
 
   workflow_call: # allows reusing the workflow (string input; choice not supported for workflow_call)
-    # inputs:
-    #   nomad_job_template:
-    #     required: false
-    #     description: The Nomad job template to use for the deployment (e.g. nomad/template.nomad or nomad/decap.template.nomad).
-    #     type: string
-    #     default: nomad/template.nomad
+    inputs:
+      nomad_job_template:
+        required: false
+        description: The Nomad job template to use for the deployment (e.g. nomad/template.nomad or nomad/decap.template.nomad).
+        type: string
+        default: nomad/template.nomad
     #   use_decap:
     #     required: false
     #     description: Override USE_DECAP ("true" or "false"); leave empty for branch-based determination.
