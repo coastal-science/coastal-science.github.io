@@ -3,7 +3,6 @@ title: Classification Models
 date: 2023-07-31T12:33:46-07:00
 weight: 3
 thumbnail: /img/short_detector_animation.gif
-thumbnailurl: https://orca.research.sfu.ca/applications/classification/
 description: Models that identify the source of underwater sounds. Explore our
   diverse models designed to discern underwater sounds from marine mammals.
 ---
