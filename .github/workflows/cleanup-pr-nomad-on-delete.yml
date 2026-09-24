@@ -37,7 +37,8 @@ jobs:
 
       - name: Cleanup Nomad jobs for deleted PR branch
         if: steps.pr.outputs.pr_number != ''
-        uses: ./.github/actions/cleanup-pr-nomad-job
+        # uses: ./.github/actions/cleanup-pr-nomad-job
+        uses: coastal-science/coastal-science.github.io/.github/actions/cleanup-pr-nomad-job@7cfd555f9f3cf67e229503cec671cc46107d2afc
         with:
           job_name: ${{ env.SERVICE }}-pr-${{ steps.pr.outputs.pr_number }}-
           nomad_version: ${{ env.NOMAD_VERSION }}
