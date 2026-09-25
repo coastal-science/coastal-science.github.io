@@ -5,7 +5,8 @@ weight: 1
 thumbnail: img/S01-J,L-1.jpg
 photocredits: Write Credits here
 thumbnailurl: https://orca.research.sfu.ca/call-library
-description: Dr. John Ford's Southern Resident Killer Whale Call Catalogue
+description: Dr. John Ford's Interactive Catalogue of Killer Whales in Coastal
+  Northeastern Pacific Waters Call Types
 ---
 {{< figure url="/img/S01-J,L-1.jpg" credit="_Ford, et. al. 2023_" >}}
 
