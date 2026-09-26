@@ -12,6 +12,8 @@ description: Dr. John Ford's Interactive Catalogue of Killer Whale Call Types in
 
 ## Dr. John Ford's [Catalogue of Killer Whale Call Types in Coastal Northeastern Pacific Waters](https://orca.research.sfu.ca/call-library)
 
+### Dialects of Killer Whales in Coastal Northeastern Pacific Waters: A Catalogue of Call Types
+
 This catalogue provides a reference collection of underwater calls produced by killer whales found in coastal waters off the west coast of North America from Southeast Alaska south to BC, Washington, Oregon and northern California. Included are call repertoires of the Southern Resident and Northern Resident populations, as well as the West Coast Transient population of Bigg’s killer whales. In the future, we hope to add the calls of the Offshore killer whale ecotype and of the Southern Alaskan Resident pods AF and AG, which occur in Southeast Alaska and occasionally the waters of Haida Gwaii.
 
 This catalogue is based largely on the identification and classification of Resident and Bigg’s killer whale calls by John Ford while a graduate student at the University of British Columbia. The classification of calls made by Bigg’s killer whales was subsequently refined by Volker Deecke while a graduate student at the University of St. Andrews, Scotland. James Pilkington has spent over 15 years recording and analyzing the calls of Resident, Bigg’s, and Offshore killer whales. He is currently classifying calls from Offshore killer whales for future inclusion in this online catalogue.
