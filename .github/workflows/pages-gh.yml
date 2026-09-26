@@ -726,7 +726,7 @@ jobs:
       - name: 1. Stop and purge previous PR job(s) for this PR
         if: github.event_name == 'pull_request' && github.event.action == 'synchronize'
         # uses: ./.github/actions/cleanup-pr-nomad-job
-        uses: coastal-science/coastal-science.github.io/.github/actions/cleanup-pr-nomad-job@7cfd555f9f3cf67e229503cec671cc46107d2afc
+        uses: coastal-science/coastal-science.github.io/.github/actions/cleanup-pr-nomad-job@83c69391d0b8e9a2a96e981a89364ff2d7028ff6
         with:
           job_name: ${{ env.SERVICE }}-pr-${{ github.event.pull_request.number }}-
           keep_job_name: ${{ needs.deploy-nomad.outputs.job_name }}
@@ -771,7 +771,7 @@ jobs:
       - name: 2. Cleanup merged PR Nomad job when push to main
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.pr.outputs.pr_number != ''
         # uses: ./.github/actions/cleanup-pr-nomad-job
-        uses: coastal-science/coastal-science.github.io/.github/actions/cleanup-pr-nomad-job@7cfd555f9f3cf67e229503cec671cc46107d2afc
+        uses: coastal-science/coastal-science.github.io/.github/actions/cleanup-pr-nomad-job@83c69391d0b8e9a2a96e981a89364ff2d7028ff6
         with:
           job_name: ${{ env.SERVICE }}-pr-${{ steps.pr.outputs.pr_number }}-
           nomad_version: ${{ env.NOMAD_VERSION }}
@@ -800,7 +800,7 @@ jobs:
         uses: actions/checkout@v5
       - name: 3. Cleanup all PR Nomad jobs when PR is closed
         # uses: ./.github/actions/cleanup-pr-nomad-job
-        uses: coastal-science/coastal-science.github.io/.github/actions/cleanup-pr-nomad-job@7cfd555f9f3cf67e229503cec671cc46107d2afc
+        uses: coastal-science/coastal-science.github.io/.github/actions/cleanup-pr-nomad-job@83c69391d0b8e9a2a96e981a89364ff2d7028ff6
         with:
           job_name: ${{ env.SERVICE }}-pr-${{ github.event.pull_request.number }}-
           nomad_version: ${{ env.NOMAD_VERSION }}
