@@ -5,17 +5,15 @@ weight: 1
 thumbnail: img/S01-J,L-1.jpg
 photocredits: Write Credits here
 thumbnailurl: https://orca.research.sfu.ca/call-library
-description: Dr. John Ford's Interactive Catalogue of Killer Whales in Coastal
-  Northeastern Pacific Waters Call Types
+description: Dr. John Ford's Interactive Catalogue of Killer Whale Call Types in
+  Coastal Northeastern Pacific Waters
 ---
-{{< figure url="/img/S01-J,L-1.jpg" credit="_Ford, et. al. 2023_" >}}
+{{< figure url="/img/S01-J,L-1.jpg" credit="*Ford, et. al. 2023*" >}}
 
-## Dr. John Ford\'s [Southern Resident Killer Whale Call Catalogue](https://orca.research.sfu.ca/call-library)
+## Dr. John Ford's [Catalogue of Killer Whale Call Types in Coastal Northeastern Pacific Waters](https://orca.research.sfu.ca/call-library)
 
-Researchers are currently aiming to “teach” artificial intelligence systems to recognize the sounds of resident killer whales in order to develop a warning system for preventing ships from fatally striking endangered orcas off British Columbia's coast.
+This catalogue provides a reference collection of underwater calls produced by killer whales found in coastal waters off the west coast of North America from Southeast Alaska south to BC, Washington, Oregon and northern California. Included are call repertoires of the Southern Resident and Northern Resident populations, as well as the West Coast Transient population of Bigg’s killer whales. In the future, we hope to add the calls of the Offshore killer whale ecotype and of the Southern Alaskan Resident pods AF and AG, which occur in Southeast Alaska and occasionally the waters of Haida Gwaii.
 
-Data used to train artificial intelligence systems come from various sources: from hydrophone nodes located near shipping lanes, to the contributions of citizen scientists and projects like [Orcasound](https://www.orcasound.net) and [Whalesound.ca](https://whalesound.ca).
+This catalogue is based largely on the identification and classification of Resident and Bigg’s killer whale calls by John Ford while a graduate student at the University of British Columbia. The classification of calls made by Bigg’s killer whales was subsequently refined by Volker Deecke while a graduate student at the University of St. Andrews, Scotland. James Pilkington has spent over 15 years recording and analyzing the calls of Resident, Bigg’s, and Offshore killer whales. He is currently classifying calls from Offshore killer whales for future inclusion in this online catalogue.
 
-This [catalogue website](https://orca.research.sfu.ca/call-library) shares a curated collection of orca acoustics and annotations which represent the type of samples used in machine learning datasets. The samples here demonstrate the complexity of communication within and between pods.
-
-These samples have been gathered through decades of research by Dr. John Ford, scientist emeritus, and former head of cetacean research at Fisheries and Oceans Canada's Pacific Biological Station in collaboration with Dr. Volker Deecke, professor at the University of Cumbria, UK and James Pilkington from the Department of Ocean and Fisheries (DFO), Canada.
+This online catalogue was assembled by John Ford, Volker Deecke, and James Pilkington, using their own recordings and others collected by friends and colleagues over the years (see Acknowledgements). It is our hope that this catalogue will be a useful guide for those wishing to interpret killer whale calls recorded from their own hydrophone systems or from the various on-line streaming hydrophones. For those wishing to reference this catalogue in their research, please review the information in Licence and How to cite.
