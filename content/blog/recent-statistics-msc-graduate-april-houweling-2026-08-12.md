@@ -1,5 +1,5 @@
 ---
-title: Statistics MSc Graduate April Houweling
+title: MSc Graduate April Houweling
 date: 2026-08-12T14:20:00.000-07:00
 tags:
   - alumni
