@@ -5,3 +5,4 @@ position: top-left # empty (text does not overlap with image), centered, four co
 textalign: # left (default), right
 photocredits: "Lucy Quayle" # or leave blank
 image: "img/LucyShipBreach.png"
+href: "research"

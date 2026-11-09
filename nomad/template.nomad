@@ -3,20 +3,13 @@ job "${__SERVICE__}-${__ENVIRONMENT__}" {
     run_uuid = "${uuidv4()}"
   }
 
-  type        = "service"
   datacenters = ${__DATACENTERS__}
   namespace   = "${__NAMESPACE__}"
-
+  type        = "service"
+  
   constraint {
-    attribute = "${meta.role}"
-    operator  = "set_contains"
-    value     = "non-data-portal"
-  }
-
-  constraint {
-    attribute = "${meta.role}"
-    operator  = "!="
-    value     = "rcg-ingress"
+    attribute = "${meta.node_class}"
+    value     = "prod"
   }
 
   constraint {
@@ -118,8 +111,8 @@ EOH
           "traefik.http.routers.rcg-${__SERVICE__}-${__ENVIRONMENT__}.tls=true",
           "traefik.http.routers.rcg-${__SERVICE__}-${__ENVIRONMENT__}.entrypoints=websecure",
           
-          "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}.rule=Host(`${__SERVICE__}-${__ENVIRONMENT__}.${__RESEARCHER__}.researchcomputinggroup.ca`)",
-          "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}-nossl.rule=Host(`${__SERVICE__}-${__ENVIRONMENT__}.${__RESEARCHER__}.researchcomputinggroup.ca`)",
+          "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}.rule=Host(`${__SERVICE__}-${__ENVIRONMENT__}.${__RESEARCHER__}.${__DATACENTER_CLOUD__}.researchcomputinggroup.ca`)",
+          "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}-nossl.rule=Host(`${__SERVICE__}-${__ENVIRONMENT__}.${__RESEARCHER__}.${__DATACENTER_CLOUD__}.researchcomputinggroup.ca`)",
           "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}.tls=true",
           "traefik.http.routers.researchcomputinggroup-${__SERVICE__}-${__ENVIRONMENT__}.entrypoints=websecure",
         ]
@@ -133,7 +126,7 @@ EOH
       }
 
       resources {
-        cpu    = 500
+        cpu    = 250
         memory = 256
       }
     }

@@ -46,10 +46,17 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Setup Nomad CLI
-      uses: hashicorp/setup-nomad@main
-      with:
-        version: ${{ inputs.nomad_version }}
+    # - name: Setup Nomad CLI
+    #   uses: hashicorp/setup-nomad@main
+    #   with:
+    #     version: ${{ inputs.nomad_version }}
+
+    - name: Setup `nomad` manually
+      shell: bash
+      run: |
+        wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+        sudo apt update && sudo apt install nomad # only carries latest
 
     - name: Stop and purge Nomad job
       id: cleanup

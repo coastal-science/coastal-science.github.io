@@ -1,6 +1,7 @@
 ---
-title: "Using a sequence deep learning model to increase the acoustic context of a killer whale detector"
-date: 2024-12-16T16:24:00Z
+title: Using a sequence deep learning model to increase the acoustic context of
+  a killer whale detector
+date: 2024-12-16T16:24:00.000Z
 authors:
   - Fabio Frazao
   - Oliver S. Kirsebom
@@ -9,9 +10,10 @@ authors:
   - Jasper Kanes
   - Ruth Joy
   - Mike Dowd
-image: "https://placehold.co/400"
 journal: _The Journal of the Acoustical Society of America_
-doi:  "DOI: J. Acoust. Soc. Am. 155, A87 (2024) [10.1121/10.0026903](https://doi.org/10.1121/10.0026903)"
+image: /img/IconCall80.png
+doi: "DOI: J. Acoust. Soc. Am. 155, A87 (2024)
+  [10.1121/10.0026903](https://doi.org/10.1121/10.0026903)"
 publicationurl: https://doi.org/10.1016/j.ecoinf.2024.102841
 ---
 
