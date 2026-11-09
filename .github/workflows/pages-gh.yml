@@ -11,36 +11,16 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
 
-  # Allows you to run this workflow manually from the Actions tab (choice input with options)
-  workflow_dispatch:
-    inputs:
-      nomad_job_template:
-        required: false
-        description: The Nomad job template to use for the deployment.
-        type: choice
-        options:
-          - nomad/template.nomad
-          - nomad/decap.template.nomad
-        default: nomad/template.nomad
-      use_decap:
-        required: false
-        description: Override Decap usage. Set to "true" or "false" to override branch-based determination; leave as "auto" for automatic.
-        type: choice
-        options:
-          - auto
-          - "true"
-          - "false"
-        default: auto
-
+  # Manual runs live in manual-deploy.yml (workflow_dispatch → workflow_call here).
   workflow_call: # allows reusing the workflow (string input; choice not supported for workflow_call)
     inputs:
       enable_github_pages:
-        description: Run Pages even when ENABLE_GITHUB_PAGES is unset. Default false.
+        description: Force-on override for Pages when repo var ENABLE_GITHUB_PAGES is unset/false. Default false.
         type: boolean
         required: false
         default: false
       enable_nomad:
-        description: Run Nomad even when ENABLE_NOMAD is unset. Default false.
+        description: Force-on override for Nomad when repo var ENABLE_NOMAD is unset/false. Default false.
         type: boolean
         required: false
         default: false
@@ -118,6 +98,7 @@ jobs:
       repo_name: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
       event_name: ${{ inputs.caller_event_name || github.event_name }}
       event_action: ${{ inputs.caller_event_action || github.event.action }}
+      # push/pull_request: leaf jobs gate on repo vars.ENABLE_*. workflow_call: pass caller override.
       enable_github_pages: ${{ github.event_name == 'workflow_call' && inputs.enable_github_pages || false }}
 
   nomad:
@@ -141,4 +122,5 @@ jobs:
       head_ref: ${{ inputs.head_ref || github.head_ref }}
       nomad_job_template: ${{ inputs.nomad_job_template }}
       use_decap: ${{ inputs.use_decap || 'auto' }}
+      # push/pull_request: leaf jobs gate on repo vars.ENABLE_*. workflow_call: pass caller override.
       enable_nomad: ${{ github.event_name == 'workflow_call' && inputs.enable_nomad || false }}

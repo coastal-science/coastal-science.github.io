@@ -23,7 +23,7 @@ on:
         required: false
         default: ''
       enable_github_pages:
-        description: Run Pages even when ENABLE_GITHUB_PAGES is unset. Default false.
+        description: Force-on override when repo var ENABLE_GITHUB_PAGES is unset/false. Default false.
         type: boolean
         required: false
         default: false

@@ -53,7 +53,7 @@ on:
         required: false
         default: auto
       enable_nomad:
-        description: Run Nomad even when ENABLE_NOMAD is unset. Default false.
+        description: Force-on override when repo var ENABLE_NOMAD is unset/false. Default false.
         type: boolean
         required: false
         default: false
