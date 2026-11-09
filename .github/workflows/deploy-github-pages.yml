@@ -27,6 +27,11 @@ on:
         type: boolean
         required: false
         default: false
+      runs_on:
+        description: Runner label (ubuntu-latest) or JSON array (["self-hosted","rcg"]). Empty defaults to ubuntu-latest.
+        type: string
+        required: false
+        default: ''
 
 jobs:
 ######################################################
@@ -38,7 +43,7 @@ jobs:
     # Skip Pages if PR is closed so a discarded draft is not published to github.io
     if: (vars.ENABLE_GITHUB_PAGES == 'true' || inputs.enable_github_pages) && (inputs.event_name != 'pull_request' || inputs.event_action != 'closed')
     
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs_on == '' && 'ubuntu-latest' || (startsWith(inputs.runs_on, '[') && fromJSON(inputs.runs_on) || inputs.runs_on) }}
     container:
       #  If Setup Pages ever fails for lack of Node, the fix is to drop the job-level container and keep only the Hugo action.
       image: peaceiris/hugo
@@ -115,7 +120,7 @@ jobs:
       contents: write
       id-token: write
       pages: write
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs_on == '' && 'ubuntu-latest' || (startsWith(inputs.runs_on, '[') && fromJSON(inputs.runs_on) || inputs.runs_on) }}
     needs: build-github-pages
     steps:
       - name: Deploy to GitHub Pages

@@ -57,6 +57,11 @@ on:
         type: boolean
         required: false
         default: false
+      runs_on:
+        description: Runner label (ubuntu-latest) or JSON array (["self-hosted","rcg"]). Empty defaults to ubuntu-latest.
+        type: string
+        required: false
+        default: ''
 
 jobs:
 ############################################
@@ -76,7 +81,8 @@ jobs:
       IMAGE_NAME: ${{ github.repository }}
       REPO_NAME: ${{ inputs.repo_name }}
 
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs_on == '' && 'ubuntu-latest' || (startsWith(inputs.runs_on, '[') && fromJSON(inputs.runs_on) || inputs.runs_on) }}
     permissions:
       contents: read
       packages: write
@@ -271,8 +277,9 @@ jobs:
     environment: 
       name: docker-image
       url: ${{ steps.set-env.outputs.nomad_url }}
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
     # runs-on: [ self-hosted, rcg ]
+    runs-on: ${{ inputs.runs_on == '' && 'ubuntu-latest' || (startsWith(inputs.runs_on, '[') && fromJSON(inputs.runs_on) || inputs.runs_on) }}
     # container:
     #   image: alpine:3.18
     env:
@@ -603,7 +610,8 @@ jobs:
       packages: read
     environment:
       name: docker-image
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs_on == '' && 'ubuntu-latest' || (startsWith(inputs.runs_on, '[') && fromJSON(inputs.runs_on) || inputs.runs_on) }}
     env:
       NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       SERVICE: "${{ vars.__SERVICE__ }}"
@@ -680,7 +688,8 @@ jobs:
       packages: read
     environment:
       name: docker-image
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs_on == '' && 'ubuntu-latest' || (startsWith(inputs.runs_on, '[') && fromJSON(inputs.runs_on) || inputs.runs_on) }}
     env:
       NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       SERVICE: "${{ vars.__SERVICE__ }}"

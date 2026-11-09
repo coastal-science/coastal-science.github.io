@@ -60,6 +60,11 @@ on:
         description: Override USE_DECAP ("true" or "false"); leave empty for branch-based determination.
         type: string
         default: ""
+      runs_on:
+        description: Runner label (ubuntu-latest) or JSON array (["self-hosted","rcg"]). Empty defaults to ubuntu-latest.
+        type: string
+        required: false
+        default: ''
 
 # Allow one concurrent deployment
 concurrency:
@@ -69,7 +74,8 @@ concurrency:
 jobs:
   generate-timestamp:
     permissions: {}
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs_on == '' && 'ubuntu-latest' || (startsWith(inputs.runs_on, '[') && fromJSON(inputs.runs_on) || inputs.runs_on) }}
     steps:
       - name: Set TIMESTAMP and get REPO_NAME
         id: date
@@ -100,6 +106,7 @@ jobs:
       event_action: ${{ inputs.caller_event_action || github.event.action }}
       # push/pull_request: leaf jobs gate on repo vars.ENABLE_*. workflow_call: pass caller override.
       enable_github_pages: ${{ github.event_name == 'workflow_call' && inputs.enable_github_pages || false }}
+      runs_on: ${{ inputs.runs_on }}
 
   nomad:
     needs:
@@ -124,3 +131,4 @@ jobs:
       use_decap: ${{ inputs.use_decap || 'auto' }}
       # push/pull_request: leaf jobs gate on repo vars.ENABLE_*. workflow_call: pass caller override.
       enable_nomad: ${{ github.event_name == 'workflow_call' && inputs.enable_nomad || false }}
+      runs_on: ${{ inputs.runs_on }}

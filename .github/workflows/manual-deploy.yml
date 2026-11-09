@@ -31,6 +31,11 @@ on:
           - "true"
           - "false"
         default: auto
+      runs_on:
+        description: 'Runner label or JSON array (e.g. ubuntu-latest or ["self-hosted","rcg"]). Empty defaults to ubuntu-latest.'
+        type: string
+        required: false
+        default: ''
 
 jobs:
   deploy:
@@ -48,3 +53,4 @@ jobs:
       caller_event_name: workflow_dispatch
       nomad_job_template: ${{ inputs.nomad_job_template }}
       use_decap: ${{ inputs.use_decap }}
+      runs_on: ${{ inputs.runs_on }}
