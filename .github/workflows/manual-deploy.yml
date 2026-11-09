@@ -1,0 +1,56 @@
+# Manual entrypoint for Deploy Hugo site. Calls pages-gh.yml with explicit intent.
+name: Deploy Hugo site - Manual
+
+on:
+  workflow_dispatch:
+    inputs:
+      enable_github_pages:
+        description: Force-on Pages if repo ENABLE_GITHUB_PAGES is unset/false. Ignored as off-switch when the repo var is true.
+        type: boolean
+        required: false
+        default: true
+      enable_nomad:
+        description: Force-on Nomad if repo ENABLE_NOMAD is unset/false. Ignored as off-switch when the repo var is true.
+        type: boolean
+        required: false
+        default: true
+      nomad_job_template:
+        required: false
+        description: The Nomad job template to use for the deployment.
+        type: choice
+        options:
+          - nomad/template.nomad
+          - nomad/decap.template.nomad
+        default: nomad/template.nomad
+      use_decap:
+        required: false
+        description: Override Decap usage. Set to "true" or "false" to override branch-based determination; leave as "auto" for automatic.
+        type: choice
+        options:
+          - auto
+          - "true"
+          - "false"
+        default: auto
+      runs_on:
+        description: 'Runner label or JSON array (e.g. ubuntu-latest or ["self-hosted","rcg"]). Empty defaults to ubuntu-latest.'
+        type: string
+        required: false
+        default: ''
+
+jobs:
+  deploy:
+    permissions:
+      contents: write
+      pages: write
+      packages: write
+      id-token: write
+      statuses: write
+    uses: ./.github/workflows/pages-gh.yml
+    secrets: inherit
+    with:
+      enable_github_pages: ${{ inputs.enable_github_pages }}
+      enable_nomad: ${{ inputs.enable_nomad }}
+      caller_event_name: workflow_dispatch
+      nomad_job_template: ${{ inputs.nomad_job_template }}
+      use_decap: ${{ inputs.use_decap }}
+      runs_on: ${{ inputs.runs_on }}

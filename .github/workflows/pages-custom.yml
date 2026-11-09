@@ -1,0 +1,104 @@
+# Alternate entrypoint for custom/self-hosted runners (SFU/RCG-style purpose).
+# Reuses pages-gh.yml → deploy-github-pages.yml / deploy-nomad.yml.
+# Prefer enabling only one of pages-gh.yml or pages-custom.yml on the same triggers
+# to avoid double deploys.
+#
+# Assumes a dedicated single runner (not a multi-runner pool) matching runs_on labels.
+# Trailing cleanup-runner reclaims Docker images and Actions work dirs on that host.
+name: Deploy Hugo site - Custom runners
+run-name: ${{ github.event_name == 'pull_request' && format('Preview [PR {0} - {1}] {2}  ', github.event.pull_request.number, github.head_ref, github.event.head_commit.message) || format('[{0}] {1}', github.ref_name, github.event.head_commit.message) }}
+
+on:
+  push:
+    branches: [main]
+
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+  workflow_dispatch:
+    inputs:
+      runs_on:
+        description: 'JSON array of runner labels (e.g. ["self-hosted","rcg"]). Used by deploy and cleanup-runner.'
+        type: string
+        required: false
+        default: '["self-hosted","rcg"]'
+      nomad_job_template:
+        required: false
+        description: The Nomad job template to use for the deployment.
+        type: choice
+        options:
+          - nomad/template.nomad
+          - nomad/decap.template.nomad
+        default: nomad/template.nomad
+      use_decap:
+        required: false
+        description: Override Decap usage. Set to "true" or "false" to override branch-based determination; leave as "auto" for automatic.
+        type: choice
+        options:
+          - auto
+          - "true"
+          - "false"
+        default: auto
+
+concurrency:
+  group: ${{ github.repository }}-custom-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('branch-{0}', github.ref_name) }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    permissions:
+      contents: write
+      pages: write
+      packages: write
+      id-token: write
+      statuses: write
+    uses: ./.github/workflows/pages-gh.yml
+    secrets: inherit
+    with:
+      # Default matches historic SFU/RCG labels; override via workflow_dispatch input.
+      runs_on: ${{ github.event_name == 'workflow_dispatch' && inputs.runs_on || '["self-hosted","rcg"]' }}
+      caller_event_name: ${{ github.event_name }}
+      caller_event_action: ${{ github.event.action }}
+      pr_number: ${{ github.event.pull_request.number }}
+      pr_head_sha: ${{ github.event.pull_request.head.sha }}
+      pr_merged: ${{ github.event.pull_request.merged == true }}
+      head_ref: ${{ github.head_ref }}
+      nomad_job_template: ${{ github.event_name == 'workflow_dispatch' && inputs.nomad_job_template || '' }}
+      use_decap: ${{ github.event_name == 'workflow_dispatch' && inputs.use_decap || 'auto' }}
+
+  # SFU-style trailing cleanup for a dedicated single self-hosted runner.
+  cleanup-runner:
+    needs: deploy
+    if: always()
+    permissions: {}
+    # Same runner spec string as deploy's `with.runs_on`. deploy only passes the string into
+    # reusable workflows (they resolve it); this leaf job must fromJSON here. Prefer JSON array form.
+    runs-on: ${{ fromJSON(github.event_name == 'workflow_dispatch' && inputs.runs_on || '["self-hosted","rcg"]') }}
+    steps:
+      - name: Disk before cleanup
+        run: |
+          df -h || true
+          docker system df || true
+          du -shc "${GITHUB_WORKSPACE}" 2>/dev/null || true
+
+      - name: Remove local images for this repository
+        run: |
+          # TODO: If needed, also remove this run's exact tags via workflow outputs
+          # (deploy-nomad build-docker-image → pages-gh → needs.deploy.outputs.image_tags → docker rmi).
+          # Repo-wide wipe below is usually enough on a dedicated runner; tag-precise cleanup is
+          # lighter when other images for this repo must be kept.
+          docker images "ghcr.io/${{ github.repository }}*" -q | xargs -r docker rmi -f || true
+          docker image prune -f || true
+
+      - name: Clean Up Workspace
+        run: |
+          # Same as pages-sfu: this job's workspace. Usually enough when the runner reuses that path.
+          # TODO: If disk still grows, do a broader sweep of the runner work tree for this repo
+          # (e.g. rm -rf "$RUNNER_WORK_FOLDER/<repo>" or "$GITHUB_WORKSPACE/../..") — other jobs can
+          # leave siblings outside this job's GITHUB_WORKSPACE on a long-lived self-hosted host.
+          rm -rf "${GITHUB_WORKSPACE}" || true
+
+      - name: Disk after cleanup
+        run: |
+          df -h || true
+          docker system df || true

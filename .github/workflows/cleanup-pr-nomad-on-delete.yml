@@ -9,13 +9,14 @@ on:
 
 jobs:
   cleanup-pr-nomad:
-    if: github.event.ref_type == 'branch'
+    if: github.event.ref_type == 'branch' && vars.ENABLE_NOMAD == 'true'
     permissions:
       contents: read
       pull-requests: read
     environment:
       name: docker-image
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNS_ON == '' && 'ubuntu-latest' || (startsWith(vars.RUNS_ON, '[') && fromJSON(vars.RUNS_ON) || vars.RUNS_ON) }}
     env:
       NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
       SERVICE: "${{ vars.__SERVICE__ }}"
