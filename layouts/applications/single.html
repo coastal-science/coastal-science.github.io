@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.LanguageCode }}">
+<html lang="{{ .Site.Language.Locale }}">
 
   <head>
     {{ partial "headers.html" . }}
@@ -43,13 +43,13 @@
                         {{ end }}
                       <!-- {{ end }} -->
                       
-                        {{ if or .Params.author .Params.date }}
+                        {{ if or .Params.author .Date }}
                           <p class="text-muted text-uppercase mb-small text-right">
                             {{ if isset .Params "authors" }}
 			      {{ i18n "authorBy" }} {{ range $index, $author := .Params.authors }}{{ if $index }}, {{ end }}<a href="{{ (printf "%s/%s" ("authors" | relLangURL) ($author | urlize)) }}">{{ $author }}</a>{{ end }}
                             {{ end }}
-                            {{ if and .Params.author .Params.date }} | {{ end }}
-                            {{ if .Params.date }}
+                            {{ if and .Params.author .Date }} | {{ end }}
+                            {{ if .Date }}
                               {{ $createdAt := .Date.Format .Site.Params.date_format }}
                               {{ range $index, $month := slice "January" "February" "March" "April" "May" "June" "July" "August" "September" "October" "November" "December" }}
                                   {{ $createdAt = replace $createdAt $month (i18n $month) }}

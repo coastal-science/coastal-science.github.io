@@ -10,7 +10,7 @@
 {{- if not $slug -}}
   {{- errorf "workshop shortcode: missing data slug (e.g. {{< workshop \"sfu-hallo-2022-bioacoustics\" >}} or front matter workshop:)" -}}
 {{- end -}}
-{{- $info := index site.Data.workshop $slug "info" -}}
+{{- $info := index hugo.Data.workshop $slug "info" -}}
 {{- if not $info -}}
   {{- errorf "workshop shortcode: no data/workshop/%s/info.yaml" $slug -}}
 {{- end -}}
