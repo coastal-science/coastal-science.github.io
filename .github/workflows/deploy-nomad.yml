@@ -76,6 +76,8 @@ jobs:
       HUGO_VERSION: ${{ vars.HUGO_VERSION }} # 0.147.8 # latest  #  0.126.1 
       HUGO_FORMS: ${{ vars.HUGO_FORMS }}
       HUGO_SERVICES_GOOGLEANALYTICS_ID: ${{ vars.HUGO_SERVICES_GOOGLEANALYTICS_ID }}
+      # Hugo 0.167+ turns an empty baseURL into https://example.org/. Keep the 0.147 "/" fallback.
+      HUGO_BASEURL: ${{ vars.HUGO_BASEURL || '/' }}
       
       REGISTRY: ghcr.io # docker.github.sfu.ca 
       IMAGE_NAME: ${{ github.repository }}
@@ -174,11 +176,13 @@ jobs:
           # For maximum backward compatibility with Hugo modules
           HUGO_ENVIRONMENT: ${{ inputs.event_name == 'pull_request' && 'preview' || 'production' }}
           HUGO_ENV: ${{ inputs.event_name == 'pull_request' && 'preview' || 'production' }}
+          HUGO_CI_SHORT_SHA: ${{ github.sha }}
+          HUGO_CI_AUTHOR: ${{ github.actor }}
         run: |
           hugo \
             --gc \
             --minify \
-            --baseURL "${{ vars.HUGO_BASEURL }}"
+            --baseURL "${{ env.HUGO_BASEURL }}"
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4

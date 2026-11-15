@@ -93,6 +93,8 @@ jobs:
           # For maximum backward compatibility with Hugo modules
           HUGO_ENVIRONMENT: staging
           HUGO_ENV: staging
+          HUGO_CI_SHORT_SHA: ${{ github.sha }}
+          HUGO_CI_AUTHOR: ${{ github.actor }}
         run: |
           hugo \
             --gc \

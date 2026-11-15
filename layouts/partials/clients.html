@@ -1,7 +1,7 @@
 {{ if isset .Site.Params "clients" }}
 {{ if .Site.Params.clients.enable }}
-{{ if isset .Site.Data "clients" }}
-{{ if gt (len .Site.Data.clients) 0 }}
+{{ if isset hugo.Data "clients" }}
+{{ if gt (len hugo.Data.clients) 0 }}
 <section class="bar background-gray no-mb">
     <div class="container">
         <div class="row">
@@ -16,7 +16,7 @@
 
                   <div class="row display-flex">
                     {{ $.Scratch.Set "index" 1 }}
-                    {{ range .Site.Data.clients }}
+                    {{ range hugo.Data.clients }}
                     <div class="col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-xxl-1 align-middle partner-logo" title="{{ .name }}" data-slide-index="{{ $.Scratch.Get "index" }}">
                         {{ if .url }}
                           <a href="{{ .url | relURL }}" target="_blank">
