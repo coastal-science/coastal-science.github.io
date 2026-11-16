@@ -1,4 +1,4 @@
-# Manual entrypoint for Deploy Hugo site. Calls pages-gh.yml with explicit intent.
+# Manual entrypoint (dispatch UI stays in this repo). Implementation: VWJF/rcg-sites via pages-gh.yml.
 name: Deploy Hugo site - Manual
 
 on:
@@ -45,6 +45,7 @@ jobs:
       packages: write
       id-token: write
       statuses: write
+      pull-requests: read
     uses: ./.github/workflows/pages-gh.yml
     secrets: inherit
     with:
