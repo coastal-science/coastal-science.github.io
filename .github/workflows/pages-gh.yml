@@ -64,9 +64,8 @@ on:
         required: false
         default: ''
 
-# Allow one concurrent deployment per PR/branch. Group must differ from the reusable
-# workflow concurrency group in VWJF/rcg-sites pages-gh.yml (same formula without this infix),
-# or GitHub deadlocks: parent `deploy` vs nested `deploy / deploy`.
+# Entrypoint-owned concurrency (rcg-sites pages-gh has none). Distinct infix so this
+# workflow and pages-custom.yml can both be enabled without canceling each other.
 concurrency:
   group: ${{ github.repository }}-coastal-pages-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('branch-{0}', github.ref_name) }}
   cancel-in-progress: true
