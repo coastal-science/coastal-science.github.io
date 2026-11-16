@@ -45,7 +45,6 @@ jobs:
       packages: write
       id-token: write
       statuses: write
-      pull-requests: read
     uses: ./.github/workflows/pages-gh.yml
     secrets: inherit
     with:

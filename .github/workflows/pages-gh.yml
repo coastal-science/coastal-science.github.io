@@ -76,7 +76,6 @@ jobs:
       packages: write
       id-token: write
       statuses: write
-      pull-requests: read
     uses: VWJF/rcg-sites/.github/workflows/pages-gh.yml@refactor-from-cs
     secrets: inherit
     with:
