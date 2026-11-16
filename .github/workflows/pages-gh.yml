@@ -1,6 +1,12 @@
-# Dispatcher entrypoint: triggers + concurrency live here.
-# Leaf deploy jobs (with environment secrets) are one hop away in VWJF/rcg-sites —
-# do not wrap via rcg-sites pages-gh.yml (A→B→C breaks environment secret inherit).
+# Dispatcher entrypoint: triggers + concurrency live here; deploy leaves are in VWJF/rcg-sites.
+#
+# Environments & secrets (caller repo):
+# - Create/select Environments here (e.g. docker-image) with the Nomad/registry secrets and vars.
+# - Leaf jobs in rcg-sites set `environment:`; this file cannot (jobs with `uses:` forbid it).
+# - Pass those secrets by name into deploy-nomad (see `secrets:` on the nomad job). Across owners,
+#   `secrets: inherit` alone does not deliver caller environment secrets — they arrive empty.
+# - Do not call rcg-sites pages-gh.yml from here (A→B→C); call deploy-* directly (one hop).
+#
 # Pin: refactor-from-cs (switch to a tag/SHA for stable releases).
 name: Deploy Hugo site - Production and Preview
 run-name: ${{ github.event_name == 'pull_request' && format('Preview [PR {0} - {1}] {2}  ', github.event.pull_request.number, github.head_ref, github.event.head_commit.message) || format('[{0}] {1}', github.ref_name, github.event.head_commit.message) }}
@@ -121,8 +127,7 @@ jobs:
       id-token: write
       statuses: write
     uses: VWJF/rcg-sites/.github/workflows/deploy-nomad.yml@refactor-from-cs
-    # Named pass: docs allow passing env-only secrets by name; leaf job environment: wins for value.
-    # Experiment vs secrets: inherit (empty across VWJF/rcg-sites).
+    # Explicit pass required for caller environment secrets (see header).
     secrets:
       NOMAD_SERVER_TOKEN: ${{ secrets.NOMAD_SERVER_TOKEN }}
       NOMAD_SERVER_ADDRESS: ${{ secrets.NOMAD_SERVER_ADDRESS }}
