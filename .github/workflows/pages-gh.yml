@@ -5,6 +5,8 @@
 # - Leaf jobs in rcg-sites set `environment:`; this file cannot (jobs with `uses:` forbid it).
 # - Pass those secrets by name into deploy-nomad (see `secrets:` on the nomad job). Across owners,
 #   `secrets: inherit` alone does not deliver caller environment secrets — they arrive empty.
+# - Callers of this file (pages-custom, manual-deploy) must pass the same secrets by name into
+#   workflow_call; inherit here also drops them before the nomad job can forward them.
 # - Do not call rcg-sites pages-gh.yml from here (A→B→C); call deploy-* directly (one hop).
 #
 # Pin: refactor-from-cs (switch to a tag/SHA for stable releases).
@@ -74,6 +76,20 @@ on:
         type: string
         required: false
         default: ''
+    # When called from pages-custom / manual-deploy, pass these by name (not inherit).
+    secrets:
+      NOMAD_SERVER_TOKEN:
+        required: false
+      NOMAD_SERVER_ADDRESS:
+        required: false
+      NOMAD_REGISTRY_PASSWORD:
+        required: false
+      __RESEARCHER__:
+        required: false
+      __DOMAIN_NAME__:
+        required: false
+      OAUTH_GITHUB_CLIENT_SECRET:
+        required: false
 
 # Entrypoint-owned concurrency. Distinct infix so this workflow and pages-custom.yml
 # can both be enabled without canceling each other. Leaves (rcg deploy-*) have no concurrency.

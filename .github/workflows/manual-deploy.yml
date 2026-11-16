@@ -1,4 +1,5 @@
-# Manual entrypoint (dispatch UI stays in this repo). Implementation: VWJF/rcg-sites via pages-gh.yml.
+# Manual entrypoint (dispatch UI stays in this repo). Calls pages-gh.yml → rcg-sites deploy-*.
+# Pass Nomad/registry secrets by name (same as pages-custom); secrets: inherit drops environment secrets.
 name: Deploy Hugo site - Manual
 
 on:
@@ -46,7 +47,13 @@ jobs:
       id-token: write
       statuses: write
     uses: ./.github/workflows/pages-gh.yml
-    secrets: inherit
+    secrets:
+      NOMAD_SERVER_TOKEN: ${{ secrets.NOMAD_SERVER_TOKEN }}
+      NOMAD_SERVER_ADDRESS: ${{ secrets.NOMAD_SERVER_ADDRESS }}
+      NOMAD_REGISTRY_PASSWORD: ${{ secrets.NOMAD_REGISTRY_PASSWORD }}
+      __RESEARCHER__: ${{ secrets.__RESEARCHER__ }}
+      __DOMAIN_NAME__: ${{ secrets.__DOMAIN_NAME__ }}
+      OAUTH_GITHUB_CLIENT_SECRET: ${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}
     with:
       enable_github_pages: ${{ inputs.enable_github_pages }}
       enable_nomad: ${{ inputs.enable_nomad }}

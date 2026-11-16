@@ -3,6 +3,9 @@
 # Prefer enabling only one of pages-gh.yml or pages-custom.yml on the same triggers
 # to avoid double deploys.
 #
+# Environments & secrets (this repo): same rules as pages-gh.yml — Environments live here;
+# pass Nomad/registry secrets by name into pages-gh (secrets: inherit drops them on the nest).
+#
 # Assumes a dedicated single runner (not a multi-runner pool) matching runs_on labels.
 # Trailing cleanup-runner reclaims Docker images and Actions work dirs on that host.
 name: Deploy Hugo site - Custom runners
@@ -55,7 +58,13 @@ jobs:
       id-token: write
       statuses: write
     uses: ./.github/workflows/pages-gh.yml
-    secrets: inherit
+    secrets:
+      NOMAD_SERVER_TOKEN: ${{ secrets.NOMAD_SERVER_TOKEN }}
+      NOMAD_SERVER_ADDRESS: ${{ secrets.NOMAD_SERVER_ADDRESS }}
+      NOMAD_REGISTRY_PASSWORD: ${{ secrets.NOMAD_REGISTRY_PASSWORD }}
+      __RESEARCHER__: ${{ secrets.__RESEARCHER__ }}
+      __DOMAIN_NAME__: ${{ secrets.__DOMAIN_NAME__ }}
+      OAUTH_GITHUB_CLIENT_SECRET: ${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}
     with:
       # Default matches historic SFU/RCG labels; override via workflow_dispatch input.
       runs_on: ${{ github.event_name == 'workflow_dispatch' && inputs.runs_on || '["self-hosted","rcg"]' }}
