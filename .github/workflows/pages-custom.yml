@@ -1,5 +1,5 @@
 # Alternate entrypoint for custom/self-hosted runners (SFU/RCG-style purpose).
-# Reuses pages-gh.yml → VWJF/rcg-sites (deploy-github-pages / deploy-nomad).
+# Calls coastal pages-gh.yml (dispatcher) → VWJF/rcg-sites deploy-github-pages / deploy-nomad.
 # Prefer enabling only one of pages-gh.yml or pages-custom.yml on the same triggers
 # to avoid double deploys.
 #
