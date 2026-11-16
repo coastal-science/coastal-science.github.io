@@ -121,7 +121,15 @@ jobs:
       id-token: write
       statuses: write
     uses: VWJF/rcg-sites/.github/workflows/deploy-nomad.yml@refactor-from-cs
-    secrets: inherit
+    # Named pass: docs allow passing env-only secrets by name; leaf job environment: wins for value.
+    # Experiment vs secrets: inherit (empty across VWJF/rcg-sites).
+    secrets:
+      NOMAD_SERVER_TOKEN: ${{ secrets.NOMAD_SERVER_TOKEN }}
+      NOMAD_SERVER_ADDRESS: ${{ secrets.NOMAD_SERVER_ADDRESS }}
+      NOMAD_REGISTRY_PASSWORD: ${{ secrets.NOMAD_REGISTRY_PASSWORD }}
+      __RESEARCHER__: ${{ secrets.__RESEARCHER__ }}
+      __DOMAIN_NAME__: ${{ secrets.__DOMAIN_NAME__ }}
+      OAUTH_GITHUB_CLIENT_SECRET: ${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}
     with:
       timestamp: ${{ needs.generate-timestamp.outputs.TIMESTAMP }}
       repo_name: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
