@@ -1,50 +1,21 @@
-# Cleanup leftover Nomad preview jobs when a PR head branch is deleted.
+# Thin entrypoint: triggers live here; implementation is in VWJF/rcg-sites@refactor-from-cs.
+# Switch the pin to a tag/SHA when rcg-sites publishes stable releases.
+#
 # Decap CMS closePR then deleteBranch; GitHub may skip the pull_request/closed
 # run in pages-gh.yml if it cannot build a merge commit. delete events always
 # use this workflow from the default branch, so they still run.
-#
-# Cleanup composite action: VWJF/rcg-sites. find-closed-pr.sh kept via migrated copy
-# (avoids cross-repo checkout for a one-line helper).
 name: Cleanup Nomad preview on branch delete
 
 on:
   delete:
 
 jobs:
-  cleanup-pr-nomad:
+  cleanup:
     if: github.event.ref_type == 'branch' && vars.ENABLE_NOMAD == 'true'
     permissions:
-      contents: read
       pull-requests: read
-    environment:
-      name: docker-image
-    runs-on: ${{ vars.RUNS_ON == '' && 'ubuntu-latest' || (startsWith(vars.RUNS_ON, '[') && fromJSON(vars.RUNS_ON) || vars.RUNS_ON) }}
-    env:
-      NOMAD_VERSION: ${{ vars.NOMAD_VERSION || '1.11.1' }}
-      SERVICE: "${{ vars.__SERVICE__ }}"
-      NOMAD_NAMESPACE: "${{ vars.__NAMESPACE__ }}"
-    steps:
-      - name: Checkout default branch (find-closed-pr.sh)
-        uses: actions/checkout@v5
-        with:
-          ref: ${{ github.event.repository.default_branch }}
-
-      - name: Find closed PR for deleted branch
-        id: pr
-        env:
-          GH_TOKEN: ${{ github.token }}
-          DELETED_REF: ${{ github.event.ref }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
-        run: bash "${GITHUB_WORKSPACE}/.github/_migrated_to_rcg_sites/cleanup-pr-nomad-job/find-closed-pr.sh"
-
-      - name: Cleanup Nomad jobs for deleted PR branch
-        if: steps.pr.outputs.pr_number != ''
-        uses: VWJF/rcg-sites/.github/actions/cleanup-pr-nomad-job@refactor-from-cs
-        with:
-          job_name: ${{ env.SERVICE }}-pr-${{ steps.pr.outputs.pr_number }}-
-          nomad_version: ${{ env.NOMAD_VERSION }}
-          nomad_token: ${{ secrets.NOMAD_SERVER_TOKEN }}
-          nomad_addr: ${{ secrets.NOMAD_SERVER_ADDRESS }}
-          nomad_namespace: ${{ env.NOMAD_NAMESPACE }}
-          allow_missing: 'true'
+    uses: VWJF/rcg-sites/.github/workflows/cleanup-pr-nomad-on-delete.yml@refactor-from-cs
+    secrets: inherit
+    with:
+      deleted_ref: ${{ github.event.ref }}
+      ref_type: ${{ github.event.ref_type }}
