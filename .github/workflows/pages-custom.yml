@@ -40,6 +40,8 @@ on:
           - "false"
         default: auto
 
+# -custom- infix keeps this group distinct from coastal pages-gh and from rcg-sites pages-gh
+# (avoids concurrency deadlock across nested reusable workflow calls).
 concurrency:
   group: ${{ github.repository }}-custom-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('branch-{0}', github.ref_name) }}
   cancel-in-progress: true
