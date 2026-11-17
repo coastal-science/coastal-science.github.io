@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+# Stub Nomad CLI for cleanup.sh tests.
+# State file (one job ID per line): NOMAD_STUB_STATE
+# Jobs are visible only when NOMAD_NAMESPACE matches NOMAD_STUB_NAMESPACE.
+set -euo pipefail
+
+STATE="${NOMAD_STUB_STATE:?NOMAD_STUB_STATE is required}"
+STUB_NS="${NOMAD_STUB_NAMESPACE:-}"
+
+namespace_ok() {
+  [ -z "${STUB_NS}" ] || [ "${NOMAD_NAMESPACE:-}" = "${STUB_NS}" ]
+}
+
+list_jobs() {
+  if ! namespace_ok; then
+    echo "ID  Type  Priority  Status  Submit Date"
+    return 0
+  fi
+  echo "ID  Type  Priority  Status  Submit Date"
+  if [ -f "${STATE}" ]; then
+    while IFS= read -r job || [ -n "${job}" ]; do
+      [ -z "${job}" ] && continue
+      echo "${job}  service  50  running  2026-01-01T00:00:00Z"
+    done < "${STATE}"
+  fi
+}
+
+job_exists() {
+  local id="$1"
+  namespace_ok || return 1
+  [ -f "${STATE}" ] || return 1
+  grep -Fxq "${id}" "${STATE}"
+}
+
+remove_job() {
+  local id="$1"
+  local tmp
+  tmp=$(mktemp)
+  if [ -f "${STATE}" ]; then
+    grep -Fxv "${id}" "${STATE}" > "${tmp}" || true
+  fi
+  mv "${tmp}" "${STATE}"
+}
+
+# nomad job status
+# nomad job status <id>
+# nomad job stop -purge -verbose <id>
+# nomad status  (cluster; unused by cleanup.sh)
+args=("$@")
+if [ "${#args[@]}" -eq 0 ]; then
+  echo "nomad stub: missing command" >&2
+  exit 1
+fi
+
+if [ "${args[0]}" = "status" ]; then
+  echo "stub cluster ok"
+  exit 0
+fi
+
+if [ "${args[0]}" != "job" ]; then
+  echo "nomad stub: unsupported command: ${args[*]}" >&2
+  exit 1
+fi
+
+sub="${args[1]:-}"
+shift 2 || true
+
+case "${sub}" in
+  status)
+    if [ "${#args[@]}" -le 2 ] || [ -z "${1:-}" ]; then
+      list_jobs
+      exit 0
+    fi
+    if job_exists "$1"; then
+      echo "ID          = $1"
+      echo "Status      = running"
+      exit 0
+    fi
+    echo "No job(s) with prefix or ID \"$1\" found" >&2
+    exit 1
+    ;;
+  stop)
+    job=""
+    for arg in "$@"; do
+      case "${arg}" in
+        -purge|-verbose|-detach|-yes|-global) ;;
+        *) job="${arg}" ;;
+      esac
+    done
+    if [ -z "${job}" ]; then
+      echo "nomad stub: job stop requires a job ID" >&2
+      exit 1
+    fi
+    if [ "${NOMAD_STUB_STOP_FAIL:-}" = "1" ]; then
+      echo "Error deregistering job with id ${job} err: stub induced failure" >&2
+      exit 1
+    fi
+    if ! job_exists "${job}"; then
+      echo "No job(s) with prefix or ID \"${job}\" found"
+      exit 1
+    fi
+    remove_job "${job}"
+    echo "Job \"${job}\" stopped and purged"
+    exit 0
+    ;;
+  *)
+    echo "nomad stub: unsupported job subcommand: ${sub}" >&2
+    exit 1
+    ;;
+esac
