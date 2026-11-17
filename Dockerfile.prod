@@ -1,7 +1,7 @@
 FROM nginx:alpine
 
 # Copy HTML content
-COPY --from=public --chown=$USER:$USER . /usr/share/nginx/html
+COPY --from=public --chown=nginx:nginx . /usr/share/nginx/html
 
 # Copy nginx configuration (includes sites-available from nginx build context)
 COPY --from=nginx --chown=nginx:nginx . /etc/nginx/
