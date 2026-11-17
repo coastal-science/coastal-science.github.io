@@ -1,5 +1,6 @@
-# Manual entrypoint (dispatch UI stays in this repo). Calls site.dispatch.yml → rcg-sites deploy-*.
-# Pass Nomad/registry secrets by name (same as pages-custom); secrets: inherit drops environment secrets.
+# Manual entrypoint (dispatch UI stays in this repo). Calls site.dispatch.yml → rcg-sites leaves.
+# Pass Nomad/registry secrets by name; secrets: inherit drops environment secrets.
+# Pass runs_on e.g. ["self-hosted","rcg"] to use custom runners (cleanup-runner runs in site.dispatch).
 name: Deploy Hugo site - Manual
 
 on:
