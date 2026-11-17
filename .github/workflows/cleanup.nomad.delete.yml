@@ -16,7 +16,7 @@ jobs:
     if: github.event.ref_type == 'branch' && vars.ENABLE_NOMAD == 'true'
     permissions:
       pull-requests: read
-    uses: VWJF/rcg-sites/.github/workflows/cleanup-pr-nomad-on-delete.yml@modularize
+    uses: VWJF/rcg-sites/.github/workflows/cleanup.nomad.delete.yml@modularize
     secrets: inherit
     with:
       deleted_ref: ${{ github.event.ref }}

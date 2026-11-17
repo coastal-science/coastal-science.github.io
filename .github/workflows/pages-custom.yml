@@ -1,10 +1,10 @@
 # Alternate entrypoint for custom/self-hosted runners (SFU/RCG-style purpose).
-# Calls coastal pages-gh.yml (dispatcher) → VWJF/rcg-sites@modularize build/deploy leaves.
-# Prefer enabling only one of pages-gh.yml or pages-custom.yml on the same triggers
+# Calls coastal site.dispatch.yml (dispatcher) → VWJF/rcg-sites@modularize build/deploy leaves.
+# Prefer enabling only one of site.dispatch.yml or pages-custom.yml on the same triggers
 # to avoid double deploys.
 #
-# Environments & secrets (this repo): same rules as pages-gh.yml — Environments live here;
-# pass Nomad/registry secrets by name into pages-gh (secrets: inherit drops them on the nest).
+# Environments & secrets (this repo): same rules as site.dispatch.yml — Environments live here;
+# pass Nomad/registry secrets by name into site.dispatch (secrets: inherit drops them on the nest).
 #
 # Assumes a dedicated single runner (not a multi-runner pool) matching runs_on labels.
 # Trailing cleanup-runner reclaims Docker images and Actions work dirs on that host.
@@ -43,8 +43,8 @@ on:
           - "false"
         default: auto
 
-# Entrypoint-owned concurrency (rcg-sites pages-gh has none). -custom- infix keeps this
-# group distinct from pages-gh.yml so both can be enabled without canceling each other.
+# Entrypoint-owned concurrency. -custom- infix keeps this group distinct from
+# site.dispatch.yml so both can be enabled without canceling each other.
 concurrency:
   group: ${{ github.repository }}-custom-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('branch-{0}', github.ref_name) }}
   cancel-in-progress: true
@@ -57,7 +57,7 @@ jobs:
       packages: write
       id-token: write
       statuses: write
-    uses: ./.github/workflows/pages-gh.yml
+    uses: ./.github/workflows/site.dispatch.yml
     secrets:
       NOMAD_SERVER_TOKEN: ${{ secrets.NOMAD_SERVER_TOKEN }}
       NOMAD_SERVER_ADDRESS: ${{ secrets.NOMAD_SERVER_ADDRESS }}

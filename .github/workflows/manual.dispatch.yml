@@ -1,4 +1,4 @@
-# Manual entrypoint (dispatch UI stays in this repo). Calls pages-gh.yml → rcg-sites deploy-*.
+# Manual entrypoint (dispatch UI stays in this repo). Calls site.dispatch.yml → rcg-sites deploy-*.
 # Pass Nomad/registry secrets by name (same as pages-custom); secrets: inherit drops environment secrets.
 name: Deploy Hugo site - Manual
 
@@ -46,7 +46,7 @@ jobs:
       packages: write
       id-token: write
       statuses: write
-    uses: ./.github/workflows/pages-gh.yml
+    uses: ./.github/workflows/site.dispatch.yml
     secrets:
       NOMAD_SERVER_TOKEN: ${{ secrets.NOMAD_SERVER_TOKEN }}
       NOMAD_SERVER_ADDRESS: ${{ secrets.NOMAD_SERVER_ADDRESS }}

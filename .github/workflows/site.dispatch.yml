@@ -5,9 +5,9 @@
 # - Leaf jobs in rcg-sites set `environment:`; this file cannot (jobs with `uses:` forbid it).
 # - Pass those secrets by name into deploy.nomad (see `secrets:` on that job). Across owners,
 #   `secrets: inherit` alone does not deliver caller environment secrets — they arrive empty.
-# - Callers of this file (pages-custom, manual-deploy) must pass the same secrets by name into
+# - Callers of this file (pages-custom, manual.dispatch) must pass the same secrets by name into
 #   workflow_call; inherit here also drops them before deploy.nomad can use them.
-# - Call the split leaves directly (one hop). Do not call rcg-sites pages-gh.yml (sample only).
+# - Call the split leaves directly (one hop). Do not call rcg-sites site.dispatch.yml (sample only).
 #
 # Pin: modularize (build.pages / deploy.pages / build.docker / deploy.nomad).
 name: Deploy Hugo site - Production and Preview
@@ -22,7 +22,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
 
-  # Manual runs live in manual-deploy.yml (workflow_dispatch → workflow_call here).
+  # Manual runs live in manual.dispatch.yml (workflow_dispatch → workflow_call here).
   workflow_call: # allows reusing the workflow (string input; choice not supported for workflow_call)
     inputs:
       enable_github_pages:
