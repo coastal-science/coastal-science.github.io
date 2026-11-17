@@ -79,17 +79,17 @@ on:
     # When called from pages-custom / manual-deploy, pass these by name (not inherit).
     secrets:
       NOMAD_SERVER_TOKEN:
-        required: false
+        required: true
       NOMAD_SERVER_ADDRESS:
-        required: false
+        required: true
       NOMAD_REGISTRY_PASSWORD:
-        required: false
+        required: true
       __RESEARCHER__:
-        required: false
+        required: true
       __DOMAIN_NAME__:
-        required: false
+        required: true
       OAUTH_GITHUB_CLIENT_SECRET:
-        required: false
+        required: true
 
 # Entrypoint-owned concurrency. Distinct infix so this workflow and pages-custom.yml
 # can both be enabled without canceling each other. Leaves (rcg deploy-*) have no concurrency.
