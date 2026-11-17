@@ -1,4 +1,4 @@
-# Thin entrypoint: triggers live here; implementation is in VWJF/rcg-sites@refactor-from-cs.
+# Thin entrypoint: triggers live here; implementation is in VWJF/rcg-sites@modularize.
 # Switch the pin to a tag/SHA when rcg-sites publishes stable releases.
 #
 # Decap CMS closePR then deleteBranch; GitHub may skip the pull_request/closed
@@ -14,7 +14,7 @@ jobs:
     if: github.event.ref_type == 'branch' && vars.ENABLE_NOMAD == 'true'
     permissions:
       pull-requests: read
-    uses: VWJF/rcg-sites/.github/workflows/cleanup-pr-nomad-on-delete.yml@refactor-from-cs
+    uses: VWJF/rcg-sites/.github/workflows/cleanup-pr-nomad-on-delete.yml@modularize
     secrets: inherit
     with:
       deleted_ref: ${{ github.event.ref }}

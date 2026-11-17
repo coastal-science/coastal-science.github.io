@@ -3,13 +3,13 @@
 # Environments & secrets (caller repo):
 # - Create/select Environments here (e.g. docker-image) with the Nomad/registry secrets and vars.
 # - Leaf jobs in rcg-sites set `environment:`; this file cannot (jobs with `uses:` forbid it).
-# - Pass those secrets by name into deploy-nomad (see `secrets:` on the nomad job). Across owners,
+# - Pass those secrets by name into deploy.nomad (see `secrets:` on that job). Across owners,
 #   `secrets: inherit` alone does not deliver caller environment secrets — they arrive empty.
 # - Callers of this file (pages-custom, manual-deploy) must pass the same secrets by name into
-#   workflow_call; inherit here also drops them before the nomad job can forward them.
-# - Do not call rcg-sites pages-gh.yml from here (A→B→C); call deploy-* directly (one hop).
+#   workflow_call; inherit here also drops them before deploy.nomad can use them.
+# - Call the split leaves directly (one hop). Do not call rcg-sites pages-gh.yml (sample only).
 #
-# Pin: refactor-from-cs (switch to a tag/SHA for stable releases).
+# Pin: modularize (build.pages / deploy.pages / build.docker / deploy.nomad).
 name: Deploy Hugo site - Production and Preview
 run-name: ${{ github.event_name == 'pull_request' && format('Preview [PR {0} - {1}] {2}  ', github.event.pull_request.number, github.head_ref, github.event.head_commit.message) || format('[{0}] {1}', github.ref_name, github.event.head_commit.message) }}
 
@@ -92,7 +92,7 @@ on:
         required: true
 
 # Entrypoint-owned concurrency. Distinct infix so this workflow and pages-custom.yml
-# can both be enabled without canceling each other. Leaves (rcg deploy-*) have no concurrency.
+# can both be enabled without canceling each other. Leaves have no concurrency.
 concurrency:
   group: ${{ github.repository }}-coastal-pages-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('branch-{0}', github.ref_name) }}
   cancel-in-progress: true
@@ -100,7 +100,6 @@ concurrency:
 jobs:
   generate-timestamp:
     permissions: {}
-    # runs-on: ubuntu-latest
     runs-on: ${{ inputs.runs_on == '' && 'ubuntu-latest' || (startsWith(inputs.runs_on, '[') && fromJSON(inputs.runs_on) || inputs.runs_on) }}
     steps:
       - name: Set TIMESTAMP and get REPO_NAME
@@ -116,33 +115,64 @@ jobs:
       TIMESTAMP: ${{ env.TIMESTAMP }}
       REPO_NAME: ${{ env.REPO_NAME }}
 
-  github-pages:
+  build-pages:
     needs:
       - generate-timestamp
     permissions:
-      contents: write
-      pages: write
-      id-token: write
-    uses: VWJF/rcg-sites/.github/workflows/deploy-github-pages.yml@refactor-from-cs
-    secrets: inherit
+      contents: read
+      pages: read
+    uses: VWJF/rcg-sites/.github/workflows/build.pages.yml@modularize
     with:
       timestamp: ${{ needs.generate-timestamp.outputs.TIMESTAMP }}
       repo_name: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
       event_name: ${{ inputs.caller_event_name || github.event_name }}
       event_action: ${{ inputs.caller_event_action || github.event.action }}
-      # push/pull_request: leaf jobs gate on repo vars.ENABLE_*. workflow_call: pass caller override.
       enable_github_pages: ${{ github.event_name == 'workflow_call' && inputs.enable_github_pages || false }}
       runs_on: ${{ inputs.runs_on }}
 
-  nomad:
+  deploy-pages:
+    needs:
+      - build-pages
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    uses: VWJF/rcg-sites/.github/workflows/deploy.pages.yml@modularize
+    with:
+      event_name: ${{ inputs.caller_event_name || github.event_name }}
+      event_action: ${{ inputs.caller_event_action || github.event.action }}
+      enable_github_pages: ${{ github.event_name == 'workflow_call' && inputs.enable_github_pages || false }}
+      runs_on: ${{ inputs.runs_on }}
+
+  build-docker:
     needs:
       - generate-timestamp
     permissions:
-      contents: write
+      contents: read
       packages: write
       id-token: write
+    uses: VWJF/rcg-sites/.github/workflows/build.docker.yml@modularize
+    with:
+      timestamp: ${{ needs.generate-timestamp.outputs.TIMESTAMP }}
+      repo_name: ${{ needs.generate-timestamp.outputs.REPO_NAME }}
+      event_name: ${{ inputs.caller_event_name || github.event_name }}
+      event_action: ${{ inputs.caller_event_action || github.event.action }}
+      pr_number: ${{ inputs.pr_number || github.event.pull_request.number }}
+      pr_head_sha: ${{ inputs.pr_head_sha || github.event.pull_request.head.sha }}
+      pr_merged: ${{ github.event_name == 'workflow_call' && inputs.pr_merged || github.event.pull_request.merged == true }}
+      head_ref: ${{ inputs.head_ref || github.head_ref }}
+      enable_nomad: ${{ github.event_name == 'workflow_call' && inputs.enable_nomad || false }}
+      runs_on: ${{ inputs.runs_on }}
+
+  deploy-nomad:
+    needs:
+      - generate-timestamp
+      - build-docker
+    permissions:
+      contents: read
+      packages: read
       statuses: write
-    uses: VWJF/rcg-sites/.github/workflows/deploy-nomad.yml@refactor-from-cs
+    uses: VWJF/rcg-sites/.github/workflows/deploy.nomad.yml@modularize
     # Explicit pass required for caller environment secrets (see header).
     secrets:
       NOMAD_SERVER_TOKEN: ${{ secrets.NOMAD_SERVER_TOKEN }}
@@ -162,6 +192,5 @@ jobs:
       head_ref: ${{ inputs.head_ref || github.head_ref }}
       nomad_job_template: ${{ inputs.nomad_job_template }}
       use_decap: ${{ inputs.use_decap || 'auto' }}
-      # push/pull_request: leaf jobs gate on repo vars.ENABLE_*. workflow_call: pass caller override.
       enable_nomad: ${{ github.event_name == 'workflow_call' && inputs.enable_nomad || false }}
       runs_on: ${{ inputs.runs_on }}
