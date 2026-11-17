@@ -1,9 +1,11 @@
 # Thin entrypoint: triggers live here; implementation is in VWJF/rcg-sites@modularize.
 # Switch the pin to a tag/SHA when rcg-sites publishes stable releases.
 #
-# Decap CMS closePR then deleteBranch; GitHub may skip the pull_request/closed
-# run in pages-gh.yml if it cannot build a merge commit. delete events always
-# use this workflow from the default branch, so they still run.
+# Intentional backup for deploy.nomad's cleanup-preview-on-discard (same
+# cleanup-pr-nomad-job action; different trigger). Decap CMS closePR then
+# deleteBranch; GitHub may skip the pull_request/closed run (and thus discard
+# cleanup) if it cannot build a merge commit. delete events always use this
+# workflow from the default branch, so they still run.
 name: Cleanup Nomad preview on branch delete
 
 on:
